@@ -10,16 +10,24 @@ from config import TELEGRAM_TOKEN
 from routers.search_router import router as search_router
 from routers.menu_router import router as menu_router
 
+async def on_startup(bot):
+    print('The bot is alive')
+
+async def on_shutdown(bot):
+    print('The bot is dead')
+
 async def main() -> None:
     bot = Bot(TELEGRAM_TOKEN, parse_mode=ParseMode.HTML)
+    await bot.delete_webhook(True)
+    
     dp = Dispatcher()
-
+    dp.startup.register(on_startup)
+    dp.shutdown.register(on_shutdown)
     dp.include_routers(
         menu_router,
         search_router,
     )
 
-    await bot.delete_webhook(True)
     await dp.start_polling(bot)
 
 

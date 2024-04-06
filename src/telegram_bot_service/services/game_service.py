@@ -1,8 +1,25 @@
 from typing import List, Dict
 from database.database import games
+from services.utils import async_wait
 
-def get_game_by_id(id: str) -> Dict:
+@async_wait()
+async def get_all_games() -> List[Dict]:
+    return games
+
+@async_wait()
+async def get_game_by_id(id: str) -> Dict:
     return list(filter(lambda x: x["id"] == id, games))[0]
+
+@async_wait()
+async def get_games_by_str_in_title(title: str) -> List[Dict]:
+    title = title.strip().lower()
+    return list(
+        filter(
+            lambda x: title in x["gameName"].lower(),
+            games
+        )
+    )
+
 
 def pritify_game_info(game: Dict):
     return (
