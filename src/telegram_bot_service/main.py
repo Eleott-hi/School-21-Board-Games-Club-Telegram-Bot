@@ -25,8 +25,7 @@ async def command_start_handler(message: Message | CallbackQuery) -> None:
     )
 
     answer = dict(
-        text=f"Hello, {hbold(message.from_user.first_name)}!\n"
-        "There is some menu",
+        text=f"Hello, {hbold(message.from_user.first_name)}!\n" "There is some menu",
         reply_markup=keyboard,
     )
 
@@ -35,15 +34,6 @@ async def command_start_handler(message: Message | CallbackQuery) -> None:
         await message.answer()
     else:
         await message.answer(**answer)
-
-
-@router.message()
-async def echo_handler(message: types.Message) -> None:
-    try:
-        await message.send_copy(chat_id=message.chat.id)
-        await message.answer(message.text)
-    except TypeError:
-        await message.answer("Nice try!")
 
 
 async def main() -> None:
@@ -56,7 +46,6 @@ async def main() -> None:
     )
 
     await bot.delete_webhook(True)
-
     await dp.start_polling(bot)
 
 
