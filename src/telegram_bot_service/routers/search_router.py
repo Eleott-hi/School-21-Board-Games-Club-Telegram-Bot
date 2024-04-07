@@ -7,16 +7,10 @@ import aiogram.types
 from aiogram.fsm.context import FSMContext
 from keyboards.builders import inline_builder
 from services.game_service import pritify_game_info, form_game_buttons, get_games_by_str_in_title, get_game_by_id, get_all_games
-
+from services.utils import display_fetching_message
 router = Router()
 
 
-async def display_fetching_message(message):
-    while True:
-        for i in range(1, 4):
-            dots = "." * i
-            await message.edit_text(f"Fetching data{dots}")
-            await asyncio.sleep(0.5)
 
 
 @router.callback_query(F.data == "list")

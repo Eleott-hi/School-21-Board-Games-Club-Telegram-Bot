@@ -18,9 +18,11 @@ async def lifespan(app):
     WEBHOOK_URL = f"{forward_url}{WEBHOOK_PATH}"
 
     # webhook = await bot.get_webhook_info()
+    await bot.delete_webhook(True)
     await bot.set_webhook(url=forward_url)
 
     yield
+
 
     print("Shutting down...")
     await bot.session.close()

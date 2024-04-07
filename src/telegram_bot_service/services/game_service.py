@@ -2,7 +2,7 @@ from typing import List, Dict
 from database.database import games
 from services.utils import async_wait
 
-@async_wait()
+@async_wait(8)
 async def get_all_games() -> List[Dict]:
     return games
 
