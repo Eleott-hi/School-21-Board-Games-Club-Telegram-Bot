@@ -1,36 +1,42 @@
-import asyncio
-import logging
-import sys
-
-from aiogram import Bot, Dispatcher
-from aiogram.enums import ParseMode
-
+# import ngrok python sdk
+import ngrok
 from config import TELEGRAM_TOKEN
+from fastapi import FastAPI
+from bot import bot, dp, types, Dispatcher, Bot
+import os
+from typing import Dict
 
-from routers.search_router import router as search_router
-from routers.menu_router import router as menu_router
+WEBHOOK_PATH = f"/bot/{TELEGRAM_TOKEN}"
 
-async def on_startup(bot):
-    print('The bot is alive')
 
-async def on_shutdown(bot):
-    print('The bot is dead')
-
-async def main() -> None:
-    bot = Bot(TELEGRAM_TOKEN, parse_mode=ParseMode.HTML)
-    await bot.delete_webhook(True)
+async def lifespan(app):
+    tmp = await ngrok.forward(8000, authtoken_from_env=True)
+    forward_url = tmp.url()
     
-    dp = Dispatcher()
-    dp.startup.register(on_startup)
-    dp.shutdown.register(on_shutdown)
-    dp.include_routers(
-        menu_router,
-        search_router,
-    )
+    print(f"Forwarding established at {forward_url}")
 
-    await dp.start_polling(bot)
+    WEBHOOK_URL = f"{forward_url}{WEBHOOK_PATH}"
+
+    # webhook = await bot.get_webhook_info()
+    await bot.set_webhook(url=forward_url)
+
+    yield
+
+    print("Shutting down...")
+    await bot.session.close()
+
+app = FastAPI(
+    lifespan=lifespan
+)
+
+
+@app.post(f"/")
+async def bot_webhook(update: types.Update):
+    print("ROOT", update)
+    await dp.feed_update(bot=bot, update=update)    
+
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-    asyncio.run(main())
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

@@ -1,4 +1,0 @@
-ngrok
-pyngrok
-python-dotenv
-fastapi[all]
