@@ -2,10 +2,10 @@ from fastapi import FastAPI
 
 from database.database import init_db
 from contextlib import asynccontextmanager
-from routers.BookingRouter import router as booking_router
-from routers.RoomRouter import router as room_router
-from routers.UserRouter import router as user_router
-from routers.ViolationRouter import router as violation_router
+# from routers.BookingRouter import router as booking_router
+# from routers.RoomRouter import router as room_router
+# from routers.UserRouter import router as user_router
+# from routers.ViolationRouter import router as violation_router
 
 
 @asynccontextmanager
@@ -22,10 +22,10 @@ app = FastAPI(
     root_path="/booking_service",
 )
 
-app.include_router(booking_router)
-app.include_router(room_router)
-app.include_router(user_router)
-app.include_router(violation_router)
+# app.include_router(booking_router)
+# app.include_router(room_router)
+# app.include_router(user_router)
+# app.include_router(violation_router)
 
 if __name__ == "__main__":
     import uvicorn
