@@ -11,6 +11,8 @@ from config import TELEGRAM_TOKEN
 
 from routers.search_router import router as search_router
 from routers.menu_router import router as menu_router
+from routers.option_router import router as option_router
+from routers.global_searcher import router as global_searcher_router
 
 async def on_startup(bot):
     print('The bot is alive')
@@ -28,6 +30,8 @@ dp.shutdown.register(on_shutdown)
 dp.include_routers(
     menu_router,
     search_router,
+    option_router,
+    global_searcher_router,
 )
 
     # await dp.start_polling(bot)
