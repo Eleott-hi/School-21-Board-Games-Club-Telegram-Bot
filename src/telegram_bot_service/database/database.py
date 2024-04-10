@@ -19,6 +19,7 @@ games = [
         videoRulesLink="Video Rule Link 1",
         genre="Adventure",
         status="available",
+        photo_link="resources/static/game_1.jpg",
     ),
     dict(
         id="2",
@@ -40,6 +41,8 @@ games = [
         videoRulesLink="Video Rule Link 2",
         genre="Strategy",
         status="available",
+        photo_link="resources/static/game_2.jpg",
+        
     ),
     dict(
         id="3",
@@ -61,6 +64,7 @@ games = [
         videoRulesLink="Video Rule Link 3",
         genre="Family",
         status="available",
+        photo_link="resources/static/game_1.jpg",
     ),
     dict(
         id="4",
@@ -82,6 +86,7 @@ games = [
         videoRulesLink="Video Rule Link 4",
         genre="Horror",
         status="available",
+        photo_link="resources/static/game_2.jpg",
     ),
     dict(
         id="5",
@@ -103,5 +108,6 @@ games = [
         videoRulesLink="Video Rule Link 5",
         genre="Party",
         status="available",
+        photo_link="resources/static/game_1.jpg",
     ),
 ]

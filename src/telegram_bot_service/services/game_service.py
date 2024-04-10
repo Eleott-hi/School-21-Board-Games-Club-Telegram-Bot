@@ -42,6 +42,8 @@ def form_game_buttons(games):
 
     for game in games:
         buttons.append(game["gameName"])
-        callbacks.append("game_info_callback:" + game["id"])
+        callbacks.append("game_menu_callback:" + game["id"])
 
     return buttons, callbacks
+
+
