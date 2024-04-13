@@ -4,6 +4,7 @@ from aiogram import F, Router
 from aiogram.filters import CommandStart
 from aiogram.types import Message, CallbackQuery
 from routers.common import display_main_menu
+from motor.motor_asyncio import AsyncIOMotorDatabase as MDB
 
 router = Router()
 

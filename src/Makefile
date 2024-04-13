@@ -1,5 +1,5 @@
-DB_DIR := postgres_service
-DB_CONTAINER_NAME := postgres_service
+DB_DIR := mongodb_service
+DB_CONTAINER_NAME := mongodb_service
 
 all:  clean_db up
 

@@ -1,11 +1,31 @@
 from typing import List, Dict
 from database.database import games
 from services.utils import async_wait
+from callbacks.callback_data import GameMenu
 
 
 @async_wait()
-async def get_all_games() -> List[Dict]:
-    return games
+async def get_games_with_filters(filters: Dict):
+    offset = filters.get("offset", 0)
+    limit = filters.get("limit", 3)
+    title = filters.get("title", None)
+
+    res = games
+    if title:
+        res = await get_games_by_str_in_title(title)
+
+    total = len(res)
+    from_ = offset * limit
+    to_ = from_ + limit
+    has_prev = offset > 0
+    has_next = to_ < total
+
+    return dict(
+        games=res[from_:to_],
+        has_prev=has_prev,
+        has_next=has_next,
+        total=total,
+    )
 
 
 @async_wait()
@@ -16,12 +36,7 @@ async def get_game_by_id(id: str) -> Dict:
 @async_wait()
 async def get_games_by_str_in_title(title: str) -> List[Dict]:
     title = title.strip().lower()
-    return list(
-        filter(
-            lambda x: title in x["gameName"].lower(),
-            games
-        )
-    )
+    return list(filter(lambda x: title in x["gameName"].lower(), games))
 
 
 def pritify_game_info(game: Dict):
@@ -42,8 +57,6 @@ def form_game_buttons(games):
 
     for game in games:
         buttons.append(game["gameName"])
-        callbacks.append("game_menu_callback:" + game["id"])
+        callbacks.append(GameMenu(id=game["id"]).pack())
 
     return buttons, callbacks
-
-

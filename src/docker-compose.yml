@@ -43,6 +43,15 @@ services:
     ports:
       - 8000:8000
 
+  mongodb_service:
+    image: mongo
+    container_name: mongodb_service
+    # environment:
+      # MONGO_INITDB_ROOT_USERNAME: mongodb
+      # MONGO_INITDB_ROOT_PASSWORD: mongodb
+    restart: on-failure
+    ports:
+      - 27017:27017
 
 volumes:
   shared_data:

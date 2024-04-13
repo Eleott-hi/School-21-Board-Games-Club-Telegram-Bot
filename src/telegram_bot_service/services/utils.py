@@ -30,7 +30,7 @@ EMODJI_ANIMATIONS = [
 ]
 
 
-def async_wait(time: float = 0.2):
+def async_wait(time: float = 0):
     def decorator(func):
         async def wrapper(*args, **kwargs):
             await asyncio.sleep(time)

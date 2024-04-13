@@ -2,3 +2,6 @@ aiogram
 python-dotenv
 fastapi[all]
 ngrok
+pymongo
+motor
+aiogram3-calendar

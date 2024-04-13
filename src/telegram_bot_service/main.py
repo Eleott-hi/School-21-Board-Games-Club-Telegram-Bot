@@ -12,6 +12,7 @@ WEBHOOK_PATH = f"/bot/{TELEGRAM_TOKEN}"
 async def lifespan(app):
     tmp = await ngrok.forward(8000, authtoken_from_env=True)
     forward_url = tmp.url()
+    
 
     print(f"Forwarding established at {forward_url}")
 
