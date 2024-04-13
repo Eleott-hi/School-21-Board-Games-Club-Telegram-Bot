@@ -11,7 +11,7 @@ router = Router()
 async def game_menu_callback(query: CallbackQuery, callback_data: GameMenu):
     message = query.message
     game = await get_game_by_id(callback_data.id)
-    await display_game_menu(message, game, edit=True)
+    await display_game_menu(message, game, page=callback_data.page, edit=True)
     await query.answer()
 
 

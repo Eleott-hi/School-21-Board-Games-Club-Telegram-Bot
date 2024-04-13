@@ -44,4 +44,4 @@ async def find_games_according_to_input(message: Message, db: MDB):
 @router.callback_query(F.data == "Not implemented")
 async def not_implemented_callback(query: CallbackQuery):
     print("Entering not implemented callback", flush=True)
-    await query.answer()
+    await query.answer(cache_time=60)

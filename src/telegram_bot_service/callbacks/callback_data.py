@@ -15,6 +15,7 @@ class Pagination(CallbackData, prefix="pagination"):
 
 class GameMenu(CallbackData, prefix="game_menu"):
     id: str
+    page: int
 
 
 class GameInfo(CallbackData, prefix="game_info"):

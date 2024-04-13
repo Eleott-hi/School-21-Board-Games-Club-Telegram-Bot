@@ -32,13 +32,19 @@ async def display_main_menu(message, edit):
     )
 
 
-async def display_game_menu(message, game, edit):
+async def display_game_menu(message, game, edit: bool, page: int | None = None):
+    back_button, back_callback = "⬅️ Back to menu", "main_menu"
+
+    if isinstance(page, int):
+        back_button = "⬅️ Back"
+        back_callback = Pagination(page=page).pack()
+
     keyboard = inline_builder(
-        ["Info", "Booking", "⬅️ Back to menu"],
+        ["Info", "Booking", back_button],
         [
             GameInfo(id=game["id"]).pack(),
             GameBooking(id=game["id"]).pack(),
-            "main_menu",
+            back_callback,
         ],
         sizes=[2],
     )
@@ -73,17 +79,17 @@ async def display_game_not_found(message, title, edit):
 
 
 async def display_game_list(message, data, page, edit):
-    
+
     prev_button, prev_callback = (
         ("⬅️", Pagination(page=page - 1))
         if data["has_prev"]
-        else ("❌", "Not implemented")
+        else (" ", "Not implemented")
     )
 
     next_button, next_callback = (
         ("➡️", Pagination(page=page + 1))
         if data["has_next"]
-        else ("❌", "Not implemented")
+        else (" ", "Not implemented")
     )
 
     pages_count = data["total"] // PAGINATION_LIMIT + (
@@ -91,7 +97,7 @@ async def display_game_list(message, data, page, edit):
     )
     page_button, page_callback = (f"📄 {page+1}/{pages_count}", "Not implemented")
 
-    buttons, callbacks = form_game_buttons(data["games"])
+    buttons, callbacks = form_game_buttons(data["games"], page)
 
     keyboard = inline_builder(
         buttons + [prev_button, page_button, next_button] + ["⬅️ Back to menu"],

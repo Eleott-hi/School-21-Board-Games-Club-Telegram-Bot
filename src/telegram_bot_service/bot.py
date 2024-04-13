@@ -10,7 +10,7 @@ from routers.menu_router import router as menu_router
 from routers.option_router import router as option_router
 from routers.global_searcher import router as global_searcher_router
 from routers.game_menu_router import router as game_menu_router
-from aiogram3_calendar import SimpleCalendar, DialogCalendar
+from routers.calendar_router import router as calendar_router
 
 
 async def on_startup(bot):
@@ -32,6 +32,7 @@ dp.include_routers(
     game_menu_router,
     search_router,
     option_router,
+    calendar_router,
     global_searcher_router,
 )
 # await dp.start_polling(bot)

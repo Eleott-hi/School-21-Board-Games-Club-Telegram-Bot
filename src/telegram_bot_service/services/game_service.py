@@ -51,12 +51,12 @@ def pritify_game_info(game: Dict):
     )
 
 
-def form_game_buttons(games):
+def form_game_buttons(games, page: int):
     buttons = []
     callbacks = []
 
     for game in games:
         buttons.append(game["gameName"])
-        callbacks.append(GameMenu(id=game["id"]).pack())
+        callbacks.append(GameMenu(id=game["id"], page=page).pack())
 
     return buttons, callbacks
