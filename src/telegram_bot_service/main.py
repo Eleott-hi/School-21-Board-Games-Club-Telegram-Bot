@@ -32,7 +32,7 @@ app = FastAPI(
 
 @app.post(f"{WEBHOOK_PATH}")
 async def bot_webhook(update: types.Update):
-    print("ROOT", update)
+    # print("ROOT", update)
     await dp.feed_update(bot=bot, update=update)
 
 
