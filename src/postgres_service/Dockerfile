@@ -11,7 +11,7 @@ WORKDIR /docker-entrypoint-initdb.d
 # COPY . /docker-entrypoint-initdb.d
 
 # Expose the PostgreSQL port
-EXPOSE 5432
+EXPOSE 5432:5432
 
 # Command to run when the container starts
 CMD ["postgres"]

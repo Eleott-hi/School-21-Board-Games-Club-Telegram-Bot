@@ -1,16 +1,14 @@
 version: '3'
-
 services:
-  postgres_service:
+  postgres:
     image: postgres:16
     container_name: postgres_service
     environment:
       POSTGRES_PASSWORD: postgres
-    volumes:
-      - ./postgres_service:/docker-entrypoint-initdb.d
     restart: on-failure
     ports:
       - 5432:5432
+
 
 
 
