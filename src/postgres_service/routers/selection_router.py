@@ -7,5 +7,5 @@ router = APIRouter(prefix="/db", tags=["test"])
 
 
 @router.get("/{id}", status_code=200)
-async def create_booking(id: int):
-    return {"message": id}
+async def test(id: int, test_int: int = None):
+    return {"message": id + test_int} if test_int else {"message": id}

@@ -16,16 +16,27 @@ async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False
 
 
 async def init_db():
+    """
+    Initializes the database by creating all defined models. This function is asynchronous.
+    """
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
 
 
 async def get_session():
+    """
+    Asynchronous function to get a session in a context manager.
+    """
     async with async_session() as session:
         yield session
 
 
 def main():
+    """
+    A function that initializes the database connection and sets up logging.
+    No parameters.
+    No return value.
+    """
     import models
     import asyncio
     logging.basicConfig(level=logging.INFO)
