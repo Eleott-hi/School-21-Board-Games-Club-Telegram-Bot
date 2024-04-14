@@ -1,9 +1,7 @@
 from datetime import datetime, timedelta
 from typing import List
 from uuid import UUID
-from routers.schemas import BookingCreate, UserInfo
-from database.database import get_session, AsyncSession, select, and_, or_, func
-from database.Models.Models import Booking, Role, Room, User, Violation
+from routers.schemas import UserInfo
 from fastapi import Depends, Request, HTTPException, status
 import httpx
 from postgres_service.config import AUTH_SERVICE
