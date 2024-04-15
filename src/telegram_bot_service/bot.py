@@ -12,8 +12,6 @@ from routers.global_searcher import router as global_searcher_router
 from routers.calendar_router import router as calendar_router
 from middlewares.MongoDB import UserMongoDB
 
-# from routers.game_menu_router import router as game_menu_router
-
 
 async def on_startup(bot):
     print("The bot is alive")
@@ -35,9 +33,6 @@ dp.update.middleware(UserMongoDB())
 dp.include_routers(
     router,
     filter_router,
-    # game_menu_router,
-    # search_router,
-    # option_router,
     calendar_router,
     global_searcher_router,
 )
