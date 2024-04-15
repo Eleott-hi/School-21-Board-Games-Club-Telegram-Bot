@@ -1,10 +1,8 @@
-import json
-
 from aiogram import F, Router
 from aiogram.types import ReplyKeyboardRemove, CallbackQuery, Message
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from keyboards.builders import inline_builder, reply_builder
+from keyboards.builders import reply_builder
 
 router = Router()
 
@@ -16,6 +14,7 @@ router = Router()
 # 4) возрастная категория (возраст младшего игрока) [any, imput])
 # 5) жанр [any, 'Азартные', 'Война', 'Карты', 'Классика', 'Компанейские', 'Логические', 'Приключения','Экономика'];
 # 6) availability [any, available_only, not_available_only]
+
 
 class GameFilterForm(StatesGroup):
     START = State()
@@ -110,8 +109,17 @@ async def select_age(message: Message, state: FSMContext) -> None:
     await state.set_state(GameFilterForm.AGE_SELECTED)
 
     keyboard = reply_builder(
-        ["Any", 'Азартные', 'Война', 'Карты', 'Классика',
-            'Компанейские', 'Логические', 'Приключения', 'Экономика'],
+        [
+            "Any",
+            "Азартные",
+            "Война",
+            "Карты",
+            "Классика",
+            "Компанейские",
+            "Логические",
+            "Приключения",
+            "Экономика",
+        ],
         sizes=[1],
         resize_keyboard=True,
     )
@@ -148,10 +156,7 @@ async def select_availability(message: Message, state: FSMContext) -> None:
     await state.clear()
 
     print(filters)
-    await message.answer(
-        f"Filters: {filters}",
-        reply_markup=ReplyKeyboardRemove()
-    )
+    await message.answer(f"Filters: {filters}", reply_markup=ReplyKeyboardRemove())
 
 
 # @router.message(GameFilterForm, F.text == "cancel")
@@ -160,7 +165,7 @@ async def select_availability(message: Message, state: FSMContext) -> None:
 #     Allow user to cancel any action
 #     """
 #     print("HERE")
-    
+
 #     # current_state = await state.get_state()
 #     # if current_state is None:
 #     #     return

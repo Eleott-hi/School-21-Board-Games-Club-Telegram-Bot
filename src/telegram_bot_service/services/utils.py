@@ -19,7 +19,7 @@ from aiogram.utils.keyboard import (
 )
 
 from keyboards.builders import inline_builder
-
+from database.database import database
 
 EMODJI_ANIMATIONS = [
     ["🌍", "🌎", "🌏"],  # Spinning planet
@@ -49,7 +49,7 @@ async def display_animation(
 
     keyboard = inline_builder(
         ["❌ Cancel"],
-        [on_cance_callback or "Not implemented"],
+        [on_cance_callback or Transfer(to=Screen.IGNORE).pack()],
     )
 
     while True:
@@ -99,3 +99,6 @@ async def create_or_edit_media(
             caption=caption,
             reply_markup=reply_markup,
         )
+
+
+

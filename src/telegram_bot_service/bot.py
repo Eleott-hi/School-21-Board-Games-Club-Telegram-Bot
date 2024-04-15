@@ -5,12 +5,14 @@ from database.database import database
 
 from config import TELEGRAM_TOKEN
 
-from routers.search_router import router as search_router
-from routers.menu_router import router as menu_router
-from routers.option_router import router as option_router
+from routers.routers import router
+
+from routers.filter_router import router as filter_router
 from routers.global_searcher import router as global_searcher_router
-from routers.game_menu_router import router as game_menu_router
 from routers.calendar_router import router as calendar_router
+from middlewares.MongoDB import UserMongoDB
+
+# from routers.game_menu_router import router as game_menu_router
 
 
 async def on_startup(bot):
@@ -27,11 +29,15 @@ bot = Bot(TELEGRAM_TOKEN, parse_mode=ParseMode.HTML)
 dp = Dispatcher(db=database)
 dp.startup.register(on_startup)
 dp.shutdown.register(on_shutdown)
+
+dp.update.middleware(UserMongoDB())
+
 dp.include_routers(
-    menu_router,
-    game_menu_router,
-    search_router,
-    option_router,
+    router,
+    filter_router,
+    # game_menu_router,
+    # search_router,
+    # option_router,
     calendar_router,
     global_searcher_router,
 )

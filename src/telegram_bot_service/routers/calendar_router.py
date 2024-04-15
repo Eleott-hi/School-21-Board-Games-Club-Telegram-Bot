@@ -17,29 +17,46 @@ from aiogram.filters.callback_data import CallbackData
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, CallbackQuery
 from aiogram.utils.markdown import hbold
 
+from callbacks.callback_data import Transfer, Screen
+from services.utils import create_or_edit_media
+from keyboards.builders import inline_builder
+
 router = Router()
 
 
-@router.message(F.text.lower() == "navigation calendar")
-async def nav_cal_handler(message: Message):
-    import calendar
-
-    year: int = datetime.now().year + 1
-    month: int = datetime.now().month
-    month_calendar = calendar.monthcalendar(year, month)
-
-    print(month_calendar, flush=True)
-
-    await message.answer(
-        "Please select a date: ", reply_markup=await SimpleCalendar().start_calendar()
+@router.callback_query(Transfer.filter(F.to_ == Screen.CALENDAR))
+async def nav_cal_handler(query: CallbackQuery):
+    message = query.message
+    await create_or_edit_media(
+        message=message,
+        photo="resources/static/booking.jpg",
+        caption="Please select a date: ",
+        reply_markup=await SimpleCalendar().start_calendar(),
+        edit=True,
     )
+
+    await query.answer()
 
 
 @router.callback_query(SimpleCalendarCallback.filter())
-async def process_simple_calendar(
-    callback_query: CallbackQuery, callback_data: CallbackData
-):
+async def process_simple_calendar(query: CallbackQuery, callback_data: CallbackData):
+    message = query.message
+
+    print(callback_data, flush=True)
+
     calendar = SimpleCalendar()
-    selected, date = await calendar.process_selection(callback_query, callback_data)
+    selected, date = await calendar.process_selection(query, callback_data)
+
     if selected:
-        await callback_query.message.answer(f'You selected {date:"%d/%m/%Y"}')
+        await create_or_edit_media(
+            message=message,
+            photo="resources/static/booking.jpg",
+            caption="You booked on: " + date.strftime("%d.%m.%Y"),
+            reply_markup=inline_builder(
+                text=["⬅️ Back to Main Menu"],
+                callback_data=[Transfer(to_=Screen.MAIN_MENU).pack()],
+            ),
+            edit=True,
+        )
+
+    await query.answer()
