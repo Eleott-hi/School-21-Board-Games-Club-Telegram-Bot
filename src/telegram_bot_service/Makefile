@@ -8,7 +8,7 @@ install:
 
 wait_for_it: 
 	chmod +x ./wait-for-it.sh 
-#	./wait-for-it.sh -t 120 auth_service:8000
+	./wait-for-it.sh -t 120 mongodb_service:27017
 
 run:
 	python3 main.py
