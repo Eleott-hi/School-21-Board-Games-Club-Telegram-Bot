@@ -1,39 +1,37 @@
 import os
 import logging
+import aioitertools
+import gspread
+
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
-import gspread
-import google_parser as gp
 
-from config import DB_URL, GOOGLE_TOKEN, AUTHORIZED_USER
-
-if __name__ != "__main__":
-    from db.models import *
+from .google_parser import GoogleSheetParser
+from .config import DB_URL, GOOGLE_TOKEN, AUTHORIZED_USER
+from .models import *
 
 
 engine = create_async_engine(DB_URL, echo=True, future=True)
 async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
+
 def parse_and_convert_data():
-    parser = gp.GoogleSheetParser('/Users/cursebow/.config/gspread/credentials.json',
-                                   '/Users/cursebow/.config/gspread/authorized_user.json')
+    parser = GoogleSheetParser(GOOGLE_TOKEN, AUTHORIZED_USER)
     
     all_values = parser.get_worksheet('table_1', 'sheet1')
+    all_values.pop(0)
+
     games = []
     for val in all_values:
         game = BoardGame(
             gameName = val[1],
-            minPlayers = val[3].split('-')[0],
-            maxPlayers = val[3].split('-')[-1],
-            minIdealPlayers = val[4].split('-')[0],
-            maxIdealPlayers = val[4].split('-')[-1],
             status = "reserved"
         )
         games.append(game)
-    print("omg")
     return games
+
 
 async def init_db():
     """
@@ -43,7 +41,11 @@ async def init_db():
         await conn.run_sync(SQLModel.metadata.create_all)
         orm_objects = parse_and_convert_data()
         for obj in orm_objects:
-            conn.add(obj)
+            try:
+                await conn.execute(obj.__table__.insert(), obj.dict())
+            except Exception as e:
+                print(f"error during insertion {e}")
+                continue
         await conn.commit()
 
 
@@ -61,10 +63,10 @@ def main():
     No parameters.
     No return value.
     """
-    import models
     import asyncio
     logging.basicConfig(level=logging.INFO)
     asyncio.run(init_db())
+    
     
 if __name__ == "__main__":
     main()
