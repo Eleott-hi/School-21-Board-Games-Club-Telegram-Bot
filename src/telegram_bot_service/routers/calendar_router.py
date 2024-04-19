@@ -3,8 +3,9 @@ import asyncio
 import sys
 from datetime import datetime
 
-from aiogram3_calendar import SimpleCalendar, DialogCalendar
-from aiogram3_calendar.calendar_types import (
+from libs.calendar.simple_calendar import SimpleCalendar
+from libs.calendar.dialog_calendar import DialogCalendar
+from libs.calendar.calendar_types import (
     SimpleCalendarCallback,
     DialogCalendarCallback,
 )
@@ -25,13 +26,16 @@ router = Router()
 
 
 @router.callback_query(Transfer.filter(F.to_ == Screen.CALENDAR))
-async def nav_cal_handler(query: CallbackQuery):
+async def nav_cal_handler(query: CallbackQuery, callback_data: Transfer):
     message = query.message
+
+    print(callback_data, flush=True)
+
     await create_or_edit_media(
         message=message,
         photo="resources/static/booking.jpg",
         caption="Please select a date: ",
-        reply_markup=await SimpleCalendar().start_calendar(),
+        reply_markup=await SimpleCalendar().start_calendar(clip_past=True),
         edit=True,
     )
 
@@ -41,8 +45,6 @@ async def nav_cal_handler(query: CallbackQuery):
 @router.callback_query(SimpleCalendarCallback.filter())
 async def process_simple_calendar(query: CallbackQuery, callback_data: CallbackData):
     message = query.message
-
-    print(callback_data, flush=True)
 
     calendar = SimpleCalendar()
     selected, date = await calendar.process_selection(query, callback_data)

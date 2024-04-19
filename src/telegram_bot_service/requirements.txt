@@ -4,4 +4,4 @@ fastapi[all]
 ngrok
 pymongo
 motor
-aiogram3-calendar
+# aiogram_dialog
