@@ -10,7 +10,6 @@ from db.models import BoardGame
 
 router = APIRouter(prefix="/db", tags=["test"])
 
-
 @router.get("/{name}", status_code=200)
 async def get_testing_query(name: Annotated[str, Path()], 
                             session: AsyncSession = Depends(get_session)):
@@ -20,6 +19,9 @@ async def get_testing_query(name: Annotated[str, Path()],
 
     return {"game id" : result_data} if result_data else None
 
-@router.get("/", status_code=200)
-async def get_testing_hello():
-    return "hello"
+# in progress..
+@router.post("/{name}", status_code=200)
+async def insert_new_game(game: Annotated[BoardGame, Query()]):
+    async with get_session() as session:
+        session.add(game)
+        await session.commit()
