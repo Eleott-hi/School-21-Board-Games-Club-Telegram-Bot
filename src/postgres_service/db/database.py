@@ -3,10 +3,12 @@ import logging
 import aioitertools
 import gspread
 
-from sqlmodel import SQLModel
+
+from sqlmodel import SQLModel, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 
 from .google_parser import GoogleSheetParser
 from .config import DB_URL, GOOGLE_TOKEN, AUTHORIZED_USER
@@ -15,7 +17,7 @@ from .models import *
 
 engine = create_async_engine(DB_URL, echo=True, future=True)
 async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-
+Base = declarative_base()
 
 def parse_and_convert_data():
     parser = GoogleSheetParser(GOOGLE_TOKEN, AUTHORIZED_USER)

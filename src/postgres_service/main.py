@@ -19,15 +19,7 @@ app.include_router(selection_router)
 
 if __name__ == "__main__":
     import uvicorn
-
-# investigation (TO BE DELETED)
-    modnames: tuple = sys.builtin_module_names
-    print ("BUILT-IN MODULES")
-    for name in modnames:
-        print(name)
-#investigation
-        
-
+    
     uvicorn.run(
         "main:app",
         host="0.0.0.0",

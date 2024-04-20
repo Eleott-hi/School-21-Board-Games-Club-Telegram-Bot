@@ -7,9 +7,6 @@ ENV POSTGRES_PASSWORD postgres
 # Set the working directory inside the container
 WORKDIR /docker-entrypoint-initdb.d
 
-# Add the initialization script to the container
-# COPY . /docker-entrypoint-initdb.d
-
 # Expose the PostgreSQL port
 EXPOSE 5432:5432
 
