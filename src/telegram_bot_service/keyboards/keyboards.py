@@ -16,9 +16,17 @@ def main_menu_keyboard():
                 text="Games",
                 callback_data=Transfer(to_=Screen.ALL_GAMES_QUERY).pack(),
             ),
+        ],
+        [
             InlineKeyboardButton(
                 text="Filters",
                 callback_data=Transfer(to_=Screen.GAME_FILTER_MENU).pack(),
+            ),
+        ],
+        [
+            InlineKeyboardButton(
+                text="Profile",
+                callback_data=Transfer(to_=Screen.NOT_IMPLEMENTED).pack(),
             ),
         ],
         [
@@ -35,7 +43,7 @@ def games_list_keyboard(data: dict):
     kb = [
         [
             InlineKeyboardButton(
-                text=game["gameName"],
+                text=game["title"],
                 callback_data=Transfer(
                     to_=Screen.GAME_MENU,
                     from_=Screen.PAGINATION,

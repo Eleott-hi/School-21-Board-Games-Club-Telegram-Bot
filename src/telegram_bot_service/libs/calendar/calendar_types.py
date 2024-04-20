@@ -1,9 +1,10 @@
 """Default namespaces"""
 
 from enum import IntEnum
+from typing import Optional
 
 from aiogram.filters.callback_data import CallbackData
-
+from callbacks.callback_data import Transfer
 
 # setting callback_data prefix and parts
 
@@ -38,9 +39,10 @@ class DialogCalendarCallback(CallbackData, prefix="dialog_calendar"):
     # clip_past: bool
 
 
-class SimpleCalendarCallback(CallbackData, prefix="simple_calendar"):
+class SimpleCalendarCallback(CallbackData, prefix="simple_calendar", sep="|"):
     act: SimpleCalendarAction
     year: int
     month: int
     day: int
     clip_past: bool
+    back_data: Optional[str] = None

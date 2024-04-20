@@ -39,12 +39,12 @@ async def get_game_by_id(id: str) -> Dict:
 @async_wait()
 async def get_games_by_str_in_title(title: str) -> List[Dict]:
     title = title.strip().lower()
-    return list(filter(lambda x: title in x["gameName"].lower(), games))
+    return list(filter(lambda x: title in x["title"].lower(), games))
 
 
 def pritify_game_info(game: Dict):
     return (
-        f'Title: {game["gameName"]}, {game["year"]}\n\n'
+        f'Title: {game["title"]}, {game["year"]}\n\n'
         f'Genre: {game["genre"]}\n'
         f'Players {game["minPlayers"]}-{game["maxPlayers"]}\n'
         f'Min age: {game["minAge"]}\n'

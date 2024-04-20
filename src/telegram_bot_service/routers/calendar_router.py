@@ -29,13 +29,18 @@ router = Router()
 async def nav_cal_handler(query: CallbackQuery, callback_data: Transfer):
     message = query.message
 
+    game_id = callback_data.meta_
+    from_ = callback_data.from_
     print(callback_data, flush=True)
 
     await create_or_edit_media(
         message=message,
         photo="resources/static/booking.jpg",
         caption="Please select a date: ",
-        reply_markup=await SimpleCalendar().start_calendar(clip_past=True),
+        reply_markup=await SimpleCalendar().start_calendar(
+            clip_past=True,
+            back_data=Transfer(to_=Screen.GAME_MENU, from_=from_, meta_=game_id).pack(),
+        ),
         edit=True,
     )
 
@@ -46,6 +51,11 @@ async def nav_cal_handler(query: CallbackQuery, callback_data: Transfer):
 async def process_simple_calendar(query: CallbackQuery, callback_data: CallbackData):
     message = query.message
 
+    transfer = callback_data.back_data
+    transfer = Transfer.unpack(transfer.replace("|", ":"))
+    game_id = transfer.meta_
+    from_ = transfer.from_
+
     calendar = SimpleCalendar()
     selected, date = await calendar.process_selection(query, callback_data)
 
@@ -55,8 +65,12 @@ async def process_simple_calendar(query: CallbackQuery, callback_data: CallbackD
             photo="resources/static/booking.jpg",
             caption="You booked on: " + date.strftime("%d.%m.%Y"),
             reply_markup=inline_builder(
-                text=["⬅️ Back to Main Menu"],
-                callback_data=[Transfer(to_=Screen.MAIN_MENU).pack()],
+                text=["⬅️ Back", "⬅️ Back to Main Menu"],
+                callback_data=[
+                    Transfer(to_=Screen.GAME_MENU, from_=from_, meta_=game_id).pack(),
+                    Transfer(to_=Screen.MAIN_MENU).pack(),
+                ],
+                sizes=[1],
             ),
             edit=True,
         )

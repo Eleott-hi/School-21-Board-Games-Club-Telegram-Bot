@@ -50,10 +50,10 @@ async def set_players_num_filter(
     query: CallbackQuery, callback_data: Transfer, db: MDB, user_mongo: Dict
 ):
     message = query.message
-    players_num = callback_data.meta_
+    new_value = callback_data.meta_
 
-    if players_num:
-        user_mongo["optional_filters"]["number_of_players"] = int(players_num)
+    if new_value:
+        user_mongo["optional_filters"]["number_of_players"] = int(new_value)
     elif "number_of_players" in user_mongo["optional_filters"]:
         del user_mongo["optional_filters"]["number_of_players"]
 

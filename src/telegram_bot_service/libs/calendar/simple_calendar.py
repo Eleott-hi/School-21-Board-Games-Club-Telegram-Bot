@@ -21,7 +21,7 @@ class SimpleCalendar:
         year: int = datetime.now().year,
         month: int = datetime.now().month,
         clip_past=False,
-        back_button=None,
+        back_data=None,
     ) -> InlineKeyboardMarkup:
         """
         Creates an inline keyboard with the provided year and month
@@ -32,7 +32,12 @@ class SimpleCalendar:
         day = None
         markup = []
         ignore_callback = SimpleCalendarCallback(
-            act=SimpleCalendarAction.IGNORE, year=year, month=month, day=0, clip_past=clip_past
+            act=SimpleCalendarAction.IGNORE,
+            year=year,
+            month=month,
+            day=0,
+            clip_past=clip_past,
+            back_data=back_data,
         )  # for buttons with no answer
 
         # First row - Month and Year
@@ -46,6 +51,7 @@ class SimpleCalendar:
                         month=month,
                         day=1,
                         clip_past=clip_past,
+                        back_data=back_data,
                     ).pack(),
                 ),
                 InlineKeyboardButton(
@@ -60,6 +66,7 @@ class SimpleCalendar:
                         month=month,
                         day=1,
                         clip_past=clip_past,
+                        back_data=back_data,
                     ).pack(),
                 ),
             ]
@@ -76,8 +83,6 @@ class SimpleCalendar:
         # Calendar rows - Days of month
         month_calendar = calendar.monthcalendar(year, month)
         curr_date = datetime.now().date()
-
-    
 
         for week in month_calendar:
             calendar_row = []
@@ -101,6 +106,7 @@ class SimpleCalendar:
                             month=month,
                             day=day,
                             clip_past=clip_past,
+                            back_data=back_data,
                         ).pack(),
                     )
                 )
@@ -117,9 +123,16 @@ class SimpleCalendar:
                         month=month,
                         day=day,
                         clip_past=clip_past,
+                        back_data=back_data,
                     ).pack(),
                 ),
-                InlineKeyboardButton(text=" ", callback_data=ignore_callback.pack()),
+                (
+                    InlineKeyboardButton(text="⬅️ Back", callback_data=back_data)
+                    if back_data
+                    else InlineKeyboardButton(
+                        text=" ", callback_data=ignore_callback.pack()
+                    )
+                ),
                 InlineKeyboardButton(
                     text=">",
                     callback_data=SimpleCalendarCallback(
@@ -128,6 +141,7 @@ class SimpleCalendar:
                         month=month,
                         day=day,
                         clip_past=clip_past,
+                        back_data=back_data,
                     ).pack(),
                 ),
             ]
@@ -161,7 +175,10 @@ class SimpleCalendar:
             prev_date = datetime(int(data.year) - 1, int(data.month), 1)
             await query.message.edit_reply_markup(
                 reply_markup=await self.start_calendar(
-                    int(prev_date.year), int(prev_date.month), clip_past=data.clip_past
+                    int(prev_date.year),
+                    int(prev_date.month),
+                    clip_past=data.clip_past,
+                    back_data=data.back_data,
                 )
             )
         # user navigates to next year, editing message with new calendar
@@ -169,7 +186,10 @@ class SimpleCalendar:
             next_date = datetime(int(data.year) + 1, int(data.month), 1)
             await query.message.edit_reply_markup(
                 reply_markup=await self.start_calendar(
-                    int(next_date.year), int(next_date.month), clip_past=data.clip_past
+                    int(next_date.year),
+                    int(next_date.month),
+                    clip_past=data.clip_past,
+                    back_data=data.back_data,
                 )
             )
         # user navigates to previous month, editing message with new calendar
@@ -177,7 +197,10 @@ class SimpleCalendar:
             prev_date = temp_date - timedelta(days=1)
             await query.message.edit_reply_markup(
                 reply_markup=await self.start_calendar(
-                    int(prev_date.year), int(prev_date.month), clip_past=data.clip_past
+                    int(prev_date.year),
+                    int(prev_date.month),
+                    clip_past=data.clip_past,
+                    back_data=data.back_data,
                 )
             )
         # user navigates to next month, editing message with new calendar
@@ -185,7 +208,10 @@ class SimpleCalendar:
             next_date = temp_date + timedelta(days=31)
             await query.message.edit_reply_markup(
                 reply_markup=await self.start_calendar(
-                    int(next_date.year), int(next_date.month), clip_past=data.clip_past
+                    int(next_date.year),
+                    int(next_date.month),
+                    clip_past=data.clip_past,
+                    back_data=data.back_data,
                 )
             )
         # at some point user clicks DAY button, returning date

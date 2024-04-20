@@ -36,6 +36,14 @@ dp.include_routers(
     calendar_router,
     global_searcher_router,
 )
+
+
+@dp.error()
+async def message_not_modified_handler(update):
+    print("Something went wrong:", update, flush=True)
+    return True
+
+
 # await dp.start_polling(bot)
 
 

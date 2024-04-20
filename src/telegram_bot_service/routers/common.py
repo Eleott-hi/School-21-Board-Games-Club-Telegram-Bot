@@ -34,7 +34,7 @@ async def display_game_menu(message, game, from_: Optional[Screen], edit: bool):
     await create_or_edit_media(
         message=message,
         photo=game["photo_link"],
-        caption=f"{game['gameName']}, {game['year']}",
+        caption=f"{game['title']}, {game['year']}",
         reply_markup=game_menu_keyboard(game_id=game["id"], from_=from_),
         edit=edit,
     )

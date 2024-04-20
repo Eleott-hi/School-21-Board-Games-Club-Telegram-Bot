@@ -9,7 +9,7 @@ database = client.telegram_db
 games = [
     dict(
         id="1",
-        gameName="Game 1",
+        title="Game 1",
         description="Description 1",
         minPlayers=2,
         maxPlayers=6,
@@ -31,7 +31,7 @@ games = [
     ),
     dict(
         id="2",
-        gameName="Game 2",
+        title="Game 2",
         description="Description 2",
         minPlayers=1,
         maxPlayers=4,
@@ -53,7 +53,7 @@ games = [
     ),
     dict(
         id="3",
-        gameName="Game 3",
+        title="Game 3",
         description="Description 3",
         minPlayers=3,
         maxPlayers=8,
@@ -75,7 +75,7 @@ games = [
     ),
     dict(
         id="4",
-        gameName="Game 4",
+        title="Game 4",
         description="Description 4",
         minPlayers=2,
         maxPlayers=5,
@@ -97,7 +97,7 @@ games = [
     ),
     dict(
         id="5",
-        gameName="Game 5",
+        title="Game 5",
         description="Description 5",
         minPlayers=4,
         maxPlayers=10,
@@ -119,7 +119,7 @@ games = [
     ),
     dict(
         id="6",
-        gameName="Game 6",
+        title="Game 6",
         description="Description 5",
         minPlayers=4,
         maxPlayers=10,
@@ -141,7 +141,7 @@ games = [
     ),
     dict(
         id="7",
-        gameName="Game 7",
+        title="Game 7",
         description="Description 5",
         minPlayers=4,
         maxPlayers=10,
@@ -163,7 +163,7 @@ games = [
     ),
     dict(
         id="8",
-        gameName="Game 8",
+        title="Game 8",
         description="Description 5",
         minPlayers=4,
         maxPlayers=10,
@@ -185,7 +185,7 @@ games = [
     ),
     dict(
         id="9",
-        gameName="Game 9",
+        title="Game 9",
         description="Description 5",
         minPlayers=4,
         maxPlayers=10,
@@ -207,7 +207,7 @@ games = [
     ),
     dict(
         id="10",
-        gameName="Game 10",
+        title="Game 10",
         description="Description 5",
         minPlayers=4,
         maxPlayers=10,
@@ -229,7 +229,7 @@ games = [
     ),
     dict(
         id="11",
-        gameName="Game 11",
+        title="Game 11",
         description="Description 5",
         minPlayers=4,
         maxPlayers=10,
@@ -251,7 +251,7 @@ games = [
     ),
     dict(
         id="12",
-        gameName="Game 12",
+        title="Game 12",
         description="Description 5",
         minPlayers=4,
         maxPlayers=10,
@@ -273,7 +273,7 @@ games = [
     ),
     dict(
         id="13",
-        gameName="Game 13",
+        title="Game 13",
         description="Description 5",
         minPlayers=4,
         maxPlayers=10,
@@ -295,7 +295,7 @@ games = [
     ),
     dict(
         id="14",
-        gameName="Game 14",
+        title="Game 14",
         description="Description 5",
         minPlayers=4,
         maxPlayers=10,
@@ -317,7 +317,7 @@ games = [
     ),
     dict(
         id="15",
-        gameName="Game 15",
+        title="Game 15",
         description="Description 5",
         minPlayers=4,
         maxPlayers=10,
