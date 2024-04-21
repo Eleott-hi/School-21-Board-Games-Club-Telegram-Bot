@@ -9,7 +9,6 @@ sqlalchemy
 sqlalchemy-utils
 requests
 pytz
-
 httpx
 passlib
 pyjwt

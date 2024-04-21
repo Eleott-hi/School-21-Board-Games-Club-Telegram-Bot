@@ -29,7 +29,7 @@ def parse_and_convert_data():
     for val in all_values:
         game = BoardGame(
             gameName = val[1],
-            status = "reserved"
+            status = False
         )
         games.append(game)
     return games

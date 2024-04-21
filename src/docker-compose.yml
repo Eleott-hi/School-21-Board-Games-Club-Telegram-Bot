@@ -1,6 +1,6 @@
 version: '3'
 services:
-  postgres:
+  postgres_service:
     image: postgres:16
     container_name: postgres_service
     environment:
@@ -9,7 +9,22 @@ services:
     ports:
       - 5432:5432
 
-
+  db_service:
+    build: ./db_service
+    container_name: db_service
+    working_dir: /app
+    volumes:
+      - ./db_service:/app
+    command: bash -c "make"
+    depends_on:
+      - postgres_service
+    environment:
+      DB_USER: "postgres"
+      DB_PASSWORD: "postgres"
+      TZ: "Asia/Novosibirsk"
+    restart: on-failure
+    ports:
+      - 8001:8000
 
 
   # redis_service:
@@ -29,15 +44,15 @@ services:
   #   ports:
   #     - 8080:8080
 
-  telegram_bot_service:
-    build: ./telegram_bot_service
-    container_name: telegram_bot_service
-    working_dir: /app
-    volumes:
-      - ./telegram_bot_service:/app
-    command: bash -c "make"
-    environment:
-      TZ: "Asia/Novosibirsk"
-    restart: on-failure
-    ports:
-      - 8000:8000
+  # telegram_bot_service:
+  #   build: ./telegram_bot_service
+  #   container_name: telegram_bot_service
+  #   working_dir: /app
+  #   volumes:
+  #     - ./telegram_bot_service:/app
+  #   command: bash -c "make"
+  #   environment:
+  #     TZ: "Asia/Novosibirsk"
+  #   restart: on-failure
+  #   ports:
+  #     - 8000:8000
