@@ -12,8 +12,6 @@ down:
 logs:
 	docker-compose logs
 
-
-
 clean_db:
 	-docker stop $(DB_CONTAINER_NAME)
 	-docker rm $(DB_CONTAINER_NAME)

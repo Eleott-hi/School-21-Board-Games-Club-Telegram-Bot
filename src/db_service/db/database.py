@@ -41,14 +41,15 @@ async def init_db():
     """
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
-        orm_objects = parse_and_convert_data()
-        for obj in orm_objects:
-            try:
-                await conn.execute(obj.__table__.insert(), obj.dict())
-            except Exception as e:
-                print(f"error during insertion {e}")
-                continue
-        await conn.commit()
+# if you want to insert data into the database from google sheets
+        # orm_objects = parse_and_convert_data()
+        # for obj in orm_objects:
+        #     try:
+        #         await conn.execute(obj.__table__.insert(), obj.dict())
+        #     except Exception as e:
+        #         print(f"error during insertion {e}")
+        #         continue
+        # await conn.commit()
 
 
 async def get_session():

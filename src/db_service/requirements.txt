@@ -12,3 +12,5 @@ pytz
 httpx
 passlib
 pyjwt
+aioitertools
+gspread

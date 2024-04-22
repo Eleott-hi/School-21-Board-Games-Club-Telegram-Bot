@@ -25,21 +25,21 @@ async def get_testing_query(name: Annotated[str, Query()],
     return {"game id" : result_data} if result_data else None
 
 
-@router.get("/change_state", status_code=200)
+@router.post("/change_state", status_code=200)
 async def change_state(data: TestState = Body(),
                        session: AsyncSession = Depends(get_session)):
-    stmt = select(BoardGame).where(BoardGame.gameName == data.name)
+    stmt = select(BoardGame).where(BoardGame.gameName == data.gameName)
     result = await session.exec(stmt)
     result_data = result.all()
 
     if result_data:
         for game in result_data:
-            game.status = data.state
+            game.status = data.status
             await session.commit()
         return {"status": "success"}
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Game with name '{data.name}' not found")
+                            detail=f"Game with name '{data.gameName}' not found")
     
     
 @router.post("/insertgame", status_code=201)
