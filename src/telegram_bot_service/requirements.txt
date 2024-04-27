@@ -1,0 +1,7 @@
+aiogram
+python-dotenv
+fastapi[all]
+ngrok
+pymongo
+motor
+# aiogram_dialog
