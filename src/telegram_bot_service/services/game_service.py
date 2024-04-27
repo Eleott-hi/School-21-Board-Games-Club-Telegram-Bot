@@ -1,7 +1,7 @@
 from typing import List, Dict
 from database.database import games
 from services.utils import async_wait
-# from callbacks.callback_data import Screen, Transfer
+from callbacks.callback_data import Screen, Transfer
 
 
 @async_wait()
@@ -12,7 +12,6 @@ async def get_games_with_filters(filters: Dict):
     title = filters.get("title", None)
 
     res = games
-
     if title:
         res = await get_games_by_str_in_title(title)
 
@@ -43,13 +42,13 @@ async def get_games_by_str_in_title(title: str) -> List[Dict]:
     return list(filter(lambda x: title in x["title"].lower(), games))
 
 
-# def pritify_game_info(game: Dict):
-#     return (
-#         f'Title: {game["title"]}, {game["year"]}\n\n'
-#         f'Genre: {game["genre"]}\n'
-#         f'Players {game["minPlayers"]}-{game["maxPlayers"]}\n'
-#         f'Min age: {game["minAge"]}\n'
-#         f'Complexity: {game["gameComplexity"]}\n'
-#         f'Status: {game["status"]}\n'
-#         f'Description: {game["gameShortDescription"]}\n'
-#     )
+def pritify_game_info(game: Dict):
+    return (
+        f'Title: {game["title"]}, {game["year"]}\n\n'
+        f'Genre: {game["genre"]}\n'
+        f'Players {game["minPlayers"]}-{game["maxPlayers"]}\n'
+        f'Min age: {game["minAge"]}\n'
+        f'Complexity: {game["gameComplexity"]}\n'
+        f'Status: {game["status"]}\n'
+        f'Description: {game["gameShortDescription"]}\n'
+    )

@@ -38,9 +38,9 @@ async def bot_webhook(update: types.Update):
         # dp.register_error_handler(bot, update)
 
 
-# @app.post(f"/notify")
-# async def notify_bot():
-#     await bot.send_message(chat_id=572276281, text="Hello from /send")
+@app.post(f"/notify")
+async def notify_bot():
+    await bot.send_message(chat_id=572276281, text="Hello from /send")
 
 
 if __name__ == "__main__":

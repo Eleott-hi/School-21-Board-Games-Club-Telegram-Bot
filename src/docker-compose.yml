@@ -9,6 +9,7 @@ services:
     ports:
       - 5432:5432
 
+
   db_service:
     build: ./db_service
     container_name: db_service
@@ -26,6 +27,7 @@ services:
     ports:
       - 8001:8000
 
+
   telegram_bot_service:
     build: ./telegram_bot_service
     container_name: telegram_bot_service
@@ -40,6 +42,7 @@ services:
     ports:
       - 8000:8000
 
+
   mongodb_service:
     image: mongo
     container_name: mongodb_service
@@ -49,6 +52,7 @@ services:
     restart: on-failure
     ports:
       - 27017:27017
+
 
 volumes:
   shared_data:

@@ -15,6 +15,10 @@ from routers.schemas import (
 router = APIRouter(prefix="/db", tags=["test"])
 
 
+@router.get("/ab_test", status_code=200)
+async def perform_test(session: AsyncSession = Depends(get_session)):
+    return {"test_key" : "this_is_the_test"}
+
 @router.get("/id", status_code=200)
 async def get_testing_query(name: Annotated[str, Query()], 
                             session: AsyncSession = Depends(get_session)):
