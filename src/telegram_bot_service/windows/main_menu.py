@@ -11,7 +11,13 @@ from aiogram_dialog import Window
 from aiogram_dialog.widgets.media import StaticMedia
 
 
-from windows.states import FilterSG, MainMenuSG, PaginationSG, not_implemented_yet
+from windows.states import (
+    FilterSG,
+    MainMenuSG,
+    PaginationSG,
+    ProfileSG,
+    not_implemented_yet,
+)
 
 
 dialog = Dialog(
@@ -28,7 +34,7 @@ dialog = Dialog(
             data={"offset": 0, "limit": 10},
         ),
         Start(Const("Filters"), id="filters", state=FilterSG.main),
-        Button(Const("Profile"), id="profile", on_click=not_implemented_yet),
+        Start(Const("Profile"), id="profile", state=ProfileSG.main),
         Button(Const("Help"), id="help", on_click=not_implemented_yet),
         state=MainMenuSG.main,
     ),

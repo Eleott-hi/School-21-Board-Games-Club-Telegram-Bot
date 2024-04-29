@@ -84,7 +84,7 @@ async def get_filter(aiogd_context, db: MDB, user_mongo: Dict, **kwargs):
     if not aiogd_context.widget_data:
         aiogd_context.widget_data = filters
 
-    return filters
+    return {**filters, "genres": ", ".join(filters["genres"])}
 
 
 async def goto_pagination(
@@ -105,7 +105,9 @@ dialog = Dialog(
             type=ContentType.PHOTO,
         ),
         # Format("{title} {id}"),
-        SwitchTo(Format("Genre: {genres}"), id="genre", state=FilterSG.genre),
+        SwitchTo(
+            Format("Genre: {genres}"), id="genre", state=FilterSG.genre
+        ),
         SwitchTo(Format("Age: {age}"), id="age", state=FilterSG.age),
         SwitchTo(
             Format("Players: {players_num}"),

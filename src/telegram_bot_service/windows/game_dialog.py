@@ -120,10 +120,23 @@ async def get_game(dialog_manager: DialogManager, aiogd_context, **kwargs):
     )
 
 
+def pritify_game_info(game: Dict):
+    
+    return (
+        f'Title: {game["title"]}, {game["year"]}\n\n'
+        f'Genre: {game["genre"]}\n'
+        f'Players {game["minPlayers"]}-{game["maxPlayers"]}\n'
+        f'Min age: {game["minAge"]}\n'
+        f'Complexity: {game["gameComplexity"]}\n'
+        f'Status: {game["status"]}\n'
+        f'Description: {game["gameShortDescription"]}\n'
+    )
+
+
 dialog = Dialog(
     Window(
         StaticMedia(
-            path="resources/static/menu.jpg",
+            path="resources/static/game_1.jpg",
             type=ContentType.PHOTO,
         ),
         Format("{title} {id}"),
@@ -131,13 +144,18 @@ dialog = Dialog(
             SwitchTo(Const("Info"), id="game_info", state=GameDialogSG.info),
             SwitchTo(Const("Booking"), id="game_booking", state=GameDialogSG.booking),
         ),
+        Row(
+            SwitchTo(
+                Const("Collections"), id="collections", state=GameDialogSG.collections
+            ),
+        ),
         Cancel(Const("⬅️ Back"), id="cancel"),
         state=GameDialogSG.main,
         getter=get_game,
     ),
     Window(
         StaticMedia(
-            path="resources/static/menu.jpg",
+            path="resources/static/game_1.jpg",
             type=ContentType.PHOTO,
         ),
         Format("{title} {id}"),
@@ -148,7 +166,7 @@ dialog = Dialog(
     ),
     Window(
         StaticMedia(
-            path="resources/static/menu.jpg",
+            path="resources/static/game_1.jpg",
             type=ContentType.PHOTO,
         ),
         CustomCalendar(
@@ -158,6 +176,20 @@ dialog = Dialog(
         ),
         SwitchTo(Const("⬅️ Back"), id="to_game_menu", state=GameDialogSG.main),
         state=GameDialogSG.booking,
+        getter=get_game,
+    ),
+    Window(
+        StaticMedia(
+            path="resources/static/game_1.jpg",
+            type=ContentType.PHOTO,
+        ),
+        Button(
+            Const("❤️ Add to favorite"),
+            id="add_to_favorites",
+            on_click=not_implemented_yet,
+        ),
+        SwitchTo(Const("⬅️ Back"), id="to_game_menu", state=GameDialogSG.main),
+        state=GameDialogSG.collections,
         getter=get_game,
     ),
 )

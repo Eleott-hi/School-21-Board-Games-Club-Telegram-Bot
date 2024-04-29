@@ -38,7 +38,8 @@ async def on_click(
     if value == "Any":
         await widget.reset_checked()
     else:
-        await widget.set_checked("Any", checked=False)
+        curr_values = widget.get_checked()
+        await widget.set_checked("Any", checked=curr_values == [value])
 
 
 async def on_state_changed(

@@ -17,6 +17,7 @@ from windows.main_menu import dialog as main_menu_dialog, MainMenuSG , FilterSG
 from windows.pagination import dialog as pagination_dialog
 from windows.game_dialog import dialog as game_dialog
 from windows.filters_dialog import dialog as filters_dialog
+from windows.profile_dialog import dialog as profile_dialog
 
 from middlewares.MongoDB import UserMongoDB
 
@@ -51,6 +52,7 @@ dp.include_routers(
     pagination_dialog,
     game_dialog,
     filters_dialog,
+    profile_dialog,
     # dialog_router,
     # router,
     # filter_router,
