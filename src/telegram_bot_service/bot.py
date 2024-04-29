@@ -10,7 +10,22 @@ from routers.routers import router
 from routers.filter_router import router as filter_router
 from routers.global_searcher import router as global_searcher_router
 from routers.calendar_router import router as calendar_router
+
+# from routers.dialog_router import dialogs as dialog_router, MySG as DialogSG
+
+from windows.main_menu import dialog as main_menu_dialog, MainMenuSG , FilterSG
+from windows.pagination import dialog as pagination_dialog
+from windows.game_dialog import dialog as game_dialog
+from windows.filters_dialog import dialog as filters_dialog
+
 from middlewares.MongoDB import UserMongoDB
+
+from aiogram_dialog import setup_dialogs
+
+from aiogram.filters import Command
+from aiogram.types import Message
+
+from aiogram_dialog import DialogManager, StartMode
 
 
 async def on_startup(bot):
@@ -30,12 +45,24 @@ dp.shutdown.register(on_shutdown)
 
 dp.update.middleware(UserMongoDB())
 
+
 dp.include_routers(
-    router,
-    filter_router,
-    calendar_router,
-    global_searcher_router,
+    main_menu_dialog,
+    pagination_dialog,
+    game_dialog,
+    filters_dialog,
+    # dialog_router,
+    # router,
+    # filter_router,
+    # calendar_router,
+    # global_searcher_router,
 )
+setup_dialogs(dp)
+
+
+@dp.message(Command("start"))
+async def start(message: Message, dialog_manager: DialogManager):
+    await dialog_manager.start(MainMenuSG.main, mode=StartMode.NORMAL)
 
 
 @dp.error()

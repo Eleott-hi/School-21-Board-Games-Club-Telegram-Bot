@@ -4,7 +4,16 @@ from aiogram import BaseMiddleware
 from aiogram.types import Message, TelegramObject, CallbackQuery
 
 
-init_user_dict = {"optional_filters": {}}
+init_user_dict = {
+    "optional_filters": dict(
+        age=None,
+        status=None,
+        players_num=None,
+        duration=None,
+        complexity=None,
+        genres=[],
+    )
+}
 
 
 class UserMongoDB(BaseMiddleware):
