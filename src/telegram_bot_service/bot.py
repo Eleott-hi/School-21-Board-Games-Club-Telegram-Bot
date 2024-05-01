@@ -5,15 +5,7 @@ from database.database import database
 
 from config import TELEGRAM_TOKEN
 
-from routers.routers import router
-
-from routers.filter_router import router as filter_router
-from routers.global_searcher import router as global_searcher_router
-from routers.calendar_router import router as calendar_router
-
-# from routers.dialog_router import dialogs as dialog_router, MySG as DialogSG
-
-from windows.main_menu import dialog as main_menu_dialog, MainMenuSG , FilterSG
+from windows.main_menu import dialog as main_menu_dialog, MainMenuSG
 from windows.pagination import dialog as pagination_dialog
 from windows.game_dialog import dialog as game_dialog
 from windows.filters_dialog import dialog as filters_dialog
@@ -53,11 +45,6 @@ dp.include_routers(
     game_dialog,
     filters_dialog,
     profile_dialog,
-    # dialog_router,
-    # router,
-    # filter_router,
-    # calendar_router,
-    # global_searcher_router,
 )
 setup_dialogs(dp)
 
@@ -68,8 +55,11 @@ async def start(message: Message, dialog_manager: DialogManager):
 
 
 @dp.error()
-async def message_not_modified_handler(update):
-    print("Something went wrong:", update, flush=True)
+async def message_not_modified_handler(error_event):
+    print("Something went wrong:", error_event, flush=True)
+
+    error_event.update.callback_query.answer("Something went wrong")
+
     return True
 
 

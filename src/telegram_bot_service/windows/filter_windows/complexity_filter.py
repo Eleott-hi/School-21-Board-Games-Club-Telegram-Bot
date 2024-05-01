@@ -2,14 +2,17 @@ from typing import Dict
 
 from aiogram.types import ContentType, CallbackQuery
 from aiogram_dialog import Window
-from aiogram_dialog.widgets.text import Const, Format
+from aiogram_dialog.widgets.text import Const, Format, Multi
 from aiogram_dialog.widgets.media import StaticMedia
-from aiogram_dialog.widgets.text import Const
 from aiogram_dialog.manager.manager import ManagerImpl
 from aiogram_dialog.widgets.kbd import ManagedRadio, SwitchTo, Column, Radio
 from database.database import MDB
 
 from windows.states import FilterSG
+from core.Localization import localization
+
+window_text = localization["complexity_filter_window"]
+common_text = localization["common"]
 
 
 async def get_values(aiogd_context, user_mongo, **kwargs):
@@ -41,7 +44,10 @@ window = Window(
         path="resources/static/filter.jpg",
         type=ContentType.PHOTO,
     ),
-    Format("Select game complexity"),
+    Multi(
+        Const(window_text["title"]),
+        Const(window_text["description"]),
+    ),
     Column(
         Radio(
             Format("🔘 {item}"),
@@ -52,7 +58,7 @@ window = Window(
             on_state_changed=on_state_changed,
         )
     ),
-    SwitchTo(Const("⬅️ Back"), id="to_game_menu", state=FilterSG.main),
+    SwitchTo(Const(common_text["back_button"]), id="to_game_menu", state=FilterSG.main),
     state=FilterSG.complexity,
     getter=get_values,
 )

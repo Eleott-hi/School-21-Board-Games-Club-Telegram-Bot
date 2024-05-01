@@ -62,6 +62,10 @@ from aiogram_dialog.widgets.kbd.calendar_kbd import (
     CalendarYearsView,
 )
 from aiogram_dialog.widgets.text import Const, Format
+from core.Localization import localization
+
+window_text = localization["game_menu_window"]
+common_text = localization["common"]
 
 
 class CustomCalendar(Calendar):
@@ -121,7 +125,7 @@ async def get_game(dialog_manager: DialogManager, aiogd_context, **kwargs):
 
 
 def pritify_game_info(game: Dict):
-    
+
     return (
         f'Title: {game["title"]}, {game["year"]}\n\n'
         f'Genre: {game["genre"]}\n'
@@ -141,15 +145,25 @@ dialog = Dialog(
         ),
         Format("{title} {id}"),
         Row(
-            SwitchTo(Const("Info"), id="game_info", state=GameDialogSG.info),
-            SwitchTo(Const("Booking"), id="game_booking", state=GameDialogSG.booking),
+            SwitchTo(
+                Const(window_text["info_button"]),
+                id="game_info",
+                state=GameDialogSG.info,
+            ),
+            SwitchTo(
+                Const(window_text["booking_button"]),
+                id="game_booking",
+                state=GameDialogSG.booking,
+            ),
         ),
         Row(
             SwitchTo(
-                Const("Collections"), id="collections", state=GameDialogSG.collections
+                Const(window_text["collection_button"]),
+                id="collections",
+                state=GameDialogSG.collections,
             ),
         ),
-        Cancel(Const("⬅️ Back"), id="cancel"),
+        Cancel(Const(common_text["back_button"]), id="cancel"),
         state=GameDialogSG.main,
         getter=get_game,
     ),
@@ -160,7 +174,11 @@ dialog = Dialog(
         ),
         Format("{title} {id}"),
         Format("{description}"),
-        SwitchTo(Const("⬅️ Back"), id="to_game_menu", state=GameDialogSG.main),
+        SwitchTo(
+            Const(common_text["back_button"]),
+            id="to_game_menu",
+            state=GameDialogSG.main,
+        ),
         state=GameDialogSG.info,
         getter=get_game,
     ),
@@ -174,7 +192,11 @@ dialog = Dialog(
             on_click=on_date_selected,
             config=CalendarConfig(min_date=datetime.date.today()),
         ),
-        SwitchTo(Const("⬅️ Back"), id="to_game_menu", state=GameDialogSG.main),
+        SwitchTo(
+            Const(common_text["back_button"]),
+            id="to_game_menu",
+            state=GameDialogSG.main,
+        ),
         state=GameDialogSG.booking,
         getter=get_game,
     ),
@@ -188,7 +210,11 @@ dialog = Dialog(
             id="add_to_favorites",
             on_click=not_implemented_yet,
         ),
-        SwitchTo(Const("⬅️ Back"), id="to_game_menu", state=GameDialogSG.main),
+        SwitchTo(
+            Const(common_text["back_button"]),
+            id="to_game_menu",
+            state=GameDialogSG.main,
+        ),
         state=GameDialogSG.collections,
         getter=get_game,
     ),

@@ -39,6 +39,7 @@ services:
     command: bash -c "make"
     environment:
       TZ: "Asia/Novosibirsk"
+    env_file: telegram_bot_service/.env
     restart: on-failure
     ports:
       - 8000:8000

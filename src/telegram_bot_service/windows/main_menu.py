@@ -4,12 +4,12 @@ from aiogram.types import CallbackQuery
 
 from aiogram_dialog import Data, Dialog, DialogManager, Window
 from aiogram_dialog.widgets.kbd import Button, Cancel, Start, Group
-from aiogram_dialog.widgets.text import Const
+from aiogram_dialog.widgets.text import Const, Multi
 from aiogram.types import ContentType
 
 from aiogram_dialog import Window
 from aiogram_dialog.widgets.media import StaticMedia
-
+from core.Localization import localization
 
 from windows.states import (
     FilterSG,
@@ -19,6 +19,9 @@ from windows.states import (
     not_implemented_yet,
 )
 
+from config import PAGINATION_LIMIT
+
+window_text = localization["main_menu_window"]
 
 dialog = Dialog(
     Window(
@@ -26,16 +29,21 @@ dialog = Dialog(
             path="resources/static/menu.jpg",
             type=ContentType.PHOTO,
         ),
-        Const("Main menu"),
+    Multi(
+        Const(window_text["title"]),
+        Const(window_text["description"]),
+    ),
         Start(
-            Const("Games"),
+            Const(window_text["all_games_button"]),
             id="all_games",
             state=PaginationSG.main,
-            data={"offset": 0, "limit": 10},
+            data={"offset": 0, "limit": PAGINATION_LIMIT},
         ),
-        Start(Const("Filters"), id="filters", state=FilterSG.main),
-        Start(Const("Profile"), id="profile", state=ProfileSG.main),
-        Button(Const("Help"), id="help", on_click=not_implemented_yet),
+        Start(Const(window_text["filters_button"]), id="filters", state=FilterSG.main),
+        Start(Const(window_text["profile_button"]), id="profile", state=ProfileSG.main),
+        Button(
+            Const(window_text["help_button"]), id="help", on_click=not_implemented_yet
+        ),
         state=MainMenuSG.main,
     ),
 )

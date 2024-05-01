@@ -51,7 +51,7 @@ from typing import Dict
 from aiogram_dialog import DialogManager
 
 
-from aiogram_dialog.widgets.text import Const, Format
+from aiogram_dialog.widgets.text import Const, Format, Multi
 from windows.filter_windows.age_window import window as age_window
 from windows.filter_windows.genre_window import window as genre_window
 from windows.filter_windows.players_filter import window as players_filter
@@ -62,6 +62,11 @@ from windows.filter_windows.duration_filter import window as duration_filter
 from windows.filter_windows.status_filter import window as status_filter
 
 from database.database import MDB
+from config import PAGINATION_LIMIT
+from core.Localization import localization
+
+window_text = localization["filters_menu_window"]
+common_text = localization["common"]
 
 
 def get_filters_from_user_mongo(user_mongo: Dict) -> Dict[str, Any]:
@@ -92,10 +97,26 @@ async def goto_pagination(
 ):
     filters = manager.middleware_data["user_mongo"]["optional_filters"]
     # await manager.mark_closed()
+
     await manager.start(
         PaginationSG.main,
-        data=dict(offset=0, limit=10, **filters),
+        data=dict(offset=0, limit=PAGINATION_LIMIT, **filters),
     )
+
+
+async def reset_filters(
+    callback: CallbackQuery, button: Button, manager: DialogManager
+):
+    user = manager.middleware_data["user_mongo"]
+    filters = user["optional_filters"]
+    db = manager.middleware_data["db"]
+
+    for key in filters:
+        filters[key] = None
+
+    await db.users.replace_one({"_id": user["_id"]}, user)
+    manager.current_context().widget_data = {}
+    await manager.show()
 
 
 dialog = Dialog(
@@ -104,27 +125,51 @@ dialog = Dialog(
             path="resources/static/filter.jpg",
             type=ContentType.PHOTO,
         ),
-        # Format("{title} {id}"),
-        SwitchTo(
-            Format("Genre: {genres}"), id="genre", state=FilterSG.genre
+        Multi(
+            Const(window_text["title"]),
+            Const(window_text["description"]),
         ),
-        SwitchTo(Format("Age: {age}"), id="age", state=FilterSG.age),
         SwitchTo(
-            Format("Players: {players_num}"),
+            Format(window_text["genre_button"]),
+            id="genre",
+            state=FilterSG.genre,
+        ),
+        SwitchTo(
+            Format(window_text["age_button"]),
+            id="age",
+            state=FilterSG.age,
+        ),
+        SwitchTo(
+            Format(window_text["players_number_button"]),
             id="players_num",
             state=FilterSG.players_num,
         ),
         SwitchTo(
-            Format("Duration: {duration}"), id="duration", state=FilterSG.duration
+            Format(window_text["duration_button"]),
+            id="duration",
+            state=FilterSG.duration,
         ),
         SwitchTo(
-            Format("Complexity: {complexity}"),
+            Format(window_text["complexity_button"]),
             id="complexity",
             state=FilterSG.complexity,
         ),
-        SwitchTo(Format("Status: {status}"), id="status", state=FilterSG.status),
-        Button(Const("🔎 Search"), id="search", on_click=goto_pagination),
-        Cancel(Const("⬅️ Back to menu"), id="cancel"),
+        SwitchTo(
+            Format(window_text["status_button"]),
+            id="status",
+            state=FilterSG.status,
+        ),
+        Row(
+            Button(
+                Const(window_text["reset_button"]), id="reset", on_click=reset_filters
+            ),
+            Button(
+                Const(window_text["search_button"]),
+                id="search",
+                on_click=goto_pagination,
+            ),
+        ),
+        Cancel(Const(common_text["back_to_main_menu_button"]), id="cancel"),
         state=FilterSG.main,
         getter=get_filter,
     ),

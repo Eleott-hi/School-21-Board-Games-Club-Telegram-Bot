@@ -35,6 +35,10 @@ from aiogram_dialog import DialogManager
 from aiogram_dialog.widgets.kbd import Select
 from aiogram_dialog.widgets.text import Format
 
+from core.Localization import localization
+
+window_text = localization["pagination_window"]
+common_text = localization["common"]
 
 # event
 # middleware_data
@@ -97,8 +101,8 @@ async def get_games(*, aiogd_context, **kwargs):
         "pages": ceil(
             aiogd_context.dialog_data["total"] / aiogd_context.dialog_data["limit"]
         ),
-        "prev": "⬅️",
-        "next": "➡️",
+        "prev": window_text["prev_button"],
+        "next": window_text["next_button"],
     }
 
 
@@ -147,7 +151,7 @@ dialog = Dialog(
             path="resources/static/menu.jpg",
             type=ContentType.PHOTO,
         ),
-        Const("Pagination"),
+        Const(window_text["title"]),
         Column(
             Select(
                 Format("{item[0]}"),
@@ -164,7 +168,7 @@ dialog = Dialog(
             Button(Format("{next}"), id="next", on_click=next_page),
             Button(Format("{pages}"), id="last_page", on_click=go_to_last_page),
         ),
-        Cancel(Const("⬅️ Back"), id="cancel"),
+        Cancel(Const(common_text["back_button"]), id="cancel"),
         state=PaginationSG.main,
         getter=get_games,
     ),

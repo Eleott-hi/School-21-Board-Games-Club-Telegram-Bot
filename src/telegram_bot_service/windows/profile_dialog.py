@@ -31,16 +31,21 @@ from aiogram_dialog.widgets.kbd import (
     Column,
     CalendarConfig,
 )
-from aiogram_dialog.widgets.text import Const, Format
+from aiogram_dialog.widgets.text import Const, Format, Multi
 from database.database import MDB
 from aiogram_dialog.manager.manager import ManagerImpl
+
+from core.Localization import localization
+
+window_text = localization["profile_menu_window"]
+common_text = localization["common"]
 
 
 async def get_data(dialog_manager: ManagerImpl, **kwargs):
     print(dialog_manager.event.from_user.full_name, flush=True)
 
-    user_name: str = dialog_manager.event.from_user.full_name
-    return dict(user_name=user_name)
+    username: str = dialog_manager.event.from_user.full_name
+    return dict(username=username)
 
 
 dialog = Dialog(
@@ -49,7 +54,10 @@ dialog = Dialog(
             path="resources/static/profile.jpg",
             type=ContentType.PHOTO,
         ),
-        Format("Hello, {user_name}!"),
+        Multi(
+            Format(window_text["title"]),
+            Const(window_text["description"]),
+        ),
         SwitchTo(Const("Bookings"), id="bookings", state=ProfileSG.bookings),
         SwitchTo(Const("Collections"), id="collections", state=ProfileSG.collections),
         Cancel(Const("⬅️ Back to menu"), id="cancel"),
@@ -62,7 +70,7 @@ dialog = Dialog(
             type=ContentType.PHOTO,
         ),
         Const("Here is your collections"),
-        SwitchTo(Const("⬅️ Back"), id="cancel", state=ProfileSG.main),
+        SwitchTo(Const(common_text["back_button"]), id="cancel", state=ProfileSG.main),
         state=ProfileSG.collections,
         # getter=get_data,
     ),
@@ -72,7 +80,7 @@ dialog = Dialog(
             type=ContentType.PHOTO,
         ),
         Const("Here is your bookings"),
-        SwitchTo(Const("⬅️ Back"), id="cancel", state=ProfileSG.main),
+        SwitchTo(Const(common_text["back_button"]), id="cancel", state=ProfileSG.main),
         state=ProfileSG.bookings,
         # getter=get_data,
     ),

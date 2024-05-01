@@ -1,7 +1,6 @@
 from typing import List, Dict
 from database.database import games
 from services.utils import async_wait
-from callbacks.callback_data import Screen, Transfer
 
 
 class GameService:
@@ -15,7 +14,7 @@ class GameService:
 
         res = games
         if title:
-            res = await get_games_by_str_in_title(title)
+            res = await cls.get_games_by_str_in_title(title)
 
         total = len(res)
         from_ = offset * limit
@@ -40,4 +39,3 @@ class GameService:
     async def get_games_by_str_in_title(cls, title: str) -> List[Dict]:
         title = title.strip().lower()
         return list(filter(lambda x: title in x["title"].lower(), games))
-
