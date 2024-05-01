@@ -6,6 +6,7 @@ from bot import bot, dp, types, Dispatcher, Bot
 import os
 from typing import Dict
 
+
 WEBHOOK_PATH = f"/bot/{TELEGRAM_TOKEN}"
 
 

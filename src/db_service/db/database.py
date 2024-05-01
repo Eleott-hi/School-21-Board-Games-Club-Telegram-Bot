@@ -14,7 +14,6 @@ from .google_parser import GoogleSheetParser
 from .config import DB_URL, GOOGLE_TOKEN, AUTHORIZED_USER
 from .models import *
 
-
 engine = create_async_engine(DB_URL, echo=True, future=True)
 async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 Base = declarative_base()
@@ -36,9 +35,6 @@ def parse_and_convert_data():
 
 
 async def init_db():
-    """
-    Initializes the database by creating all defined models. This function is asynchronous.
-    """
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
 # if you want to insert data into the database from google sheets
