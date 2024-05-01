@@ -11,7 +11,7 @@ class FibonacciRpcClient:
         self.response = None
         self.corr_id = None
 
-
+#abc
     async def on_response(self, message):
         if self.corr_id == message.correlation_id:
             self.response = message.body.decode()
