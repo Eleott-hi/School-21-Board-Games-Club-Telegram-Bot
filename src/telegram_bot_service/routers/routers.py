@@ -15,17 +15,18 @@ from aiogram.types import Message, CallbackQuery
 from motor.motor_asyncio import AsyncIOMotorDatabase as MDB
 
 from config import PAGINATION_LIMIT
-from rpc.rpc_client import caller
+from rpc.rpc_client import FibonacciRpcClient
+import asyncio
 
 router = Router()
 
 
 @router.message(CommandStart())
 async def command_start_handler(message: Message, db: MDB) -> None:
-    print('START\nSTART\nSTART\nSTART\nSTART\nSTART\n')
-    data = await caller.call('test_call')
-    print(data)
-    print('END\nEND\nEND\nEND\nEND\nEND\nEND\n')
+    loop = asyncio.get_event_loop()
+    rpc_client = FibonacciRpcClient(loop)
+    await rpc_client.connect()
+    response = await rpc_client.call('test_call')
     await display_main_menu(message, edit=False)
 
 
