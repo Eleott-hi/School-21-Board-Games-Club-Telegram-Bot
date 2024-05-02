@@ -4,6 +4,7 @@ import json
 
 class Language(str, Enum):
     RU = "ru"
+    EN = "en"
 
 
 class LocalizationManager:

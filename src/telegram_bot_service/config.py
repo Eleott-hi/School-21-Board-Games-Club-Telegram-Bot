@@ -1,5 +1,3 @@
 import os
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN") or "INVALID_TOKEN"
-PAGINATION_LIMIT = 5
-

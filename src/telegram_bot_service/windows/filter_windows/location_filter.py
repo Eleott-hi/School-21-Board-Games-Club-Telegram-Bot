@@ -14,7 +14,7 @@ from aiogram_dialog.widgets.kbd import (
 )
 from database.database import MDB
 
-from windows.states import FilterSG
+from windows.states import TitleSearchSG
 from core.Localization import localization
 
 window_text = localization["genre_filter_window"]
@@ -75,7 +75,9 @@ window = Window(
             on_state_changed=on_state_changed,
         )
     ),
-    SwitchTo(Const(common_text["back_button"]), id="to_game_menu", state=FilterSG.main),
-    state=FilterSG.genre,
+    SwitchTo(
+        Const(common_text["back_button"]), id="to_game_menu", state=TitleSearchSG.main
+    ),
+    state=TitleSearchSG.location,
     getter=get_values,
 )

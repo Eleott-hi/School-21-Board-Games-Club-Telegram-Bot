@@ -1,67 +1,33 @@
-from copy import deepcopy
 import datetime
-from math import ceil
+from datetime import date
+from copy import deepcopy
 from typing import Any, Dict
 
-from aiogram.types import CallbackQuery
+from aiogram.types import CallbackQuery, ContentType
 
 from aiogram_dialog import Data, Dialog, DialogManager, Window
 from aiogram_dialog.widgets.kbd import (
     Button,
     Cancel,
-    Start,
-    Group,
     Row,
     Cancel,
-    Next,
     SwitchTo,
-)
-from aiogram_dialog.widgets.text import Const
-from aiogram.types import ContentType
-
-from aiogram_dialog import Window
-from aiogram_dialog.widgets.media import StaticMedia
-
-
-from windows.states import MainMenuSG, PaginationSG, GameDialogSG
-from windows.states import not_implemented_yet, ignore
-from aiogram_dialog.widgets.kbd import (
-    Button,
-    ScrollingGroup,
-    Select,
-    Column,
-    CalendarConfig,
-)
-from aiogram_dialog.widgets.text import Const
-import operator
-from typing import Any
-
-from aiogram.types import CallbackQuery
-
-from aiogram_dialog import DialogManager
-from aiogram_dialog.widgets.kbd import Select
-from aiogram_dialog.widgets.text import Format
-from datetime import date
-
-from aiogram.types import CallbackQuery
-
-from aiogram_dialog import DialogManager
-from aiogram_dialog.widgets.kbd import Calendar
-from typing import Dict
-
-from aiogram_dialog import DialogManager
-from aiogram_dialog.widgets.kbd import (
     Calendar,
     CalendarScope,
     CalendarUserConfig,
+    CalendarConfig,
 )
+from aiogram_dialog.widgets.text import Const, Format, Multi
+from aiogram_dialog.widgets.media import StaticMedia
 from aiogram_dialog.widgets.kbd.calendar_kbd import (
     CalendarDaysView,
     CalendarMonthView,
     CalendarScopeView,
     CalendarYearsView,
 )
-from aiogram_dialog.widgets.text import Const, Format
+
+from services.game_service import GameService
+from windows.states import GameDialogSG, not_implemented_yet
 from core.Localization import localization
 
 window_text = localization["game_menu_window"]
@@ -102,25 +68,23 @@ async def on_date_selected(
     callback: CallbackQuery, widget, manager: DialogManager, selected_date: date
 ):
     await callback.answer(str(selected_date))
-
     await manager.switch_to(GameDialogSG.main)
 
 
 async def get_game(dialog_manager: DialogManager, aiogd_context, **kwargs):
-    print(
-        "get_game",
-        aiogd_context.dialog_data,
-        aiogd_context.start_data,
-        flush=True,
-    )
+    print(aiogd_context.start_data, flush=True)
+    print(aiogd_context.dialog_data, flush=True)
 
     if not aiogd_context.dialog_data:
         aiogd_context.dialog_data = deepcopy(aiogd_context.start_data)
 
+    data = aiogd_context.dialog_data
+    game: Dict = await GameService.get_game_by_id(data["game_id"])
+
     return dict(
-        id=aiogd_context.dialog_data["game_id"],
-        title="Game title",
-        description="Game description",
+        id=game["id"],
+        title=game["title"],
+        description=game["description"],
     )
 
 
@@ -143,7 +107,7 @@ dialog = Dialog(
             path="resources/static/game_1.jpg",
             type=ContentType.PHOTO,
         ),
-        Format("{title} {id}"),
+        Format("{title}"),
         Row(
             SwitchTo(
                 Const(window_text["info_button"]),
@@ -172,8 +136,11 @@ dialog = Dialog(
             path="resources/static/game_1.jpg",
             type=ContentType.PHOTO,
         ),
-        Format("{title} {id}"),
-        Format("{description}"),
+        Multi(
+            Format("{title}"),
+            Format("{description}"),
+            sep="\n\n",
+        ),
         SwitchTo(
             Const(common_text["back_button"]),
             id="to_game_menu",

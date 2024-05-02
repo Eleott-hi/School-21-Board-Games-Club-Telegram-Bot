@@ -23,7 +23,7 @@ from aiogram_dialog import Window
 from aiogram_dialog.widgets.media import StaticMedia
 
 
-from windows.states import ProfileSG
+from windows.states import OptionsSG, ProfileSG
 from aiogram_dialog.widgets.kbd import (
     Button,
     ScrollingGroup,
@@ -55,12 +55,12 @@ dialog = Dialog(
             type=ContentType.PHOTO,
         ),
         Multi(
-            Format(window_text["title"]),
-            Const(window_text["description"]),
+            Format(window_text["title"]), Const(window_text["description"]), sep="\n\n"
         ),
-        SwitchTo(Const("Bookings"), id="bookings", state=ProfileSG.bookings),
-        SwitchTo(Const("Collections"), id="collections", state=ProfileSG.collections),
-        Cancel(Const("⬅️ Back to menu"), id="cancel"),
+        SwitchTo(Const(window_text["booking_button"]), id="bookings", state=ProfileSG.bookings),
+        SwitchTo(Const(window_text["collections_button"]), id="collections", state=ProfileSG.collections),
+        Start(Const(window_text["settings_button"]), id="options", state=OptionsSG.main),
+        Cancel(Const(common_text["back_to_main_menu_button"]), id="cancel"),
         state=ProfileSG.main,
         getter=get_data,
     ),

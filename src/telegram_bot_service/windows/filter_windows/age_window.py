@@ -53,6 +53,7 @@ window = Window(
     Multi(
         Const(window_text["title"]),
         Const(window_text["description"]),
+        sep="\n\n",
     ),
     Column(
         Radio(

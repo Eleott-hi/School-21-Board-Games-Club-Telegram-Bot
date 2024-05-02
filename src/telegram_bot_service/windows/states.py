@@ -18,6 +18,7 @@ class GameDialogSG(StatesGroup):
     booking = State()
     collections = State()
 
+
 class FilterSG(StatesGroup):
     main = State()
     players_num = State()
@@ -27,10 +28,26 @@ class FilterSG(StatesGroup):
     genre = State()
     status = State()
 
+
+class TitleSearchSG(StatesGroup):
+    main = State()
+    location = State()
+
+
 class ProfileSG(StatesGroup):
     main = State()
     bookings = State()
     collections = State()
+
+
+class OptionsSG(StatesGroup):
+    main = State()
+    pagination = State()
+
+
+class NotFoundSG(StatesGroup):
+    main = State()
+
 
 async def not_implemented_yet(
     callback: CallbackQuery, button: Button, manager: DialogManager

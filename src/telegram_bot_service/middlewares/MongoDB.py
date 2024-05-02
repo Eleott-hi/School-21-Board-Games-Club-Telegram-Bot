@@ -3,7 +3,6 @@ from typing import Any, Awaitable, Callable, Dict
 from aiogram import BaseMiddleware
 from aiogram.types import Message, TelegramObject, CallbackQuery
 
-
 init_user_dict: Dict = {
     "optional_filters": dict(
         age=None,
@@ -12,6 +11,9 @@ init_user_dict: Dict = {
         duration=None,
         complexity=None,
         genres=[],
+    ), 
+    "options":dict(
+        pagination_limit=5
     )
 }
 

@@ -23,7 +23,8 @@ from aiogram_dialog import Window
 from aiogram_dialog.widgets.media import StaticMedia
 
 
-from windows.states import MainMenuSG, PaginationSG, FilterSG
+from services.game_service import GameService
+from windows.states import GameDialogSG, MainMenuSG, NotFoundSG, PaginationSG, FilterSG
 from windows.states import not_implemented_yet, ignore
 from aiogram_dialog.widgets.kbd import (
     Button,
@@ -62,7 +63,7 @@ from windows.filter_windows.duration_filter import window as duration_filter
 from windows.filter_windows.status_filter import window as status_filter
 
 from database.database import MDB
-from config import PAGINATION_LIMIT
+
 from core.Localization import localization
 
 window_text = localization["filters_menu_window"]
@@ -92,16 +93,23 @@ async def get_filter(aiogd_context, db: MDB, user_mongo: Dict, **kwargs):
     return {**filters, "genres": ", ".join(filters["genres"])}
 
 
-async def goto_pagination(
-    callback: CallbackQuery, button: Button, manager: DialogManager
-):
-    filters = manager.middleware_data["user_mongo"]["optional_filters"]
-    # await manager.mark_closed()
+async def goto(callback: CallbackQuery, button: Button, manager: DialogManager):
+    user = manager.middleware_data["user_mongo"]
+    options = user["options"]
+    filters = user["optional_filters"]
+    filters = dict(offset=0, limit=options["pagination_limit"], **filters)
 
-    await manager.start(
-        PaginationSG.main,
-        data=dict(offset=0, limit=PAGINATION_LIMIT, **filters),
-    )
+    games = await GameService.get_games(filters)
+
+    if games["total"] == 0:
+        await manager.start(NotFoundSG.main)
+
+    elif games["total"] == 1:
+        game_id = games["games"][0]["id"]
+        await manager.start(GameDialogSG.main, data=dict(game_id=game_id))
+
+    else:
+        await manager.start(PaginationSG.main, data=filters)
 
 
 async def reset_filters(
@@ -128,6 +136,7 @@ dialog = Dialog(
         Multi(
             Const(window_text["title"]),
             Const(window_text["description"]),
+            sep="\n\n",
         ),
         SwitchTo(
             Format(window_text["genre_button"]),
@@ -166,11 +175,12 @@ dialog = Dialog(
             Button(
                 Const(window_text["search_button"]),
                 id="search",
-                on_click=goto_pagination,
+                on_click=goto,
             ),
         ),
         Cancel(Const(common_text["back_to_main_menu_button"]), id="cancel"),
         state=FilterSG.main,
+        parse_mode="HTML",
         getter=get_filter,
     ),
     genre_window,

@@ -6,37 +6,36 @@ from aiogram_dialog.widgets.text import Const, Format, Multi
 from aiogram_dialog.widgets.media import StaticMedia
 from aiogram_dialog.manager.manager import ManagerImpl
 from aiogram_dialog.widgets.kbd import ManagedRadio, SwitchTo, Column, Radio
-from database.database import MDB
 
-from windows.states import FilterSG
+from database.database import MDB
+from windows.states import OptionsSG
 from core.Localization import localization
 
-window_text = localization["duration_filter_window"]
+window_text = localization["pagination_option_window"]
 common_text = localization["common"]
 
 
-async def get_values(aiogd_context, user_mongo, **kwargs):
-    return dict(duration=["Any", "15", "30", "45", "60"])
+async def get_ages(**kwargs):
+    return dict(pagination_limits=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
 
-async def on_state_changed(
+async def process_event(
     cb: CallbackQuery,
     button: ManagedRadio,
     manager: ManagerImpl,
     value: str,
 ):
+    value = int(value)
 
     db: MDB = manager.middleware_data["db"]
-    user_mongo: Dict = manager.middleware_data["user_mongo"]
+    user: Dict = manager.middleware_data["user_mongo"]
+    options = user["options"]
 
-    curr_value = value if value != "Any" else None
+    filter_name: str = "pagination_limit"
 
-    filter_name: str = "duration"
-    filters = user_mongo["optional_filters"]
-
-    if filters[filter_name] != curr_value:
-        filters[filter_name] = curr_value
-        await db.users.replace_one({"_id": user_mongo["_id"]}, user_mongo)
+    if options[filter_name] != value:
+        options[filter_name] = value
+        await db.users.replace_one({"_id": user["_id"]}, user)
 
 
 window = Window(
@@ -53,13 +52,15 @@ window = Window(
         Radio(
             Format("🔘 {item}"),
             Format("⚪️ {item}"),
-            id="duration",
+            id="pagination_limit",
             item_id_getter=str,
-            items="duration",
-            on_state_changed=on_state_changed,
+            items="pagination_limits",
+            on_state_changed=process_event,
         )
     ),
-    SwitchTo(Const(common_text["back_button"]), id="to_game_menu", state=FilterSG.main),
-    state=FilterSG.duration,
-    getter=get_values,
+    SwitchTo(
+        Const(common_text["back_button"]), id="to_game_menu", state=OptionsSG.main
+    ),
+    state=OptionsSG.pagination,
+    getter=get_ages,
 )
