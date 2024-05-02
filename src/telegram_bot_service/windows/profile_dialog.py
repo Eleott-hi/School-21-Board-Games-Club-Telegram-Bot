@@ -42,10 +42,10 @@ common_text = localization["common"]
 
 
 async def get_data(dialog_manager: ManagerImpl, **kwargs):
-    print(dialog_manager.event.from_user.full_name, flush=True)
-
-    username: str = dialog_manager.event.from_user.full_name
-    return dict(username=username)
+    user = dialog_manager.event.from_user
+    if user:
+        username: str = user.full_name
+        return dict(username=username)
 
 
 dialog = Dialog(

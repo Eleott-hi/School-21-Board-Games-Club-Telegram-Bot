@@ -4,7 +4,7 @@ from aiogram import BaseMiddleware
 from aiogram.types import Message, TelegramObject, CallbackQuery
 
 
-init_user_dict = {
+init_user_dict: Dict = {
     "optional_filters": dict(
         age=None,
         status=None,

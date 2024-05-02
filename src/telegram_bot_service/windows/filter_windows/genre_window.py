@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 from aiogram.types import ContentType, CallbackQuery
 from aiogram_dialog import Window
@@ -20,17 +20,9 @@ from core.Localization import localization
 window_text = localization["genre_filter_window"]
 common_text = localization["common"]
 
+
 async def get_values(**kwargs):
-    return dict(
-        genres=[
-            "Any",
-            "Strategy",
-            "RPG",
-            "War",
-            "Shooter",
-            "Sports"
-        ]
-    )
+    return dict(genres=["Any", "Strategy", "RPG", "War", "Shooter", "Sports"])
 
 
 async def on_click(
@@ -51,11 +43,11 @@ async def on_state_changed(
     db: MDB = manager.middleware_data["db"]
     user_mongo: Dict = manager.middleware_data["user_mongo"]
 
-    curr_values = widget.get_checked()
+    curr_values: List = widget.get_checked()
     curr_values = [] if curr_values == ["Any"] else curr_values
 
     filter_name: str = "genres"
-    filters = user_mongo["optional_filters"]
+    filters: List | None = user_mongo["optional_filters"]
 
     if len(filters[filter_name] or []) != len(curr_values):
         filters[filter_name] = curr_values or None

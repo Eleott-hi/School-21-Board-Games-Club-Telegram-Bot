@@ -1,34 +1,13 @@
-import operator
-from copy import deepcopy
-from math import ceil
-from typing import Any, Dict
+from typing import Dict
 
 from aiogram.types import ContentType, CallbackQuery
-from aiogram_dialog import Data, Dialog, DialogManager, Window, ChatEvent
+from aiogram_dialog import Window
 from aiogram_dialog.widgets.text import Const, Format, Multi
 from aiogram_dialog.widgets.media import StaticMedia
 from aiogram_dialog.manager.manager import ManagerImpl
-from aiogram_dialog.widgets.kbd import (
-    Checkbox,
-    ManagedCheckbox,
-    ManagedRadio,
-    Start,
-    Group,
-    Row,
-    Cancel,
-    Next,
-    SwitchTo,
-    Button,
-    ScrollingGroup,
-    Select,
-    Column,
-    CalendarConfig,
-    Radio,
-    Multiselect,
-)
+from aiogram_dialog.widgets.kbd import ManagedRadio, SwitchTo, Column, Radio
 from database.database import MDB
-
-from windows.states import FilterSG, not_implemented_yet, ignore
+from windows.states import FilterSG
 
 from core.Localization import localization
 
@@ -36,7 +15,7 @@ window_text = localization["age_filter_window"]
 common_text = localization["common"]
 
 
-async def get_ages(aiogd_context, user_mongo, **kwargs):
+async def get_ages(**kwargs):
     return dict(ages=["Any", "5+", "10+", "18+"])
 
 
@@ -46,7 +25,7 @@ async def get_ages(aiogd_context, user_mongo, **kwargs):
 # <class 'str'>
 
 
-async def on_state_changed(
+async def process_event(
     cb: CallbackQuery,
     button: ManagedRadio,
     manager: ManagerImpl,
@@ -82,7 +61,7 @@ window = Window(
             id="age",
             item_id_getter=str,
             items="ages",
-            on_state_changed=on_state_changed,
+            on_state_changed=process_event,
         )
     ),
     SwitchTo(Const(common_text["back_button"]), id="to_game_menu", state=FilterSG.main),
