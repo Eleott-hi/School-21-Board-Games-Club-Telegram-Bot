@@ -45,8 +45,4 @@ class UserMongoDB(BaseMiddleware):
 
         print(user)
 
-<<<<<<< HEAD
         return await handler(event, data)
-=======
-        return await handler(event, data)
->>>>>>> 9c11c41104dc53551de7fd198094c44fd94f8b30

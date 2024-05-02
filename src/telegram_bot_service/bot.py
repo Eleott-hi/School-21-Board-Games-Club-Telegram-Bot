@@ -70,6 +70,7 @@ async def message_not_modified_handler(error_event):
     return True
 
 
+
 # await dp.start_polling(bot)
 
 
