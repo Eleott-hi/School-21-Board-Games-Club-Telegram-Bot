@@ -1,0 +1,97 @@
+{
+    "main_menu_window": {
+        "title": "<b>🏠 Main Menu</b>",
+        "description": "👆 Select an action",
+        "all_games_button": "🎮 All Games List",
+        "filters_button": "🔍 Filters",
+        "title_search_button": "🔍 Search by Title",
+        "profile_button": "👤 Profile",
+        "help_button": "📖 Help"
+    },
+    "pagination_window": {
+        "title": "<b>🎮 Games List</b>",
+        "no_pages_message": "There are no more pages",
+        "prev_button": "⬅️",
+        "next_button": "➡️"
+    },
+    "title_search_menu_window": {
+        "title": "<b>🔍 Search by Title</b>",
+        "description": "👆 Enter a title to search for",
+        "current_input": "💬 Current value: <b>\"{input}\"</b>",
+        "location_button": "📍 Text location: {location}",
+        "reset_button": "🔄 Clear filters",
+        "search_button": "🔎 Search"
+    },
+    "filters_menu_window": {
+        "title": "<b>🔍 Filters</b>",
+        "description": "👆 Select search parameters",
+        "players_number_button": "👥 Number of Players: {players_num}",
+        "genre_button": "🎲 Genre: {genres}",
+        "age_button": "🔞 Age: {age}",
+        "complexity_button": "🧠 Complexity: {complexity}",
+        "duration_button": "⏱️ Duration (min): {duration}",
+        "status_button": "📊 Status: {status}",
+        "reset_button": "🔄 Clear filters",
+        "search_button": "🔎 Search"
+    },
+    "genre_filter_window": {
+        "title": "<b>🎲 Genre</b>",
+        "description": "👆 Select a genre",
+        "genre_rpg_button": "🗡️ RPG",
+        "genre_strategy_button": "🏰 Strategy",
+        "genre_war_button": "⚔️ War",
+        "genre_shooter_button": "🔫 Shooter",
+        "genre_sports_button": "🏅 Sports"
+    },
+    "duration_filter_window": {
+        "title": "<b>⏱️ Duration</b>",
+        "description": "👆 Select the game duration"
+    },
+    "players_number_filter_window": {
+        "title": "<b>👥 Number of Players</b>",
+        "description": "👆 Select the number of players"
+    },
+    "age_filter_window": {
+        "title": "<b>🔞 Age</b>",
+        "description": "👆 Select the age"
+    },
+    "status_filter_window": {
+        "title": "<b>📊 Status</b>",
+        "description": "🚦 Select status",
+        "available_button": "✅ Available",
+        "unavailable_button": "❌ Unavailable"
+    },
+    "complexity_filter_window": {
+        "title": "<b>🧠 Complexity</b>",
+        "description": "🔍 Select the complexity",
+        "easy_button": "😀 Easy",
+        "medium_button": "😐 Medium",
+        "hard_button": "😠 Hard"
+    },
+    "help_menu_window": {
+        "title": "<b>📖 Help</b>",
+        "description": "🆘 Help about the bot",
+        "help_menu_button": "📖 Help"
+    },
+    "game_menu_window": {
+        "title": "<b>🎮 Game</b>",
+        "description": "📜 Information about the game",
+        "info_button": "📖 Information",
+        "booking_button": "📅 Booking",
+        "collection_button": "👤 Collection"
+    },
+    "profile_menu_window": {
+        "title": "<b>👋 Hello, {username}!</b>",
+        "description": "👤 Information about you",
+        "profile_menu_button": "👤 Profile"
+    },
+    "not_found_window": {
+        "title": "<b>😕 Nothing Found</b>",
+        "description": "I didn't find anything, so there is a sad kitty somewhere 😿"
+    },
+    "common": {
+        "back_button": "⬅️ Back",
+        "back_to_main_menu_button": "⬅️ Back to Main Menu",
+        "any_button": "🔲 Any"
+    }
+}

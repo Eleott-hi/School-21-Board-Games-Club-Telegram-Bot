@@ -57,10 +57,10 @@ services:
     command: bash -c "make"
     environment:
       TZ: "Asia/Novosibirsk"
+    env_file: telegram_bot_service/.env
     restart: on-failure
     ports:
       - 8000:8000
-
 
   mongodb_service:
     image: mongo
@@ -71,7 +71,6 @@ services:
     restart: on-failure
     ports:
       - 27017:27017
-
 
 volumes:
   shared_data:

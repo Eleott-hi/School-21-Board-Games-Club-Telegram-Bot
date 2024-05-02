@@ -4,6 +4,4 @@ fastapi[all]
 ngrok
 pymongo
 motor
-pika
-aiormq
-# aiogram_dialog
+aiogram_dialog

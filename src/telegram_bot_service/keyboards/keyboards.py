@@ -7,12 +7,9 @@ from aiogram.utils.keyboard import (
 
 from callbacks.callback_data import Screen, Transfer
 from keyboards.buttons import pagination_buttons, to_main_menu_button
-from services.utils import test_func
+
 
 def main_menu_keyboard():
-    data = test_func()
-    print(data["test_key"])
-    test_button: str = data["test_key"] if data else "Filters"
     kb = [
         [
             InlineKeyboardButton(
@@ -22,7 +19,7 @@ def main_menu_keyboard():
         ],
         [
             InlineKeyboardButton(
-                text=test_button,
+                text="Filters",
                 callback_data=Transfer(to_=Screen.GAME_FILTER_MENU).pack(),
             ),
         ],

@@ -3,8 +3,19 @@ from typing import Any, Awaitable, Callable, Dict
 from aiogram import BaseMiddleware
 from aiogram.types import Message, TelegramObject, CallbackQuery
 
-
-init_user_dict = {"optional_filters": {}}
+init_user_dict: Dict = {
+    "optional_filters": dict(
+        age=None,
+        status=None,
+        players_num=None,
+        duration=None,
+        complexity=None,
+        genres=[],
+    ), 
+    "options":dict(
+        pagination_limit=5
+    )
+}
 
 
 class UserMongoDB(BaseMiddleware):
@@ -34,4 +45,8 @@ class UserMongoDB(BaseMiddleware):
 
         print(user)
 
+<<<<<<< HEAD
         return await handler(event, data)
+=======
+        return await handler(event, data)
+>>>>>>> 9c11c41104dc53551de7fd198094c44fd94f8b30

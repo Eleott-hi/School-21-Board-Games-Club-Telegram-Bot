@@ -1,7 +1,4 @@
 import asyncio
-import os
-import httpx
-from config import DB_API_URL
 
 from typing import List, Dict
 from random import choice
@@ -104,9 +101,3 @@ async def create_or_edit_media(
         )
 
 
-def test_func():
-    addr = f'{DB_API_URL}ab_test'
-    print(addr)
-    query = httpx.get(addr)
-    data = query.json()
-    return data

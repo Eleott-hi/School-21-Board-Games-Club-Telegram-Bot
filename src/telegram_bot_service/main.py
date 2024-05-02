@@ -6,12 +6,11 @@ from bot import bot, dp, types, Dispatcher, Bot
 import os
 from typing import Dict
 
-
 WEBHOOK_PATH = f"/bot/{TELEGRAM_TOKEN}"
 
 
 async def lifespan(app):
-    tmp = await ngrok.forward(8001, authtoken_from_env=True)
+    tmp = await ngrok.forward(8000, authtoken_from_env=True)
     forward_url = tmp.url()
 
     print(f"Forwarding established at {forward_url}")
@@ -47,4 +46,4 @@ async def notify_bot():
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

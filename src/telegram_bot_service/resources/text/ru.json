@@ -1,0 +1,110 @@
+{
+    "main_menu_window": {
+        "title": "<b>🏠 Главное меню</b>",
+        "description": "👆 Выберите действие",
+        "all_games_button": "🎮 Список всех игр",
+        "filters_button": "🔍 Фильтры",
+        "title_search_button": "🔍 Поиск по названию",
+        "profile_button": "👤 Профиль",
+        "help_button": "📖 Помощь"
+    },
+    "pagination_window": {
+        "title": "<b>🎮 Список игр</b>",
+        "no_pages_message": "Больше нет страниц",
+        "prev_button": "⬅️",
+        "next_button": "➡️"
+    },
+    "title_search_menu_window": {
+        "title": "<b>🔍 Поиск по названию</b>",
+        "description": "👆 Введите название для поиска",
+        "current_input": "💬 Текущее значение: <b>\"{input}\"</b>",
+        "location_button": "📍 Местоположение текста: {location}",
+        "reset_button": "🔄 Очистить фильтры",
+        "search_button": "🔎 Поиск"
+    },
+    "filters_menu_window": {
+        "title": "<b>🔍 Фильтры</b>",
+        "description": "👆 Выберите параметры для поиска",
+        "players_number_button": "👥 Количество игроков: {players_num}",
+        "genre_button": "🎲 Жанр: {genres}",
+        "age_button": "🔞 Возраст: {age}",
+        "complexity_button": "🧠 Сложность: {complexity}",
+        "duration_button": "⏱️ Длительность (мин): {duration}",
+        "status_button": "📊 Статус: {status}",
+        "reset_button": "🔄 Очистить фильтры",
+        "search_button": "🔎 Поиск"
+    },
+    "genre_filter_window": {
+        "title": "<b>🎲 Жанр</b>",
+        "description": "👆 Выберите жанр",
+        "genre_rpg_button": "🗡️ RPG",
+        "genre_strategy_button": "🏰 Стратегия",
+        "genre_war_button": "⚔️ Война",
+        "genre_shooter_button": "🔫 Шутер",
+        "genre_sports_button": "🏅 Спорт"
+    },
+    "duration_filter_window": {
+        "title": "<b>⏱️ Длительность</b>",
+        "description": "👆 Выберите длительность игры"
+    },
+    "players_number_filter_window": {
+        "title": "<b>👥 Количество игроков</b>",
+        "description": "👆 Выберите количество игроков"
+    },
+    "age_filter_window": {
+        "title": "<b>🔞 Возраст</b>",
+        "description": "👆 Выберите возраст"
+    },
+    "status_filter_window": {
+        "title": "<b>📊 Статус</b>",
+        "description": "👆 Выберите статус",
+        "available_button": "✅ Доступно",
+        "unavailable_button": "❌ Недоступно"
+    },
+    "complexity_filter_window": {
+        "title": "<b>🧠 Сложность</b>",
+        "description": "👆 Выберите сложность",
+        "easy_button": "😀 Легко",
+        "medium_button": "😐 Средне",
+        "hard_button": "😠 Сложно"
+    },
+    "help_menu_window": {
+        "title": "<b>📖 Помощь</b>",
+        "description": "🆘 Помощь по боту",
+        "help_menu_button": "📖 Помощь"
+    },
+    "game_menu_window": {
+        "title": "<b>🎮 Игра</b>",
+        "description": "📜 Информация о игре",
+        "info_button": "📖 Информация",
+        "booking_button": "📅 Бронирование",
+        "collection_button": "👤 Коллекция"
+    },
+    "profile_menu_window": {
+        "title": "<b>👋 Привет, {username}!</b>",
+        "description": "👤 Информация о вас",
+        "profile_menu_button": "👤 Профиль",
+        "booking_button":"📅 Бронирования",
+        "collections_button":"👤 Коллекция",
+        "settings_button": "⚙️ Настройки"
+    },
+    "settings_window": {
+        "title": "<b>⚙️ Настройки</b>",
+        "description": "👇 Выберите параметр",
+        "pagination_button": "Пагинация: {pagination_limit}"
+    },
+    "pagination_option_window": {
+        "title": "<b>⚙️ Пагинация</b>",
+        "description": "👇 Выберите количество элементов на странице",
+        "pagination_button": "Элементов на странице: {pagination_limit}"
+    },
+    "not_found_window": {
+        "title": "<b>😕 Ничего не найдено</b>",
+        "description": "Я ничего не нашел, поэтому где-то грустит один котик 😿"
+    },
+    "common": {
+        "back_button": "⬅️ Назад",
+        "back_to_main_menu_button": "⬅️ В главное меню",
+        "any_button": "🔲 Любой"
+    }
+}
