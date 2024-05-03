@@ -5,11 +5,11 @@ from datetime import datetime
 
 
 class Filters(BaseModel):
-    age: Optional[str]
-    status: Optional[str]
-    players_num: Optional[str]
-    duration: Optional[str]
-    complexity: Optional[str]
-    genres: Optional[List[str]]
+    age: Optional[str] = None
+    status: Optional[str] = None
+    players_num: Optional[str] = None
+    duration: Optional[str] = None
+    complexity: Optional[str] = None
+    genres: Optional[List[str]] = None
 
 #curl -X POST -H "Content-Type: application/json" -d '{ "gameName": "tratata", "maxPlayers": 5, "minPlayers": 2 }' http://localhost:8000/db/insertgame

@@ -12,7 +12,6 @@ from routers.schemas import (
 )
 
 
-
 router = APIRouter(prefix="/db", tags=["test"])
 
 
@@ -26,8 +25,8 @@ async def get_testing_query(name: Annotated[str, Query()],
     return {"game id" : result_data} if result_data else None
 
 
-@router.get("/find", status_code=200)
-async def get_filtered(game: Filters = Body()):
-    result_data = await get_filtered_games(game)
-    print(result_data)
-    return {result_data}
+@router.post("/find", status_code=200)
+async def get_filtered(game: Filters = Body(), 
+                       session: AsyncSession = Depends(get_session)):
+    result_data = await get_filtered_games(game, session)
+    return {"answer" : result_data}

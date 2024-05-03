@@ -1,7 +1,7 @@
 import os
 import aioitertools
 
-from sqlmodel import SQLModel, select
+from sqlmodel import SQLModel, select, and_, or_
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
@@ -36,10 +36,25 @@ async def get_session():
         yield session
 
 
-async def get_filtered_games(filters: Filters) -> BoardGame:
-    filter_values = {k: v for k, v in filters.dict().items() if v is not None}
-    board_game = BoardGame(**filter_values)
-    stmt = select(board_game)
-    result = await get_session().exec(stmt)
-    result_data = result.all()
+async def get_filtered_games(filters: Filters, conn: AsyncSession):
+    conditions = []
+
+    if filters.age is not None:
+        conditions.append(BoardGame.age == int(filters.age))
+
+    if filters.status is not None:
+        conditions.append(BoardGame.status == filters.status)
+
+    if filters.players_num is not None:
+        conditions.append(and_(BoardGame.minPlayers <= int(filters.players_num), 
+                               BoardGame.maxPlayers >= int(filters.players_num)))
+
+    if filters.genres:
+        genre_conditions = [BoardGame.genre.like(f'%{genre}%') for genre in filters.genres]
+        conditions.append(or_(*genre_conditions))
+
+    stmt = select(BoardGame).where(and_(*conditions))
+    result = await conn.execute(stmt)
+    result_data = result.scalars().all()
+    print(result_data)
     return result_data

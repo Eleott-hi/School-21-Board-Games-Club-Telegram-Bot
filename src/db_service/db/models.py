@@ -14,7 +14,7 @@ class BoardGame(SQLModel, table=True):
     maxPlayTime: Optional[int]
     ruleTime: Optional[int]
     gameComplexity: Optional[str]
-    minAge: Optional[int]
+    age: Optional[int]
     year: Optional[int]
     gameShortDescription: Optional[str]
     gameFullDescription: Optional[str]
