@@ -5,14 +5,13 @@ from uuid import UUID
 from typing import Annotated
 from fastapi import APIRouter, status, HTTPException, Depends, Query, Path, Body
 
-from db.database import get_session, AsyncSession, select
+from db.database import get_session, get_filtered_games, AsyncSession, select
 from db.models import BoardGame
 from routers.schemas import (
     TestGameWateredDown,
     TestState,
     Filters
 )
-from db.interaction_funcs import filters_to_boardgame
 
 
 router = APIRouter(prefix="/db", tags=["test"])
@@ -55,11 +54,9 @@ async def insert_new_game(game: TestGameWateredDown = Body(),
     return{"status": "success"}
 
 
+
 @router.get("/find", status_code=200)
-async def find_with_filters(game: Filters = Body(),
-                          session: AsyncSession = Depends(get_session)):
-    template = BoardGame(game)
-    stmt = select(template)
-    result = await session.exec(stmt)
-    result_data = result.all()
+async def get_filtered(game: Filters = Body()):
+    result_data = await get_filtered_games(game)
+    print(result_data)
     return {result_data}

@@ -10,7 +10,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from .config import DB_URL, GOOGLE_TOKEN, AUTHORIZED_USER
 from .models import *
 from .db_data import games
-from .interaction_funcs import filters_to_boardgame
 
 from routers.schemas import Filters
 
@@ -38,8 +37,10 @@ async def get_session():
         yield session
 
 
-def get_filtered_games(filters: Filters) -> BoardGame:
+async def get_filtered_games(filters: Filters) -> BoardGame:
     filter_values = {k: v for k, v in filters.dict().items() if v is not None}
     board_game = BoardGame(**filter_values)
-    
-    return board_game
+    stmt = select(board_game)
+    result = await get_session().exec(stmt)
+    result_data = result.all()
+    return result_data
