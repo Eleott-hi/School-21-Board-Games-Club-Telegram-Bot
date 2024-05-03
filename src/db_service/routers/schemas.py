@@ -4,15 +4,6 @@ from pydantic import BaseModel, EmailStr, Field, model_validator
 from datetime import datetime
 
 
-class TestGameWateredDown(BaseModel):
-    gameName: str
-    maxPlayers: int
-    minPlayers: int
-
-class TestState(BaseModel):
-    gameName: str
-    status: bool
-
 class Filters(BaseModel):
     age: Optional[str]
     status: Optional[str]

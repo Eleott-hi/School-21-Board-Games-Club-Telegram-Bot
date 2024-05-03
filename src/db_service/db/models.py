@@ -4,7 +4,8 @@ from sqlmodel import SQLModel, Field, Column, Boolean
 
 class BoardGame(SQLModel, table=True):
     id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
-    gameName: str
+    title: Optional[str]
+    description: Optional[str]
     minPlayers: Optional[int]
     maxPlayers: Optional[int]
     minIdealPlayers: Optional[int]
@@ -20,4 +21,5 @@ class BoardGame(SQLModel, table=True):
     coverImageLink: Optional[str]
     videoRulesLink: Optional[str]
     genre: Optional[str]
-    status: Optional[bool] = Field(default=False)
+    status: Optional[str] = Field(default="Unavailable")
+    photo_link: Optional[str]

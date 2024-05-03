@@ -1,7 +1,6 @@
 
 games = [
     dict(
-        id="1",
         title="Game 1",
         description="Description 1",
         minPlayers=2,
@@ -23,7 +22,6 @@ games = [
         photo_link="resources/static/game_1.jpg",
     ),
     dict(
-        id="2",
         title="Game 2",
         description="Description 2",
         minPlayers=1,
@@ -45,7 +43,6 @@ games = [
         photo_link="resources/static/game_2.jpg",
     ),
     dict(
-        id="3",
         title="Game 3",
         description="Description 3",
         minPlayers=3,
@@ -67,7 +64,6 @@ games = [
         photo_link="resources/static/game_1.jpg",
     ),
     dict(
-        id="4",
         title="Game 4",
         description="Description 4",
         minPlayers=2,
@@ -89,7 +85,6 @@ games = [
         photo_link="resources/static/game_2.jpg",
     ),
     dict(
-        id="5",
         title="Game 5",
         description="Description 5",
         minPlayers=4,
@@ -111,7 +106,6 @@ games = [
         photo_link="resources/static/game_1.jpg",
     ),
     dict(
-        id="6",
         title="Game 6",
         description="Description 5",
         minPlayers=4,
@@ -133,7 +127,6 @@ games = [
         photo_link="resources/static/game_1.jpg",
     ),
     dict(
-        id="7",
         title="Game 7",
         description="Description 5",
         minPlayers=4,
@@ -155,7 +148,6 @@ games = [
         photo_link="resources/static/game_1.jpg",
     ),
     dict(
-        id="8",
         title="Game 8",
         description="Description 5",
         minPlayers=4,
@@ -177,7 +169,6 @@ games = [
         photo_link="resources/static/game_1.jpg",
     ),
     dict(
-        id="9",
         title="Game 9",
         description="Description 5",
         minPlayers=4,
@@ -199,7 +190,6 @@ games = [
         photo_link="resources/static/game_1.jpg",
     ),
     dict(
-        id="10",
         title="Game 10",
         description="Description 5",
         minPlayers=4,
@@ -221,7 +211,6 @@ games = [
         photo_link="resources/static/game_1.jpg",
     ),
     dict(
-        id="11",
         title="Game 11",
         description="Description 5",
         minPlayers=4,
@@ -243,7 +232,6 @@ games = [
         photo_link="resources/static/game_1.jpg",
     ),
     dict(
-        id="12",
         title="Game 12",
         description="Description 5",
         minPlayers=4,
@@ -265,7 +253,6 @@ games = [
         photo_link="resources/static/game_1.jpg",
     ),
     dict(
-        id="13",
         title="Game 13",
         description="Description 5",
         minPlayers=4,
@@ -287,7 +274,6 @@ games = [
         photo_link="resources/static/game_1.jpg",
     ),
     dict(
-        id="14",
         title="Game 14",
         description="Description 5",
         minPlayers=4,
@@ -309,7 +295,6 @@ games = [
         photo_link="resources/static/game_1.jpg",
     ),
     dict(
-        id="15",
         title="Game 15",
         description="Description 5",
         minPlayers=4,

@@ -23,9 +23,8 @@ async def init_db():
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
         for game in games:
-            inserted = filters_to_boardgame(game)
             try:
-                await conn.execute(inserted.__table__.insert(), game.dict())
+                await conn.execute(BoardGame.__table__.insert(), game)
             except Exception as e:
                 print(f"error during insertion {e}")
                 continue
