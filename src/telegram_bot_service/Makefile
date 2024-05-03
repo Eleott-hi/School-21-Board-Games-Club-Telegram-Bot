@@ -1,3 +1,6 @@
+export PYTHONUNBUFFERED=1
+export PYTHONPYCACHEPREFIX=build
+
 all: init_timesone install wait_for_it run
 
 init_timesone:
