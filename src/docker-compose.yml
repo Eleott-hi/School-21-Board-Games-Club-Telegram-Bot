@@ -43,6 +43,7 @@ services:
     restart: on-failure
     ports:
       - 8000:8000
+      
 
   mongodb_service:
     image: mongo
