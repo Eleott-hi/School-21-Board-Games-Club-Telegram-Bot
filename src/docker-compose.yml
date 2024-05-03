@@ -1,16 +1,16 @@
 version: '3'
 
 services:
-  # postgres_service:
-  #   image: postgres:16
-  #   container_name: postgres_service
-  #   environment:
-  #     POSTGRES_PASSWORD: postgres
-  #   volumes:
-  #     - ./postgres_service:/docker-entrypoint-initdb.d
-  #   restart: on-failure
-  #   ports:
-  #     - 5431:5432
+  postgres_service:
+    image: postgres:16
+    container_name: postgres_service
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./postgres_service/init:/docker-entrypoint-initdb.d
+    restart: on-failure
+    ports:
+      - 5431:5432
 
   # redis_service:
   #   image: redis:6
@@ -29,30 +29,45 @@ services:
   #   ports:
   #     - 8080:8080
 
-  telegram_bot_service:
-    build: ./telegram_bot_service
-    container_name: telegram_bot_service
+  # telegram_bot_service:
+  #   build: ./telegram_bot_service
+  #   container_name: telegram_bot_service
+  #   working_dir: /app
+  #   volumes:
+  #     - ./telegram_bot_service:/app
+  #     - shared_data:/app/shared
+  #   command: bash -c "make"
+  #   environment:
+  #     TZ: "Asia/Novosibirsk"
+  #   env_file: telegram_bot_service/.env
+  #   restart: on-failure
+  #   ports:
+  #     - 8000:8000
+
+  # mongodb_service:
+  #   image: mongo
+  #   container_name: mongodb_service
+  #   # environment:
+  #     # MONGO_INITDB_ROOT_USERNAME: mongodb
+  #     # MONGO_INITDB_ROOT_PASSWORD: mongodb
+  #   restart: on-failure
+  #   ports:
+  #     - 27017:27017
+
+  auth_service:
+    build: ./auth_service
+    container_name: auth_service
     working_dir: /app
     volumes:
-      - ./telegram_bot_service:/app
+      - ./auth_service:/app
       - shared_data:/app/shared
     command: bash -c "make"
     environment:
       TZ: "Asia/Novosibirsk"
-    env_file: telegram_bot_service/.env
+    env_file: auth_service/.env
     restart: on-failure
     ports:
-      - 8000:8000
-
-  mongodb_service:
-    image: mongo
-    container_name: mongodb_service
-    # environment:
-      # MONGO_INITDB_ROOT_USERNAME: mongodb
-      # MONGO_INITDB_ROOT_PASSWORD: mongodb
-    restart: on-failure
-    ports:
-      - 27017:27017
+      - 8001:8000
 
 volumes:
   shared_data:
