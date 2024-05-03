@@ -53,8 +53,14 @@ async def get_filtered_games(filters: Filters, conn: AsyncSession):
         genre_conditions = [BoardGame.genre.like(f'%{genre}%') for genre in filters.genres]
         conditions.append(or_(*genre_conditions))
 
+    if filters.complexity:
+        conditions.append(BoardGame.gameComplexity == filters.complexity)
+
+    if filters.duration:
+        conditions.append(and_(BoardGame.minPlayTime <= int(filters.duration),
+                                BoardGame.maxPlayTime >= int(filters.duration)))
+
     stmt = select(BoardGame).where(and_(*conditions))
     result = await conn.execute(stmt)
     result_data = result.scalars().all()
-    print(result_data)
     return result_data
