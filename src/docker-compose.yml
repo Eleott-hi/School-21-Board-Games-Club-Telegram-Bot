@@ -9,22 +9,6 @@ services:
     ports:
       - 5432:5432
 
-
-  rabbitmq:
-    image: rabbitmq:3.10.7-management
-    container_name: rabbitmq
-    restart: always
-    environment:
-      - RABBITMQ_DEFAULT_USER=rmuser
-      - RABBITMQ_DEFAULT_PASS=rmpassword
-      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}] disk_free_limit 2147483648
-    volumes:
-      - ./rabbitmq:/var/lib/rabbitmq
-    ports:
-      - 15672:15672
-      - 5672:5672
-
-
   db_service:
     build: ./db_service
     container_name: db_service
@@ -42,7 +26,6 @@ services:
     restart: on-failure
     ports:
       - 8001:8000
-
 
   telegram_bot_service:
     build: ./telegram_bot_service

@@ -48,10 +48,10 @@ async def change_state(data: TestState = Body(),
 @router.post("/insertgame", status_code=201)
 async def insert_new_game(game: TestGameWateredDown = Body(),
                           session: AsyncSession = Depends(get_session)):
-    game = BoardGame(**game.dict()) # The `dict` method is deprecated; use `model_dump` instead.
+    # game = BoardGame(**game.dict()) # The `dict` method is deprecated; use `model_dump` instead.
 
-    session.add(game)
-    await session.commit()
+    # session.add(game)
+    # await session.commit()
     return{"status": "success"}
 
 
