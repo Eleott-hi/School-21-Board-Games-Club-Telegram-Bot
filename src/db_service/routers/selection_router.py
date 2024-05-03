@@ -9,15 +9,14 @@ from db.database import get_session, AsyncSession, select
 from db.models import BoardGame
 from routers.schemas import (
     TestGameWateredDown,
-    TestState
+    TestState,
+    Filters
 )
+from db.interaction_funcs import filters_to_boardgame
+
 
 router = APIRouter(prefix="/db", tags=["test"])
 
-
-@router.get("/ab_test", status_code=200)
-async def perform_test(session: AsyncSession = Depends(get_session)):
-    return {"test_key" : "this_is_the_test"}
 
 @router.get("/id", status_code=200)
 async def get_testing_query(name: Annotated[str, Query()], 
@@ -54,3 +53,13 @@ async def insert_new_game(game: TestGameWateredDown = Body(),
     session.add(game)
     await session.commit()
     return{"status": "success"}
+
+
+@router.get("/find", status_code=200)
+async def find_with_filters(game: Filters = Body(),
+                          session: AsyncSession = Depends(get_session)):
+    template = BoardGame(game)
+    stmt = select(template)
+    result = await session.exec(stmt)
+    result_data = result.all()
+    return {result_data}

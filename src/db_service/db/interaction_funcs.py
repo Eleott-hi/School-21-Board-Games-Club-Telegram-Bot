@@ -1,5 +1,13 @@
 from db.database import get_session, AsyncSession, select
 from db.models import BoardGame
+from routers.schemas import Filters
+
+def filters_to_boardgame(filters: Filters) -> BoardGame:
+    filter_values = {k: v for k, v in filters.dict().items() if v is not None}
+    board_game = BoardGame(**filter_values)
+    
+    return board_game
+
 
 async def get_id_by_name(name):
     session: AsyncSession = get_session()

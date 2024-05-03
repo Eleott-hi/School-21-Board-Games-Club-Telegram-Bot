@@ -13,10 +13,13 @@ from sqlalchemy.ext.declarative import declarative_base
 from .google_parser import GoogleSheetParser
 from .config import DB_URL, GOOGLE_TOKEN, AUTHORIZED_USER
 from .models import *
+from .db_data import games
+from .interaction_funcs import filters_to_boardgame
 
 engine = create_async_engine(DB_URL, echo=True, future=True)
 async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 Base = declarative_base()
+
 
 def parse_and_convert_data():
     parser = GoogleSheetParser(GOOGLE_TOKEN, AUTHORIZED_USER)
@@ -37,6 +40,15 @@ def parse_and_convert_data():
 async def init_db():
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
+        for game in games:
+            inserted = filters_to_boardgame(game)
+
+            try:
+                await conn.execute(inserted.__table__.insert(), game.dict())
+            except Exception as e:
+                print(f"error during insertion {e}")
+                continue
+        await conn.commit()
 # if you want to insert data into the database from google sheets
         # orm_objects = parse_and_convert_data()
         # for obj in orm_objects:
