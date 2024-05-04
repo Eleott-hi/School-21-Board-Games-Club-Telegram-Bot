@@ -26,7 +26,15 @@ async def get_testing_query(name: Annotated[str, Query()],
 
 
 @router.post("/find", status_code=200)
-async def get_filtered(game: Filters = Body(), 
+async def get_filtered(game: Filters = Body(...,
+                                            example={
+                                                "age": 18,
+                                                "status": "available",
+                                                "players_num": 4,
+                                                "duration": 80,
+                                                "complexity": "hard",
+                                                "genres": ["strategy", "family", "adventure"]
+                                            }), 
                        session: AsyncSession = Depends(get_session)):
     result_data = await get_filtered_games(game, session)
     return {"answer" : result_data}

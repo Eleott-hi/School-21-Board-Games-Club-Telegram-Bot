@@ -21,5 +21,5 @@ class BoardGame(SQLModel, table=True):
     coverImageLink: Optional[str]
     videoRulesLink: Optional[str]
     genre: Optional[str]
-    status: Optional[str] = Field(default="Unavailable")
+    status: Optional[str] = Field(default="available")
     photo_link: Optional[str]

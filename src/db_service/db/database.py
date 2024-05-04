@@ -38,9 +38,11 @@ async def get_session():
 
 async def get_filtered_games(filters: Filters, conn: AsyncSession):
     conditions = []
+    
+    print(filters.__dict__)
 
     if filters.age is not None:
-        conditions.append(BoardGame.age == int(filters.age))
+        conditions.append(BoardGame.age <= int(filters.age))
 
     if filters.status is not None:
         conditions.append(BoardGame.status == filters.status)
