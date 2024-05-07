@@ -1,10 +1,12 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, status
 from email.message import EmailMessage
 import aiosmtplib
 import asyncio
-from schemas import EmailInfo, NearestEvents
+from schemas.schemas import EmailInfo, NearestEvents
 import former
 from pydantic import EmailStr
+
+from services.mail_service import MailService
 
 app: FastAPI = FastAPI(
     title="mailing", description="Service to manage mailing", version="0.0.1"
@@ -54,10 +56,16 @@ async def send_mail(mail: str, message: str) -> None:
     """
 
 
-
-@app.post("/send_one_message", status_code=201)
-async def send_one_message(email_message: EmailInfo) -> None:
-    await send_mail(email_message.email, email_message.message)
+@app.post("/send", status_code=status.HTTP_202_ACCEPTED)
+async def send_one_message(
+    email_message: EmailInfo, mail_service: MailService = Depends()
+) -> None:
+    try:
+        await mail_service.send_mail(email_message.email, email_message.message)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+        )
 
 
 if __name__ == "__main__":

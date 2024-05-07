@@ -3,11 +3,8 @@ import aiosmtplib
 
 
 class MailService:
-    def __init__(self, mail_service):
-        self.mail_service = mail_service
-
+    
     async def send_mail(self, mail: str, message: str) -> None:
-
         email = EmailMessage()
         email["From"] = "not_reply@bytecode.su"
         email["To"] = mail
