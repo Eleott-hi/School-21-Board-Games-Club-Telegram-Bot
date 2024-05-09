@@ -22,7 +22,7 @@ async def init_db():
         await conn.run_sync(SQLModel.metadata.create_all)
         for game in games:
             try:
-                await conn.execute(BoardGame.__table__.insert(), game)
+                await conn.execute(DbBoardGame.__table__.insert(), game)
             except Exception as e:
                 print(f"error during insertion {e}")
                 continue
@@ -38,29 +38,29 @@ async def get_filtered_games(filters: Filters, conn: AsyncSession):
     conditions = []
     
     if filters.age is not None:
-        conditions.append(BoardGame.age <= int(filters.age))
+        conditions.append(DbBoardGame.age <= int(filters.age))
 
     if filters.status is not None:
-        conditions.append(BoardGame.status == filters.status)
+        conditions.append(DbBoardGame.status == filters.status)
 
     if filters.players_num is not None:
-        conditions.append(and_(BoardGame.minPlayers <= int(filters.players_num), 
-                               BoardGame.maxPlayers >= int(filters.players_num)))
+        conditions.append(and_(DbBoardGame.minPlayers <= int(filters.players_num), 
+                               DbBoardGame.maxPlayers >= int(filters.players_num)))
 
     if filters.genres:
-        genre_conditions = [BoardGame.genre.like(f'%{genre}%') for genre in filters.genres]
+        genre_conditions = [DbBoardGame.genre.like(f'%{genre}%') for genre in filters.genres]
         conditions.append(or_(*genre_conditions))
 
     if filters.complexity:
-        conditions.append(BoardGame.gameComplexity == filters.complexity)
+        conditions.append(DbBoardGame.gameComplexity == filters.complexity)
 
     if filters.duration:
-        conditions.append(and_(BoardGame.minPlayTime <= int(filters.duration),
-                                BoardGame.maxPlayTime >= int(filters.duration)))
+        conditions.append(and_(DbBoardGame.minPlayTime <= int(filters.duration),
+                                DbBoardGame.maxPlayTime >= int(filters.duration)))
         
     offset = filters.offset or 0
     limit = filters.limit or 1000
 
-    stmt = select(BoardGame).where(and_(*conditions)).offset(offset).limit(limit)
+    stmt = select(DbBoardGame).where(and_(*conditions)).offset(offset).limit(limit)
     result = await conn.exec(stmt)
     return result.all()

@@ -2,8 +2,7 @@ from typing import Optional, List
 from uuid import UUID, uuid4
 from sqlmodel import SQLModel, Field, Column, Boolean
 
-class BoardGame(SQLModel, table=True):
-    id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
+class BoardGame(SQLModel):
     title: Optional[str]
     description: Optional[str]
     minPlayers: Optional[int]
@@ -23,6 +22,12 @@ class BoardGame(SQLModel, table=True):
     genre: Optional[str]
     status: Optional[str] = Field(default="available")
     photo_link: Optional[str]
+
+
+class DbBoardGame(BoardGame, table=True):
+    id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
+
+
 
 
 class Filters(SQLModel):
