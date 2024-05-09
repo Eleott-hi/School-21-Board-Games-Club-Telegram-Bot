@@ -11,8 +11,6 @@ from .config import DB_URL, GOOGLE_TOKEN, AUTHORIZED_USER
 from .models import *
 from .db_data import games
 
-from routers.schemas import Filters
-
 
 engine = create_async_engine(DB_URL, echo=True, future=True)
 async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
@@ -39,8 +37,6 @@ async def get_session():
 async def get_filtered_games(filters: Filters, conn: AsyncSession):
     conditions = []
     
-    print(filters.__dict__)
-
     if filters.age is not None:
         conditions.append(BoardGame.age <= int(filters.age))
 
@@ -61,8 +57,10 @@ async def get_filtered_games(filters: Filters, conn: AsyncSession):
     if filters.duration:
         conditions.append(and_(BoardGame.minPlayTime <= int(filters.duration),
                                 BoardGame.maxPlayTime >= int(filters.duration)))
+        
+    offset = filters.offset or 0
+    limit = filters.limit or 1000
 
-    stmt = select(BoardGame).where(and_(*conditions))
-    result = await conn.execute(stmt)
-    result_data = result.scalars().all()
-    return result_data
+    stmt = select(BoardGame).where(and_(*conditions)).offset(offset).limit(limit)
+    result = await conn.exec(stmt)
+    return result.all()

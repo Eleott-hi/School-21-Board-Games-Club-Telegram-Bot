@@ -6,10 +6,7 @@ from typing import Annotated
 from fastapi import APIRouter, status, HTTPException, Depends, Query, Path, Body
 
 from db.database import get_session, get_filtered_games, AsyncSession, select
-from db.models import BoardGame
-from routers.schemas import (
-    Filters
-)
+from db.models import BoardGame, Filters
 
 
 router = APIRouter(prefix="/db", tags=["test"])
@@ -33,8 +30,11 @@ async def get_filtered(game: Filters = Body(...,
                                                 "players_num": 4,
                                                 "duration": 80,
                                                 "complexity": "hard",
-                                                "genres": ["strategy", "family", "adventure"]
+                                                "genres": ["strategy", "family", "adventure"],
+                                                "offset": 0,
+                                                "limit" : 0
                                             }), 
                        session: AsyncSession = Depends(get_session)):
     result_data = await get_filtered_games(game, session)
-    return {"answer" : result_data}
+
+    return [game.model_dump(round_trip=True) for game in result_data]

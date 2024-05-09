@@ -23,11 +23,6 @@ router = Router()
 
 @router.message(CommandStart())
 async def command_start_handler(message: Message, db: MDB) -> None:
-    rpc_client = FibonacciRpcClient()
-    print('here')
-    await rpc_client.connect()
-    print('and here')
-    response = await rpc_client.call('test_call')
     await display_main_menu(message, edit=False)
 
 
