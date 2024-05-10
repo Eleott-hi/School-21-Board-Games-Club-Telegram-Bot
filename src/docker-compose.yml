@@ -3,17 +3,7 @@ services:
   postgres_service:
     build: ./postgres_service
     container_name: postgres_service
-    environment:
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-
-      DB_NAME_TWO: ${DB_NAME_TWO}
-      DB_PASSWORD_TWO: ${DB_PASSWORD_TWO}
-      DB_USER_TWO: ${DB_USER_TWO}
-
-      POSTGRES_PASSWORD: ${DB_ROOT_PASSWORD}
-
+    env_file: .env
     restart: on-failure
     ports:
       - 5432:5432
@@ -27,14 +17,7 @@ services:
     command: bash -c "make"
     depends_on:
       - postgres_service
-    environment:
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_DRIVER: ${DB_DRIVER}
-      TZ: ${TIMEZONE}
+    env_file: .env
     restart: on-failure
     ports:
       - 8001:8000
@@ -49,11 +32,6 @@ services:
       - ./telegram_bot_service:/app
       - shared_data:/app/shared
     command: bash -c "make"
-    environment:
-      TZ: ${TIMEZONE}
-      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
-      TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
-      DB_API_URL: ${DB_API_URL}
     env_file: telegram_bot_service/.env
     restart: on-failure
     ports:

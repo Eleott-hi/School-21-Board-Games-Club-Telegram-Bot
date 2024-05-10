@@ -11,7 +11,7 @@ from .config import DB_URL, GOOGLE_TOKEN, AUTHORIZED_USER
 from .models import *
 from .db_data import games
 
-
+print(f"this is db_url\n------->>>>>>>\n{DB_URL}\n------->>>>>>>\n")
 engine = create_async_engine(DB_URL, echo=True, future=True)
 async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 Base = declarative_base()
