@@ -1,10 +1,19 @@
 version: '3'
 services:
   postgres_service:
-    image: postgres:16
+    build: ./postgres_service
     container_name: postgres_service
     environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+      DB_NAME_TWO: ${DB_NAME_TWO}
+      DB_PASSWORD_TWO: ${DB_PASSWORD_TWO}
+      DB_USER_TWO: ${DB_USER_TWO}
+
+      POSTGRES_PASSWORD: ${DB_ROOT_PASSWORD}
+
     restart: on-failure
     ports:
       - 5432:5432
