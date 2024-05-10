@@ -27,7 +27,7 @@ async def get_testing_query(*,
 
 @router.get("/find", status_code=200, response_model=List[BoardGame])
 async def get_filtered(*,
-                        json_filters: Optional[str] = Query(None, example=json.dumps({
+                        json_filters: Optional[str] = Query(None, examples=json.dumps({
                             "age": 18,
                             "status": "available",
                             "players_num": 4,

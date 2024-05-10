@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 import sys
+from contextlib import asynccontextmanager
 
 from db.database import init_db
-from contextlib import asynccontextmanager
 from routers.selection_router import router as selection_router
 
 @asynccontextmanager

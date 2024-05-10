@@ -19,7 +19,8 @@ services:
       - postgres_service
     env_file: .env
     environment:
-      - MODE=test
+      - PYTHONPATH=/app
+      - MODE=
     restart: on-failure
     ports:
       - 8001:8000
