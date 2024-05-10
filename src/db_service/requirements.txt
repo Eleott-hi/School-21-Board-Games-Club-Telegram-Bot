@@ -15,3 +15,4 @@ pyjwt
 aioitertools
 gspread
 aiormq
+pytest
