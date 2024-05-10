@@ -49,5 +49,4 @@ async def get_filtered(*,
     
     result_data = await get_filtered_games(filters, session)
 
-
-    return [BoardGame.model_validate(game) for game in result_data]
+    return result_data
