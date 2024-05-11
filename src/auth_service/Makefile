@@ -5,8 +5,4 @@ wait_for_it:
 	./wait-for-it.sh -t 120 postgres_service:5432
 
 run:
-	if [ -z "${MODE}" ]; then\
-		python3 main.py;\
-	else\
-		pytest;\
-	fi
+	python3 main.py

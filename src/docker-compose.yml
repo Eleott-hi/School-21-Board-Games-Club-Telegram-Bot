@@ -17,10 +17,9 @@ services:
     command: bash -c "make"
     depends_on:
       - postgres_service
-    env_file: .env
-    environment:
-      - PYTHONPATH=/app
-      - MODE=
+    env_file:
+      - .env
+      - db_service/.env
     restart: on-failure
     ports:
       - 8001:8000
@@ -49,6 +48,21 @@ services:
     restart: on-failure
     ports:
       - 27017:27017
+
+  auth_service:
+    build: ./auth_service
+    container_name: auth_service
+    working_dir: /app
+    env_file: 
+      - auth_service/.env
+      - .env
+    volumes:
+      - ./auth_service:/app
+    command: bash -c "make"
+    restart: on-failure
+    ports:
+      - 8000:8000
+
 
 volumes:
   shared_data:
