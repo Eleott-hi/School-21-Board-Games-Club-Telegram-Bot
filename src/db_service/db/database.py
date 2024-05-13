@@ -6,8 +6,11 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
 
+
 from .config import DB_URL, GOOGLE_TOKEN, AUTHORIZED_USER
 from .models import *
+from .db_data import games
+
 
 engine = create_async_engine(DB_URL, echo=True, future=True)
 async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
@@ -16,6 +19,17 @@ async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False
 async def init_db():
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
+
+    async with async_session() as session:
+        for game in games:
+            try:
+                db_game = DbBoardGame(**game)
+                session.add(db_game)
+                await session.commit()
+            except Exception as e:
+                session.rollback()
+                print(f"ERROR: {e}")
+                continue
 
 
 async def get_session():
