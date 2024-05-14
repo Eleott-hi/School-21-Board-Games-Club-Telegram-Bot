@@ -32,15 +32,15 @@ services:
   #   ports:
   #     - 9092:9092
 
-  # mongodb_service:
-  #   image: mongo
-  #   container_name: mongodb_service
-  #   # environment:
-  #     # MONGO_INITDB_ROOT_USERNAME: mongodb
-  #     # MONGO_INITDB_ROOT_PASSWORD: mongodb
-  #   restart: on-failure
-  #   ports:
-  #     - 27017:27017
+  mongodb_service:
+    image: mongo
+    container_name: mongodb_service
+    # environment:
+      # MONGO_INITDB_ROOT_USERNAME: mongodb
+      # MONGO_INITDB_ROOT_PASSWORD: mongodb
+    restart: on-failure
+    ports:
+      - 27017:27017
 
   redis_service:
     image: redis:6
@@ -82,20 +82,20 @@ services:
     ports:
       - 8001:8000
 
-  # telegram_bot_service:
-  #   build: ./telegram_bot_service
-  #   container_name: telegram_bot_service
-  #   working_dir: /app
-  #   volumes:
-  #     - ./telegram_bot_service:/app
-  #     - shared_data:/app/shared
-  #   command: bash -c "make"
-  #   environment:
-  #     TZ: "Asia/Novosibirsk"
-  #   env_file: telegram_bot_service/.env
-  #   restart: on-failure
-  #   ports:
-  #     - 8002:8000
+  telegram_bot_service:
+    build: ./telegram_bot_service
+    container_name: telegram_bot_service
+    working_dir: /app
+    volumes:
+      - ./telegram_bot_service:/app
+      - shared_data:/app/shared
+    command: bash -c "make"
+    environment:
+      TZ: "Asia/Novosibirsk"
+    env_file: telegram_bot_service/.env
+    restart: on-failure
+    ports:
+      - 8002:8000
 
 volumes:
   shared_data:
