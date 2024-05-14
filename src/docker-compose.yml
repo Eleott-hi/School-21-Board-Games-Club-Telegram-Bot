@@ -1,71 +1,71 @@
 version: '3'
 
 services:
-  postgres_service:
-    image: postgres:16
-    container_name: postgres_service
-    environment:
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - ./postgres_service/init:/docker-entrypoint-initdb.d
-    restart: on-failure
-    ports:
-      - 5431:5432
+  # postgres_service:
+  #   image: postgres:16
+  #   container_name: postgres_service
+  #   environment:
+  #     POSTGRES_PASSWORD: postgres
+  #   volumes:
+  #     - ./postgres_service/init:/docker-entrypoint-initdb.d
+  #   restart: on-failure
+  #   ports:
+  #     - 5431:5432
 
-  zookeeper:
-    image: wurstmeister/zookeeper
-    restart: on-failure
-    ports:
-      - 2181:2181
+  # zookeeper:
+  #   image: wurstmeister/zookeeper
+  #   restart: on-failure
+  #   ports:
+  #     - 2181:2181
 
-  kafka:
-    image: confluentinc/cp-kafka
-    environment:
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 
-    restart: on-failure
-    depends_on:
-      - zookeeper
-    ports:
-      - 9092:9092
+  # kafka:
+  #   image: confluentinc/cp-kafka
+  #   environment:
+  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 
+  #   restart: on-failure
+  #   depends_on:
+  #     - zookeeper
+  #   ports:
+  #     - 9092:9092
 
-  mongodb_service:
-    image: mongo
-    container_name: mongodb_service
-    # environment:
-      # MONGO_INITDB_ROOT_USERNAME: mongodb
-      # MONGO_INITDB_ROOT_PASSWORD: mongodb
-    restart: on-failure
-    ports:
-      - 27017:27017
+  # mongodb_service:
+  #   image: mongo
+  #   container_name: mongodb_service
+  #   # environment:
+  #     # MONGO_INITDB_ROOT_USERNAME: mongodb
+  #     # MONGO_INITDB_ROOT_PASSWORD: mongodb
+  #   restart: on-failure
+  #   ports:
+  #     - 27017:27017
 
-  redis_service:
-    image: redis:6
-    container_name: redis_service
-    command: redis-server --appendonly yes
-    volumes:
-      - ./redis_service:/data
-    restart: on-failure
-    ports:
-      - 6379:6379
+  # redis_service:
+  #   image: redis:6
+  #   container_name: redis_service
+  #   command: redis-server --appendonly yes
+  #   volumes:
+  #     - ./redis_service:/data
+  #   restart: on-failure
+  #   ports:
+  #     - 6379:6379
 
-  auth_service:
-    build: ./auth_service
-    container_name: auth_service
-    working_dir: /app
-    volumes:
-      - ./auth_service:/app
-      - shared_data:/app/shared
-    command: bash -c "make"
-    environment:
-      TZ: "Asia/Novosibirsk"
-    env_file: auth_service/.env
-    restart: on-failure
-    ports:
-      - 8000:8000
+  # auth_service:
+  #   build: ./auth_service
+  #   container_name: auth_service
+  #   working_dir: /app
+  #   volumes:
+  #     - ./auth_service:/app
+  #     - shared_data:/app/shared
+  #   command: bash -c "make"
+  #   environment:
+  #     TZ: "Asia/Novosibirsk"
+  #   env_file: auth_service/.env
+  #   restart: on-failure
+  #   ports:
+  #     - 8000:8000
 
   mail_service:
     build: ./mail_service
@@ -82,20 +82,20 @@ services:
     ports:
       - 8001:8000
 
-  telegram_bot_service:
-    build: ./telegram_bot_service
-    container_name: telegram_bot_service
-    working_dir: /app
-    volumes:
-      - ./telegram_bot_service:/app
-      - shared_data:/app/shared
-    command: bash -c "make"
-    environment:
-      TZ: "Asia/Novosibirsk"
-    env_file: telegram_bot_service/.env
-    restart: on-failure
-    ports:
-      - 8002:8000
+  # telegram_bot_service:
+  #   build: ./telegram_bot_service
+  #   container_name: telegram_bot_service
+  #   working_dir: /app
+  #   volumes:
+  #     - ./telegram_bot_service:/app
+  #     - shared_data:/app/shared
+  #   command: bash -c "make"
+  #   environment:
+  #     TZ: "Asia/Novosibirsk"
+  #   env_file: telegram_bot_service/.env
+  #   restart: on-failure
+  #   ports:
+  #     - 8002:8000
 
 volumes:
   shared_data:
