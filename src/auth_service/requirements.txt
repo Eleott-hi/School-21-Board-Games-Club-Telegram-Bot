@@ -9,3 +9,4 @@ pydantic[email]
 phonenumbers
 passlib
 pyjwt
+redis

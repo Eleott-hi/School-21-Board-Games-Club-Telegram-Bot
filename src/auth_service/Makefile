@@ -11,6 +11,9 @@ install:
 
 wait_for_it: 
 	chmod +x ./wait-for-it.sh 
+	./wait-for-it.sh "$$POSTGRES_SERVICE_HOST:$$POSTGRES_SERVICE_PORT"  -- \
+	./wait-for-it.sh "$$REDIS_SERVICE_HOST:$$REDIS_SERVICE_PORT" -- \
+	./wait-for-it.sh "$$MAIL_SERVICE_HOST:$$MAIL_SERVICE_PORT"
 
 run:
 	python3 main.py

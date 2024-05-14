@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 
+from database.database import init_db
 from routers.auth_router import router as auth_router
 
 
 async def lifespan(app):
+    await init_db()
     yield
 
 

@@ -1,31 +1,28 @@
-from typing import Optional
 from uuid import UUID, uuid4
-from sqlalchemy.orm import declarative_base
-from enum import Enum
+from sqlalchemy import Integer, String, Enum
+from sqlalchemy.orm import declarative_base, Mapped, mapped_column
+from enum import Enum as PyEnum
+from sqlalchemy.dialects.postgresql import UUID as SQLUUID
 
 Base = declarative_base()
 
-
-class Role(str, Enum):
+class Role(str, PyEnum):
     USER = "user"
     ADMIN = "admin"
 
-
-class AuthMethod(str, Enum):
+class AuthMethod(str, PyEnum):
     NATIVE = "native"
     GOOGLE = "google"
     GITLAB = "gitlab"
     TELEGRAM = "telegram"
 
-
 class User(Base):
     __tablename__ = "users"
 
-    id: Mapper
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    nickname: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    telegram_id: Mapped[int] = mapped_column(Integer, unique=True, nullable=False)
+    email: Mapped[str] = mapped_column(String, unique=True, nullable=False)
 
-    id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
-    telegram_id: str = Field(unique=True)
-    email: str = Field(unique=True)
-
-    auth_method: AuthMethod = Field(default=AuthMethod.TELEGRAM)
-    role: Role = Field(default=Role.USER)
+    auth_method: Mapped[AuthMethod] = mapped_column(Enum(AuthMethod), default=AuthMethod.TELEGRAM)
+    role: Mapped[Role] = mapped_column(Enum(Role), default=Role.USER)
