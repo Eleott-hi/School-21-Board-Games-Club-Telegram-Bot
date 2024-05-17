@@ -41,3 +41,24 @@ def reply_builder(
     keyboard = builder.as_markup(**kwargs)
 
     return keyboard
+
+
+def reply_builder(
+    text: List[str],
+    # callback_data: List[str],
+    sizes: List[str] = None,
+    **kwargs,
+) -> ReplyKeyboardMarkup:
+    builder = ReplyKeyboardBuilder()
+
+    # for txt, cb in zip(text):
+    # builder.button(text=txt)
+
+    builder.add(*[KeyboardButton(text=txt) for txt in text])
+
+    if sizes:
+        builder.adjust(*sizes)
+
+    keyboard = builder.as_markup(**kwargs)
+
+    return keyboard
