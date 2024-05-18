@@ -12,11 +12,7 @@ async def send_email(
 ) -> None:
 
     try:
-        await mail_service.send_mail(
-            email_info.email,
-            email_info.subject,
-            email_info.message,
-        )
+        await mail_service.send_mail(email_info)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)

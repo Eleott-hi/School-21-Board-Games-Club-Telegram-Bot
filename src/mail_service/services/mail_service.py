@@ -2,16 +2,17 @@ import aiosmtplib as smtp
 
 from email.message import EmailMessage
 from config import MAIL_PASSWORD, MAIL_ADDRESS
+from schemas.schemas import EmailInfo
 
 
 class MailService:
 
-    async def send_mail(self, to: str, subject: str, message: str) -> None:
+    async def send_mail(self, email_info: EmailInfo) -> None:
         email = EmailMessage()
         email["From"] = MAIL_ADDRESS
-        email["To"] = to
-        email["Subject"] = subject
-        email.set_content(message)
+        email["To"] = email_info.email
+        email["Subject"] = email_info.subject
+        email.set_content(email_info.message)
 
         print(email)
 
