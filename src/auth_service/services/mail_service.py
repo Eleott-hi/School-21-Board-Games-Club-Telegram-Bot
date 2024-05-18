@@ -1,5 +1,8 @@
+import services.utils as utils
+
+from fastapi import status, HTTPException
 from config import MAIL_SERVICE_URL
-from httpx import AsyncClient
+from httpx import AsyncClient, Response
 
 
 class MailService:
@@ -18,3 +21,9 @@ class MailService:
                 },
                 timeout=10,
             )
+
+            if res.status_code != status.HTTP_202_ACCEPTED:
+                raise HTTPException(
+                    status_code=status.HTTP_504_GATEWAY_TIMEOUT,
+                    detail=utils.get_fastapi_error_detail(res.text),
+                )

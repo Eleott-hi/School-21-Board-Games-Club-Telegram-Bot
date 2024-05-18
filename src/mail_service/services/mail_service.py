@@ -2,6 +2,8 @@ import aiosmtplib as smtp
 import ssl
 
 from email.message import EmailMessage
+
+from fastapi import HTTPException, status
 from config import MAIL_PASSWORD, MAIL_ADDRESS
 from schemas.schemas import EmailInfo
 
@@ -38,14 +40,17 @@ class MailService:
         email["Subject"] = email_info.subject
         email.set_content(email_info.message)
 
-        tmp = await smtp.send(
-            email,
-            hostname=self.smtp,
-            port=465,
-            use_tls=True,
-            username=MAIL_ADDRESS,
-            password=MAIL_PASSWORD,
-            timeout=10,
-        )
-
-        print(tmp)
+        try:
+            await smtp.send(
+                email,
+                hostname=self.smtp,
+                port=465,
+                use_tls=True,
+                username=MAIL_ADDRESS,
+                password=MAIL_PASSWORD,
+                timeout=10,
+            )
+        except smtp.errors.SMTPConnectTimeoutError as e:
+            raise HTTPException(
+                status_code=status.HTTP_504_GATEWAY_TIMEOUT, detail=str(e)
+            )

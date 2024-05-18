@@ -5,15 +5,17 @@ from services.mail_service import MailService
 router: APIRouter = APIRouter()
 
 
-@router.post("/send_email", status_code=status.HTTP_202_ACCEPTED)
+@router.post(
+    "/send_email",
+    status_code=status.HTTP_202_ACCEPTED,
+    responses={
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {},
+        status.HTTP_504_GATEWAY_TIMEOUT: {},
+    },
+)
 async def send_email(
     email_info: EmailInfo,
     mail_service: MailService = Depends(),
 ) -> None:
 
-    try:
-        await mail_service.send_mail(email_info)
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
-        )
+    await mail_service.send_mail(email_info)

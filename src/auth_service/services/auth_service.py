@@ -38,16 +38,16 @@ class AuthService:
     async def confirm_token(self, confirm_schema: ConfirmSchema):
         payload = self.decode_jwt(confirm_schema.token)
         nickname = payload["nickname"]
-        telegram_id = await self.redis_service.get(nickname)
         email = self.get_email_address_from_nickname(nickname)
 
+        telegram_id = await self.redis_service.get(nickname)
         if not telegram_id:
             raise HTTPException(status_code=401, detail="Invalid token")
 
         await self.redis_service.delete(nickname)
 
         await self.auth_repository.add(
-            telegram_id=telegram_id,
+            telegram_id=int(telegram_id),
             nickname=nickname,
             email=email,
             auth_method=AuthMethod.TELEGRAM,
@@ -58,7 +58,7 @@ class AuthService:
         return User.model_validate(user)
 
     def get_email_address_from_nickname(self, nickname: str):
-        return f"{nickname}@student.school-21.ru"
+        return f"{nickname}@student.21-school.ru"
 
     def decode_jwt(self, token: str):
         try:
