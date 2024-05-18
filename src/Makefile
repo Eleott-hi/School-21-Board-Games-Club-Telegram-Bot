@@ -18,8 +18,8 @@ clean_db:
 	-docker stop $(POSTGRES_CONTAINER_NAME)
 	-docker rm   $(POSTGRES_CONTAINER_NAME)
 
-ngrok:
-	docker run --net=host -it -e NGROK_AUTHTOKEN=xyz ngrok/ngrok:latest http 4040
-
 prune:
 	docker system prune -a
+
+sed:
+	find . -type f -name "*.sh" -exec sed -i 's/\r//g' {} +

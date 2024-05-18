@@ -1,12 +1,14 @@
-from email.message import EmailMessage
 import aiosmtplib as smtp
+
+from email.message import EmailMessage
+from config import MAIL_PASSWORD, MAIL_ADDRESS
 
 
 class MailService:
 
     async def send_mail(self, to: str, subject: str, message: str) -> None:
         email = EmailMessage()
-        email["From"] = "s21boardgamesclub@mail.ru"
+        email["From"] = MAIL_ADDRESS
         email["To"] = to
         email["Subject"] = subject
         email.set_content(message)
@@ -18,8 +20,8 @@ class MailService:
             hostname="smtp.mail.ru",
             port=465,
             use_tls=True,
-            username=email["From"],
-            password="wyYbSgXHLeHu62DPniqa",
+            username=MAIL_ADDRESS,
+            password=MAIL_PASSWORD,
             timeout=10,
         )
 
