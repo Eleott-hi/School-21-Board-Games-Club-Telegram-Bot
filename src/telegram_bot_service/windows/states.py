@@ -38,6 +38,7 @@ class ProfileSG(StatesGroup):
     main = State()
     bookings = State()
     collections = State()
+    registration = State()
 
 
 class OptionsSG(StatesGroup):
@@ -47,6 +48,11 @@ class OptionsSG(StatesGroup):
 
 class NotFoundSG(StatesGroup):
     main = State()
+
+
+class RegistrationSG(StatesGroup):
+    start = State()
+    confirm = State()
 
 
 async def not_implemented_yet(

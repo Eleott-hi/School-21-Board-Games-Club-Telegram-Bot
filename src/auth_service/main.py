@@ -9,7 +9,13 @@ async def lifespan(app):
     yield
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    lifespan=lifespan,
+    title="Auth Service",
+    description="Service to manage authentication and authorization",
+    version="0.0.1",
+    root_path="/api/v1",
+)
 
 app.include_router(auth_router)
 

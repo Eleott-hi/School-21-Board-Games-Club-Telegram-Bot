@@ -1,6 +1,4 @@
-from datetime import datetime, timedelta
 from typing import Dict
-import jwt
 
 from fastapi import Depends, HTTPException
 from models.User import AuthMethod
@@ -8,7 +6,8 @@ from repositories.auth_repository import AuthRepository
 from schemas.auth_schemas import ConfirmSchema, RegisterSchema, User
 from services.mail_service import MailService
 from services.redis_service import RedisService
-from config import SERVICE_SECRET_KEY, SERVICE_SECRET_ALGORITHM, CONFIRMATION_TOKEN_TTL
+from config import CONFIRMATION_TOKEN_TTL
+from utils.JWT import decode_jwt, encode_jwt
 
 
 class AuthService:
@@ -27,16 +26,18 @@ class AuthService:
         nickname = register_schema.nickname
         telegram_id = register_schema.telegram_id
         email = self.get_email_address_from_nickname(nickname)
-        token = self.encode_jwt({"nickname": nickname})
+        token = encode_jwt({"nickname": nickname})
 
         await self.mail_service.send_token(email=email, token=token)
 
         await self.redis_service.set(
-            key=nickname, value=telegram_id, ttl=CONFIRMATION_TOKEN_TTL
+            key=nickname,
+            value=telegram_id,
+            ttl=CONFIRMATION_TOKEN_TTL,
         )
 
     async def confirm_token(self, confirm_schema: ConfirmSchema):
-        payload = self.decode_jwt(confirm_schema.token)
+        payload = decode_jwt(confirm_schema.token)
         nickname = payload["nickname"]
         email = self.get_email_address_from_nickname(nickname)
 
@@ -59,28 +60,3 @@ class AuthService:
 
     def get_email_address_from_nickname(self, nickname: str):
         return f"{nickname}@student.21-school.ru"
-
-    def decode_jwt(self, token: str):
-        try:
-            return jwt.decode(
-                jwt=token,
-                key=SERVICE_SECRET_KEY,
-                algorithms=[SERVICE_SECRET_ALGORITHM],
-            )
-
-        except jwt.exceptions.ExpiredSignatureError:
-            raise HTTPException(status_code=401, detail="Token expired")
-
-    def encode_jwt(self, payload: Dict):
-        return jwt.encode(
-            payload={
-                **payload,
-                "exp": int(
-                    (
-                        datetime.now() + timedelta(seconds=CONFIRMATION_TOKEN_TTL)
-                    ).timestamp()
-                ),
-            },
-            key=SERVICE_SECRET_KEY,
-            algorithm=SERVICE_SECRET_ALGORITHM,
-        )

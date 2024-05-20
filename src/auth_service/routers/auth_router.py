@@ -3,7 +3,6 @@ from schemas.auth_schemas import ConfirmSchema, RegisterSchema, User
 from services.auth_service import AuthService
 
 router = APIRouter(
-    prefix="/auth",
     tags=["auth"],
     responses={401: {"description": "Not authorized"}},
 )
