@@ -11,8 +11,9 @@ install:
 
 wait_for_it: 
 	chmod +x ./wait-for-it.sh 
-	./wait-for-it.sh -t 120 $$MONGODB_SERVICE_HOST:$$MONGODB_SERVICE_PORT -- \
-	./wait-for-it.sh -t 120 $$AUTH_SERVICE_HOST:$$AUTH_SERVICE_PORT
+	./wait-for-it.sh -t 120 "$$POSTGRES_SERVICE_HOST:$$POSTGRES_SERVICE_PORT"  -- \
+	./wait-for-it.sh -t 120 "$$REDIS_SERVICE_HOST:$$REDIS_SERVICE_PORT" -- \
+	./wait-for-it.sh -t 120 "$$MAIL_SERVICE_HOST:$$MAIL_SERVICE_PORT"
 
 run:
 	python3 main.py

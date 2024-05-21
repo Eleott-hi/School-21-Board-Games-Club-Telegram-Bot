@@ -13,6 +13,7 @@ from windows.profile_dialog import dialog as profile_dialog
 from windows.options_dialog import dialog as options_dialog
 from windows.title_search_dialog import dialog as title_search_dialog
 from windows.not_found_dialog import dialog as not_found_dialog
+from windows.registration_dialog import dialog as registration_dialog
 
 
 from middlewares.MongoDB import UserMongoDB
@@ -51,6 +52,7 @@ dp.include_routers(
     profile_dialog,
     options_dialog,
     title_search_dialog,
+    registration_dialog,
     not_found_dialog,
 )
 setup_dialogs(dp)

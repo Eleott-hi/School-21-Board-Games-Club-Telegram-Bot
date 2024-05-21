@@ -1,0 +1,12 @@
+fastapi[all]
+sqlalchemy
+sqlalchemy-utils
+psycopg2-binary
+asyncpg
+alembic
+pydantic-extra-types
+pydantic[email]
+phonenumbers
+passlib
+pyjwt
+redis

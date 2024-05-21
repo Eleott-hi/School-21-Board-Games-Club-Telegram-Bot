@@ -1,7 +1,7 @@
-DB_DIR := mongodb_service
-DB_CONTAINER_NAME := mongodb_service
+MONGO_DB_CONTAINER_NAME := mongodb_service 
+POSTGRES_CONTAINER_NAME := postgres_service
 
-all:  clean_db up
+all: down up
 
 up:
 	docker-compose up
@@ -13,11 +13,13 @@ logs:
 	docker-compose logs
 
 clean_db:
-	-docker stop $(DB_CONTAINER_NAME)
-	-docker rm $(DB_CONTAINER_NAME)
-
-ngrok:
-	docker run --net=host -it -e NGROK_AUTHTOKEN=xyz ngrok/ngrok:latest http 4040
+	-docker stop $(MONGO_DB_CONTAINER_NAME)
+	-docker rm   $(MONGO_DB_CONTAINER_NAME)
+	-docker stop $(POSTGRES_CONTAINER_NAME)
+	-docker rm   $(POSTGRES_CONTAINER_NAME)
 
 prune:
 	docker system prune -a
+
+sed:
+	find . -type f -name "*.sh" -exec sed -i 's/\r//g' {} +

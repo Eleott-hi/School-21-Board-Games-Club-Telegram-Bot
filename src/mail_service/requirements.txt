@@ -1,0 +1,3 @@
+fastapi[standart]
+pydantic[email]
+aiosmtplib

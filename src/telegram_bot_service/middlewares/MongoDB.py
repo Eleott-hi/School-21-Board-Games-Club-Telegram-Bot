@@ -2,6 +2,7 @@ from typing import Any, Awaitable, Callable, Dict
 
 from aiogram import BaseMiddleware
 from aiogram.types import Message, TelegramObject, CallbackQuery
+from core.Localization import Language
 
 init_user_dict: Dict = {
     "optional_filters": dict(
@@ -11,10 +12,12 @@ init_user_dict: Dict = {
         duration=None,
         complexity=None,
         genres=[],
-    ), 
-    "options":dict(
-        pagination_limit=5
-    )
+    ),
+    "options": dict(
+        pagination_limit=5,
+        language=Language.RU,
+        is_logged_in=False,
+    ),
 }
 
 

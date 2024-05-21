@@ -22,6 +22,18 @@
         "reset_button": "🔄 Очистить фильтры",
         "search_button": "🔎 Поиск"
     },
+    "registration_window": {
+        "title": "<b>📝 Регистрация</b>",
+        "description": "👆 Введите свой ник в \"Школе 21\"",
+        "current_input": "💬 Текущее значение: <b>\"{input}\"</b>",
+        "register_button": "📝 Зарегистрироваться"
+    },
+    "confirmation_window": {
+        "title": "<b>📝 Подтверждение</b>",
+        "description": "👆 На твою школьную почту был отправлен токен. Введи его",
+        "current_input": "💬 Текущее значение: <b>\"{input}\"</b>",
+        "confirm_button": "✅ Подтвердить"
+    },
     "filters_menu_window": {
         "title": "<b>🔍 Фильтры</b>",
         "description": "👆 Выберите параметры для поиска",
@@ -84,19 +96,25 @@
         "title": "<b>👋 Привет, {username}!</b>",
         "description": "👤 Информация о вас",
         "profile_menu_button": "👤 Профиль",
-        "booking_button":"📅 Бронирования",
-        "collections_button":"👤 Коллекция",
+        "booking_button": "📅 Бронирования",
+        "collections_button": "👤 Коллекция",
+        "registration_button": "📝 Регистрация",
         "settings_button": "⚙️ Настройки"
     },
     "settings_window": {
         "title": "<b>⚙️ Настройки</b>",
         "description": "👇 Выберите параметр",
-        "pagination_button": "Пагинация: {pagination_limit}"
+        "pagination_button": "Пагинация: {pagination_limit}",
+        "language_button": "Язык: {language}"
     },
     "pagination_option_window": {
         "title": "<b>⚙️ Пагинация</b>",
         "description": "👇 Выберите количество элементов на странице",
         "pagination_button": "Элементов на странице: {pagination_limit}"
+    },
+    "language_settings_window": {
+        "title": "<b>👅 Язык</b>",
+        "description": "👇 Выберите язык"
     },
     "not_found_window": {
         "title": "<b>😕 Ничего не найдено</b>",
