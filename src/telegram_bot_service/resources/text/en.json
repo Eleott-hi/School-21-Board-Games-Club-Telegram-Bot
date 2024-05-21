@@ -11,8 +11,11 @@
     "pagination_window": {
         "title": "<b>🎮 Games List</b>",
         "no_pages_message": "There are no more pages",
+        "first_page_button": "1",
         "prev_button": "⬅️",
-        "next_button": "➡️"
+        "pagination_info": "{page}/{pages}",
+        "next_button": "➡️",
+        "last_page_button": "{pages}"
     },
     "title_search_menu_window": {
         "title": "<b>🔍 Search by Title</b>",
@@ -93,5 +96,11 @@
         "back_button": "⬅️ Back",
         "back_to_main_menu_button": "⬅️ Back to Main Menu",
         "any_button": "🔲 Any"
+    },
+    "registration_window": {
+        "title": "<b>📝 Registration</b>",
+        "description": "👆 Enter your \"School 21\" nickname",
+        "current_input": "💬 Current input: <b>\"{input}\"</b>",
+        "register_button": "📝 Register"
     }
 }

@@ -1,12 +1,8 @@
-# import ngrok python sdk
 import ngrok
 from config import TELEGRAM_TOKEN
 from fastapi import FastAPI
-from bot import bot, dp, types, Dispatcher, Bot
-import os
-from typing import Dict
-
-WEBHOOK_PATH = f"/bot/{TELEGRAM_TOKEN}"
+from bot import bot
+from routers.telegram_route import router as telegram_router
 
 
 async def lifespan(app):
@@ -15,10 +11,8 @@ async def lifespan(app):
 
     print(f"Forwarding established at {forward_url}")
 
-    WEBHOOK_URL = f"{forward_url}{WEBHOOK_PATH}"
-
     await bot.delete_webhook(drop_pending_updates=True)
-    await bot.set_webhook(url=WEBHOOK_URL)
+    await bot.set_webhook(url=f"{forward_url}/bot/{TELEGRAM_TOKEN}")
 
     yield
 
@@ -27,21 +21,7 @@ async def lifespan(app):
 
 
 app = FastAPI(lifespan=lifespan)
-
-
-@app.post(f"{WEBHOOK_PATH}")
-async def bot_webhook(update: types.Update):
-    try:
-        await dp.feed_update(bot=bot, update=update)
-    except Exception as e: 
-        print("Error processing update:", e)
-        # dp.register_error_handler(bot, update)
-
-
-@app.post(f"/notify")
-async def notify_bot():
-    await bot.send_message(chat_id=572276281, text="Hello from /send")
-
+app.include_router(telegram_router)
 
 if __name__ == "__main__":
     import uvicorn

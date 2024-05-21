@@ -11,8 +11,11 @@
     "pagination_window": {
         "title": "<b>🎮 Список игр</b>",
         "no_pages_message": "Больше нет страниц",
+        "first_page_button": "1",
         "prev_button": "⬅️",
-        "next_button": "➡️"
+        "pagination_info": "{page}/{pages}",
+        "next_button": "➡️",
+        "last_page_button": "{pages}"
     },
     "title_search_menu_window": {
         "title": "<b>🔍 Поиск по названию</b>",
