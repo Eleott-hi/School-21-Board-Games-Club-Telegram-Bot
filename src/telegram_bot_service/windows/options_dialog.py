@@ -14,6 +14,7 @@ from aiogram_dialog.widgets.media import StaticMedia
 from windows.option_windows.pagination_option_window import (
     window as pagination_option_window,
 )
+from windows.option_windows.language_settings import window as language_settings_window
 from windows.states import OptionsSG
 from database.database import MDB
 from aiogram_dialog.manager.manager import ManagerImpl
@@ -27,6 +28,7 @@ common_text = localization["common"]
 def widget_from_user_options(options: Dict):
     return dict(
         pagination_limit=str(options["pagination_limit"]),
+        language=str(options["language"]),
     )
 
 
@@ -55,9 +57,15 @@ dialog = Dialog(
             id="pagination",
             state=OptionsSG.pagination,
         ),
+        SwitchTo(
+            Format(window_text["language_button"]),
+            id="language",
+            state=OptionsSG.language,
+        ),
         Cancel(Const(common_text["back_button"]), id="cancel"),
         state=OptionsSG.main,
         getter=get_data,
     ),
     pagination_option_window,
+    language_settings_window,
 )

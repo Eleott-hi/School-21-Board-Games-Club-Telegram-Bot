@@ -6,7 +6,6 @@ from models.User import AuthMethod
 
 
 class RegisterSchema(BaseModel):
-    telegram_id: int
     nickname: str = Field(min_length=3, pattern="^[a-z]+$")
 
     model_config = {

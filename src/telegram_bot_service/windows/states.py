@@ -44,6 +44,7 @@ class ProfileSG(StatesGroup):
 class OptionsSG(StatesGroup):
     main = State()
     pagination = State()
+    language = State()
 
 
 class NotFoundSG(StatesGroup):

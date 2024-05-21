@@ -22,9 +22,11 @@ class AuthService:
         self.mail_service = mail_service
         self.auth_repository = auth_repository
 
-    async def start_registeration(self, register_schema: RegisterSchema):
-        nickname = register_schema.nickname
-        telegram_id = register_schema.telegram_id
+    async def start_registeration(
+        self,
+        telegram_id: int,
+        nickname: str,
+    ):
         email = self.get_email_address_from_nickname(nickname)
         token = encode_jwt({"nickname": nickname})
 
@@ -36,19 +38,29 @@ class AuthService:
             ttl=CONFIRMATION_TOKEN_TTL,
         )
 
-    async def confirm_token(self, confirm_schema: ConfirmSchema):
-        payload = decode_jwt(confirm_schema.token)
+    async def confirm_token(
+        self,
+        telegram_id: int,
+        token: str,
+    ):
+        payload = decode_jwt(token)
         nickname = payload["nickname"]
         email = self.get_email_address_from_nickname(nickname)
 
-        telegram_id = await self.redis_service.get(nickname)
-        if not telegram_id:
-            raise HTTPException(status_code=401, detail="Invalid token")
+        radis_telegram_id = await self.redis_service.get(nickname)
+        if not radis_telegram_id:
+            raise HTTPException(status_code=400, detail="Invalid token")
+
+        radis_telegram_id = int(radis_telegram_id)
+        if radis_telegram_id != telegram_id:
+            raise HTTPException(
+                status_code=400, detail="Token was sent from another telegram id"
+            )
 
         await self.redis_service.delete(nickname)
 
         await self.auth_repository.add(
-            telegram_id=int(telegram_id),
+            telegram_id=int(radis_telegram_id),
             nickname=nickname,
             email=email,
             auth_method=AuthMethod.TELEGRAM,

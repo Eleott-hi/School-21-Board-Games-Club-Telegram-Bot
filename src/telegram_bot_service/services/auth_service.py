@@ -6,7 +6,7 @@ from config import AUTH_SERVICE_HOST, AUTH_SERVICE_PORT, AUTH_SERVICE_VERSION
 
 class AuthService:
     def __init__(self):
-        self.auth_url = f"http://{AUTH_SERVICE_HOST}:{AUTH_SERVICE_PORT}/api/v{AUTH_SERVICE_VERSION}"
+        self.auth_url = f"http://{AUTH_SERVICE_HOST}:{AUTH_SERVICE_PORT}/api/v{AUTH_SERVICE_VERSION}/telegram"
 
     async def is_registered(self, telegram_id: int):
         url = f"{self.auth_url}/user"

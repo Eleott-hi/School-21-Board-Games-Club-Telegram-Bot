@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Any, Dict
 
 from aiogram.types import ContentType, CallbackQuery
 from aiogram_dialog import Window
@@ -9,29 +9,40 @@ from aiogram_dialog.widgets.kbd import ManagedRadio, SwitchTo, Column, Radio
 
 from database.database import MDB
 from windows.states import OptionsSG
-from core.Localization import localization
+from core.Localization import Language, localization
 
-window_text = localization["pagination_option_window"]
+window_text = localization["language_settings_window"]
 common_text = localization["common"]
 
 
-async def getter(**kwargs):
-    return dict(pagination_limits=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+def text(data: Dict[str, Any]) -> Dict[str, str]:
+    return {
+        "title": window_text["title"].format_map(data),
+        "description": window_text["description"].format_map(data),
+    }
 
 
-async def process_event(
+async def getter(user_mongo: Dict, db: MDB, **kwargs):
+    data = [Language.EN.value, Language.RU.value]
+
+    return dict(
+        text=text({}),
+        data=data,
+    )
+
+
+async def on_state_changed(
     cb: CallbackQuery,
     button: ManagedRadio,
     manager: ManagerImpl,
     value: str,
 ):
-    value = int(value)
-
+    value = Language(value)
     db: MDB = manager.middleware_data["db"]
     user: Dict = manager.middleware_data["user_mongo"]
     options = user["options"]
 
-    filter_name: str = "pagination_limit"
+    filter_name: str = "language"
 
     if options[filter_name] != value:
         options[filter_name] = value
@@ -52,15 +63,15 @@ window = Window(
         Radio(
             Format("🔘 {item}"),
             Format("⚪️ {item}"),
-            id="pagination_limit",
+            id="language",
             item_id_getter=str,
-            items="pagination_limits",
-            on_state_changed=process_event,
+            items="data",
+            on_state_changed=on_state_changed,
         )
     ),
     SwitchTo(
         Const(common_text["back_button"]), id="to_game_menu", state=OptionsSG.main
     ),
-    state=OptionsSG.pagination,
+    state=OptionsSG.language,
     getter=getter,
 )

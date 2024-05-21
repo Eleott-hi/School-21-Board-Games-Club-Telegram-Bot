@@ -104,12 +104,17 @@
     "settings_window": {
         "title": "<b>⚙️ Настройки</b>",
         "description": "👇 Выберите параметр",
-        "pagination_button": "Пагинация: {pagination_limit}"
+        "pagination_button": "Пагинация: {pagination_limit}",
+        "language_button": "Язык: {language}"
     },
     "pagination_option_window": {
         "title": "<b>⚙️ Пагинация</b>",
         "description": "👇 Выберите количество элементов на странице",
         "pagination_button": "Элементов на странице: {pagination_limit}"
+    },
+    "language_settings_window": {
+        "title": "<b>👅 Язык</b>",
+        "description": "👇 Выберите язык"
     },
     "not_found_window": {
         "title": "<b>😕 Ничего не найдено</b>",
