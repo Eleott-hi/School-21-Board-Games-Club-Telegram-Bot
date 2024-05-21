@@ -31,9 +31,6 @@ def text(data: Dict, language: str) -> Dict[str, str]:
         next_button=window_text["next_button"].format_map(data),
         last_page_button=window_text["last_page_button"].format_map(data),
         back_button=common_text["back_button"].format_map(data),
-        back_to_main_menu_button=common_text["back_to_main_menu_button"].format_map(
-            data
-        ),
         no_pages_message=window_text["no_pages_message"].format_map(data),
     )
 

@@ -7,9 +7,8 @@ from aiogram_dialog.widgets.kbd import Button, Cancel, Cancel
 from aiogram_dialog.widgets.text import Format, Multi
 from aiogram_dialog.widgets.media import StaticMedia
 
+import ui.utils
 from ui.states import NotFoundSG
-from ui.utils import back_to_main_menu
-
 from core.Localization import Language, localization_manager
 
 
@@ -37,14 +36,6 @@ async def getter(user_mongo: Dict, **kwargs):
     )
 
 
-async def on_back_to_main_menu(
-    callback: CallbackQuery,
-    button: Button,
-    manager: DialogManager,
-):
-    await back_to_main_menu(manager)
-
-
 dialog = Dialog(
     Window(
         StaticMedia(
@@ -60,7 +51,7 @@ dialog = Dialog(
         Button(
             Format("{text[back_to_main_menu_button]}"),
             id="back_to_main_menu",
-            on_click=on_back_to_main_menu,
+            on_click=ui.utils.default_on_back_to_main_menu,
         ),
         parse_mode="HTML",
         state=NotFoundSG.main,
