@@ -71,7 +71,7 @@ async def on_date_selected(
     await manager.switch_to(GameDialogSG.main)
 
 
-async def get_game(dialog_manager: DialogManager, aiogd_context, **kwargs):
+async def getter(dialog_manager: DialogManager, aiogd_context, **kwargs):
     print(aiogd_context.start_data, flush=True)
     print(aiogd_context.dialog_data, flush=True)
 
@@ -82,9 +82,7 @@ async def get_game(dialog_manager: DialogManager, aiogd_context, **kwargs):
     game: Dict = await GameService.get_game_by_id(data["game_id"])
 
     return dict(
-        id=game["id"],
-        title=game["title"],
-        description=game["description"],
+        game_info=game,
     )
 
 
@@ -107,7 +105,7 @@ dialog = Dialog(
             path="resources/static/game_1.jpg",
             type=ContentType.PHOTO,
         ),
-        Format("{title}"),
+        Format("{game_info[title]}"),
         Row(
             SwitchTo(
                 Const(window_text["info_button"]),
@@ -129,7 +127,7 @@ dialog = Dialog(
         ),
         Cancel(Const(common_text["back_button"]), id="cancel"),
         state=GameDialogSG.main,
-        getter=get_game,
+        getter=getter,
     ),
     Window(
         StaticMedia(
@@ -137,8 +135,8 @@ dialog = Dialog(
             type=ContentType.PHOTO,
         ),
         Multi(
-            Format("{title}"),
-            Format("{description}"),
+            Format("{game_info[title]}"),
+            Format("{game_info[description]}"),
             sep="\n\n",
         ),
         SwitchTo(
@@ -147,7 +145,7 @@ dialog = Dialog(
             state=GameDialogSG.main,
         ),
         state=GameDialogSG.info,
-        getter=get_game,
+        getter=getter,
     ),
     Window(
         StaticMedia(
@@ -165,7 +163,7 @@ dialog = Dialog(
             state=GameDialogSG.main,
         ),
         state=GameDialogSG.booking,
-        getter=get_game,
+        getter=getter,
     ),
     Window(
         StaticMedia(
@@ -183,6 +181,6 @@ dialog = Dialog(
             state=GameDialogSG.main,
         ),
         state=GameDialogSG.collections,
-        getter=get_game,
+        getter=getter,
     ),
 )
