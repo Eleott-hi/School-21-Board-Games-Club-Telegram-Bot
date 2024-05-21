@@ -41,13 +41,13 @@ window_text = localization["profile_menu_window"]
 common_text = localization["common"]
 
 
-async def get_data(dialog_manager: ManagerImpl, **kwargs):
+async def get_data(dialog_manager: ManagerImpl, user_mongo: Dict, **kwargs):
     user = dialog_manager.event.from_user
     if user:
         username: str = user.full_name
         return dict(
             username=username,
-            is_registered=True,
+            is_not_registered=not user_mongo["options"]["is_logged_in"],
         )
 
 
@@ -72,7 +72,7 @@ dialog = Dialog(
         ),
         Start(
             Const(window_text["registration_button"]),
-            when="is_registered",
+            when="is_not_registered",
             id="registration",
             state=RegistrationSG.start,
         ),

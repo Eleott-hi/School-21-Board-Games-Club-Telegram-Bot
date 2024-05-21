@@ -44,6 +44,7 @@ async def register(callback: CallbackQuery, button: Button, manager: DialogManag
         await manager.start(NotFoundSG.main)
         return
 
+    manager.current_context().widget_data["input"] = ""
     await manager.switch_to(RegistrationSG.confirm)
 
 

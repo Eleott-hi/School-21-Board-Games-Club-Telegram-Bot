@@ -13,7 +13,7 @@ from aiogram_dialog.manager.manager import ManagerImpl
 from services.auth_service import AuthService
 from windows.states import RegistrationSG, ignore
 from database.database import MDB
-
+from windows.utils import back_to_main_menu
 from core.Localization import localization
 
 
@@ -38,7 +38,20 @@ async def confirm(callback: CallbackQuery, button: Button, manager: DialogManage
 
     auth = AuthService()
     telegram_id = callback.from_user.id
-    res = await auth.confirm_token(token, telegram_id)
+
+    is_confirmed, err = await auth.confirm_token(token, telegram_id)
+
+    if not is_confirmed:
+        await callback.answer(err)
+        return
+
+    db: MDB = manager.middleware_data["db"]
+    user_mongo = manager.middleware_data["user_mongo"]
+    user_mongo["options"]["is_logged_in"] = True
+
+    await db.users.replace_one({"_id": user_mongo["_id"]}, user_mongo)
+    await callback.answer("Your account is confirmed")
+    await back_to_main_menu(manager)
 
 
 async def user_input_text(message: Message, b: MessageInput, manager: ManagerImpl):

@@ -40,7 +40,7 @@ async def on_state_changed(
     value = Language(value)
     db: MDB = manager.middleware_data["db"]
     user: Dict = manager.middleware_data["user_mongo"]
-    options = user["options"]
+    options: Dict = user["options"]
 
     filter_name: str = "language"
 

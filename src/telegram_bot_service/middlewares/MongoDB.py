@@ -16,6 +16,7 @@ init_user_dict: Dict = {
     "options": dict(
         pagination_limit=5,
         language=Language.RU,
+        is_logged_in=False,
     ),
 }
 
