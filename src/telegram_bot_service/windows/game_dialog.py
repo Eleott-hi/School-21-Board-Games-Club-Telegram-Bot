@@ -17,8 +17,9 @@ from aiogram_dialog.widgets.kbd import (
     CalendarUserConfig,
     CalendarConfig,
 )
+from aiogram_dialog.api.entities import MediaAttachment, MediaId
 from aiogram_dialog.widgets.text import Const, Format, Multi
-from aiogram_dialog.widgets.media import StaticMedia
+from aiogram_dialog.widgets.media import StaticMedia, DynamicMedia
 from aiogram_dialog.widgets.kbd.calendar_kbd import (
     CalendarDaysView,
     CalendarMonthView,
@@ -79,10 +80,11 @@ async def getter(dialog_manager: DialogManager, aiogd_context, **kwargs):
         aiogd_context.dialog_data = deepcopy(aiogd_context.start_data)
 
     data = aiogd_context.dialog_data
-    game: Dict = await GameService.get_game_by_id(data["game_id"])
+    game_info: Dict = await GameService.get_game_by_id(data["game_id"])
 
     return dict(
-        game_info=game,
+        photo=MediaAttachment(ContentType.PHOTO, path=game_info["photo_link"]),
+        game_info=game_info,
     )
 
 
@@ -101,10 +103,7 @@ def pritify_game_info(game: Dict):
 
 dialog = Dialog(
     Window(
-        StaticMedia(
-            path="resources/static/game_1.jpg",
-            type=ContentType.PHOTO,
-        ),
+        DynamicMedia("photo"),
         Format("{game_info[title]}"),
         Row(
             SwitchTo(
@@ -130,10 +129,7 @@ dialog = Dialog(
         getter=getter,
     ),
     Window(
-        StaticMedia(
-            path="resources/static/game_1.jpg",
-            type=ContentType.PHOTO,
-        ),
+        DynamicMedia("photo"),
         Multi(
             Format("{game_info[title]}"),
             Format("{game_info[description]}"),
@@ -148,10 +144,7 @@ dialog = Dialog(
         getter=getter,
     ),
     Window(
-        StaticMedia(
-            path="resources/static/game_1.jpg",
-            type=ContentType.PHOTO,
-        ),
+        DynamicMedia("photo"),
         CustomCalendar(
             id="calendar",
             on_click=on_date_selected,
@@ -166,10 +159,7 @@ dialog = Dialog(
         getter=getter,
     ),
     Window(
-        StaticMedia(
-            path="resources/static/game_1.jpg",
-            type=ContentType.PHOTO,
-        ),
+        DynamicMedia("photo"),
         Button(
             Const("❤️ Add to favorite"),
             id="add_to_favorites",
