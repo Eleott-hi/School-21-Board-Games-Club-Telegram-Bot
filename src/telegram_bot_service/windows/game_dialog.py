@@ -80,15 +80,15 @@ async def getter(dialog_manager: DialogManager, aiogd_context, **kwargs):
         aiogd_context.dialog_data = deepcopy(aiogd_context.start_data)
 
     data = aiogd_context.dialog_data
-    game_info: Dict = await GameService.get_game_by_id(data["game_id"])
+    game: Dict = await GameService.get_game_by_id(data["game_id"])
 
     return dict(
-        photo=MediaAttachment(ContentType.PHOTO, path=game_info["photo_link"]),
-        game_info=game_info,
+        photo=MediaAttachment(ContentType.PHOTO, path=game["photo_link"]),
+        game=game,
     )
 
 
-def pritify_game_info(game: Dict):
+def pritify_game(game: Dict):
 
     return (
         f'Title: {game["title"]}, {game["year"]}\n\n'
@@ -104,16 +104,16 @@ def pritify_game_info(game: Dict):
 dialog = Dialog(
     Window(
         DynamicMedia("photo"),
-        Format("{game_info[title]}"),
+        Format("{game[title]}"),
         Row(
             SwitchTo(
                 Const(window_text["info_button"]),
-                id="game_info",
+                id="info",
                 state=GameDialogSG.info,
             ),
             SwitchTo(
                 Const(window_text["booking_button"]),
-                id="game_booking",
+                id="booking",
                 state=GameDialogSG.booking,
             ),
         ),
@@ -131,8 +131,8 @@ dialog = Dialog(
     Window(
         DynamicMedia("photo"),
         Multi(
-            Format("{game_info[title]}"),
-            Format("{game_info[description]}"),
+            Format("{game[title]}"),
+            Format("{game[description]}"),
             sep="\n\n",
         ),
         SwitchTo(
