@@ -1,10 +1,13 @@
 MONGO_DB_CONTAINER_NAME := mongodb_service 
 POSTGRES_CONTAINER_NAME := postgres_service
 
-all: down up
+all: stop up
 
 up:
 	docker-compose up
+
+stop:
+	docker-compose stop
 
 down:
 	docker-compose down
