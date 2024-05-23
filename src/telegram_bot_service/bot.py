@@ -7,10 +7,10 @@ from aiogram_dialog import setup_dialogs
 from aiogram_dialog import DialogManager, StartMode
 
 from ui.dialogs.game_dialog import dialog as game_dialog
+from ui.dialogs.error_dialog import dialog as error_dialog
 from ui.dialogs.profile_dialog import dialog as profile_dialog
 from ui.dialogs.filters_dialog import dialog as filters_dialog
 from ui.dialogs.settings_dialog import dialog as settings_dialog
-from ui.dialogs.not_found_dialog import dialog as not_found_dialog
 from ui.dialogs.main_menu_dialog import dialog as main_menu_dialog
 from ui.dialogs.pagination_dialog import dialog as pagination_dialog
 from ui.dialogs.title_search_dialog import dialog as title_search_dialog
@@ -49,7 +49,7 @@ dp.include_routers(
     settings_dialog,
     title_search_dialog,
     registration_dialog,
-    not_found_dialog,
+    error_dialog,
 )
 setup_dialogs(dp)
 

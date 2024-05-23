@@ -1,8 +1,8 @@
 from typing import Any, Dict
 
-from aiogram.types import CallbackQuery, ContentType
+from aiogram.types import ContentType
 
-from aiogram_dialog import Dialog, DialogManager, Window
+from aiogram_dialog import Window
 from aiogram_dialog.widgets.kbd import Button, Cancel, Cancel
 from aiogram_dialog.widgets.text import Format, Multi
 from aiogram_dialog.widgets.media import StaticMedia
@@ -36,25 +36,23 @@ async def getter(user_mongo: Dict, **kwargs):
     )
 
 
-dialog = Dialog(
-    Window(
-        StaticMedia(
-            path="resources/static/not_found.jpg",
-            type=ContentType.PHOTO,
-        ),
-        Multi(
-            Format("{text[title]}"),
-            Format("{text[description]}"),
-            sep="\n\n",
-        ),
-        Cancel(Format("{text[back_button]}"), id="cancel"),
-        Button(
-            Format("{text[back_to_main_menu_button]}"),
-            id="back_to_main_menu",
-            on_click=ui.utils.default_on_back_to_main_menu,
-        ),
-        parse_mode="HTML",
-        state=NotFoundSG.main,
-        getter=getter,
+window = Window(
+    StaticMedia(
+        path="resources/static/not_found.jpg",
+        type=ContentType.PHOTO,
     ),
+    Multi(
+        Format("{text[title]}"),
+        Format("{text[description]}"),
+        sep="\n\n",
+    ),
+    Cancel(Format("{text[back_button]}"), id="cancel"),
+    Button(
+        Format("{text[back_to_main_menu_button]}"),
+        id="back_to_main_menu",
+        on_click=ui.utils.default_on_back_to_main_menu,
+    ),
+    parse_mode="HTML",
+    state=NotFoundSG.main,
+    getter=getter,
 )

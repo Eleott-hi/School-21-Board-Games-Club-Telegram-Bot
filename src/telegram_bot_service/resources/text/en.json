@@ -83,6 +83,9 @@
         "booking_button": "📅 Booking",
         "collection_button": "👤 Collection"
     },
+    "game_collection_window": {
+        "collection_button": "❤️ Add to favorite"
+    },
     "profile_menu_window": {
         "title": "<b>👋 Hello, {username}!</b>",
         "description": "👤 Information about you",

@@ -15,7 +15,11 @@ window_text = localization["complexity_filter_window"]
 common_text = localization["common"]
 
 
-async def get_values(aiogd_context, user_mongo, **kwargs):
+async def getter(
+    aiogd_context,
+    user_mongo,
+    **kwargs,
+):
     return dict(complexity=["Any", "Easy", "Medium", "Hard"])
 
 
@@ -61,5 +65,5 @@ window = Window(
     ),
     SwitchTo(Const(common_text["back_button"]), id="to_game_menu", state=FilterSG.main),
     state=FilterSG.complexity,
-    getter=get_values,
+    getter=getter,
 )
