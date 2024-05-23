@@ -1,29 +1,25 @@
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, types
 from aiogram.enums import ParseMode
-from aiogram import types
-from database.database import database
-
-from config import TELEGRAM_TOKEN
-
-from windows.main_menu_dialog import dialog as main_menu_dialog, MainMenuSG
-from windows.pagination_dialog import dialog as pagination_dialog
-from windows.game_dialog import dialog as game_dialog
-from windows.filters_dialog import dialog as filters_dialog
-from windows.profile_dialog import dialog as profile_dialog
-from windows.options_dialog import dialog as options_dialog
-from windows.title_search_dialog import dialog as title_search_dialog
-from windows.not_found_dialog import dialog as not_found_dialog
-from windows.registration_dialog import dialog as registration_dialog
-
-
-from middlewares.MongoDB import UserMongoDB
-
-from aiogram_dialog import setup_dialogs
-
 from aiogram.filters import Command
 from aiogram.types import Message
 
+from aiogram_dialog import setup_dialogs
 from aiogram_dialog import DialogManager, StartMode
+
+from ui.dialogs.game_dialog import dialog as game_dialog
+from ui.dialogs.error_dialog import dialog as error_dialog
+from ui.dialogs.profile_dialog import dialog as profile_dialog
+from ui.dialogs.filters_dialog import dialog as filters_dialog
+from ui.dialogs.settings_dialog import dialog as settings_dialog
+from ui.dialogs.main_menu_dialog import dialog as main_menu_dialog
+from ui.dialogs.pagination_dialog import dialog as pagination_dialog
+from ui.dialogs.title_search_dialog import dialog as title_search_dialog
+from ui.dialogs.registration_dialog import dialog as registration_dialog
+from ui.states import MainMenuSG
+
+from config import TELEGRAM_TOKEN
+from database.database import database
+from middlewares.MongoDB import UserMongoDB
 
 
 async def on_startup(bot):
@@ -50,10 +46,10 @@ dp.include_routers(
     game_dialog,
     filters_dialog,
     profile_dialog,
-    options_dialog,
+    settings_dialog,
     title_search_dialog,
     registration_dialog,
-    not_found_dialog,
+    error_dialog,
 )
 setup_dialogs(dp)
 

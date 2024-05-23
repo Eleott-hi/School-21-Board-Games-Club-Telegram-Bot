@@ -8,6 +8,17 @@ class Language(str, Enum):
     EN = "en"
 
 
+class WordMap:
+    def __init__(self, word_map: Dict[str, str] | None = None) -> None:
+        self.word_map = word_map if word_map else {}
+
+    def __getitem__(self, key) -> str:
+        if key in self.word_map:
+            return self.word_map[key]
+
+        return "[not implemented]"
+
+
 class Localization:
     def __init__(self, language: Language = Language.RU) -> None:
         self.language = language
@@ -19,11 +30,17 @@ class Localization:
 
     def parse_text(self):
         file = f"resources/text/{self.language.value}.json"
-        with open(file, encoding="utf-8") as f:
-            self.texts: Dict[str, Any] = json.load(f)
 
-    def __getitem__(self, item) -> Dict[str, Any]:
-        return self.texts.get(item)
+        with open(file, encoding="utf-8") as f:
+            texts: Dict[str, Any] = json.load(f)
+
+        self.texts = {}
+
+        for window, words_map in texts.items():
+            self.texts[window] = WordMap(words_map)
+
+    def __getitem__(self, window) -> Dict[str, Any]:
+        return self.texts.get(window, WordMap())
 
 
 class LocalizationManager:
