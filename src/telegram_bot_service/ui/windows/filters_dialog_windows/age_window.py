@@ -24,9 +24,9 @@ def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
     )
 
 
-async def getter(**kwargs):
+async def getter(user_mongo: Dict, **kwargs):
     return dict(
-        text=text({}, kwargs["user_mongo"]["options"]["language"]),
+        text=text({}, user_mongo["options"]["language"]),
         ages=["Any", "5+", "10+", "18+"],
     )
 

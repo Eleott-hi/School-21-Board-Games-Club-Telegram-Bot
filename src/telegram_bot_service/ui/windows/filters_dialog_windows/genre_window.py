@@ -30,9 +30,9 @@ def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
     )
 
 
-async def get_values(**kwargs):
+async def getter(user_mongo: Dict, **kwargs):
     return dict(
-        text=text({}, kwargs["user_mongo"]["options"]["language"]),
+        text=text({}, user_mongo["options"]["language"]),
         genres=["Any", "Strategy", "RPG", "War", "Shooter", "Sports"],
     )
 
@@ -93,5 +93,5 @@ window = Window(
         state=FilterSG.main,
     ),
     state=FilterSG.genre,
-    getter=get_values,
+    getter=getter,
 )

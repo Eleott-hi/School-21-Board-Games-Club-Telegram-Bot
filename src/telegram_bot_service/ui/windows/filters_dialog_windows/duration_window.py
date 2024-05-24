@@ -24,7 +24,7 @@ def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
     )
 
 
-async def get_values(aiogd_context, user_mongo, **kwargs):
+async def get_values(user_mongo: Dict, **kwargs):
     return dict(
         text=text({}, user_mongo["options"]["language"]),
         duration=["Any", "15", "30", "45", "60"],
