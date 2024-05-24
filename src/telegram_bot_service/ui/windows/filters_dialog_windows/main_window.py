@@ -5,17 +5,36 @@ from aiogram.types import CallbackQuery
 
 from aiogram_dialog import DialogManager, Window
 from aiogram_dialog.widgets.kbd import Button, Cancel, Row, Cancel, SwitchTo
-from aiogram_dialog.widgets.text import Const, Format, Multi
+from aiogram_dialog.widgets.text import Format, Multi
 from aiogram_dialog.widgets.media import StaticMedia
 
 from ui.states import GameDialogSG, NotFoundSG, PaginationSG, FilterSG
 
 from database.database import MDB
 from services.game_service import GameService
-from core.Localization import localization
+from core.Localization import localization_manager, Language
 
-window_text = localization["filters_menu_window"]
-common_text = localization["common"]
+
+def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
+    localization = localization_manager[language]
+    window_text = localization["filters_menu_window"]
+    common_text = localization["common"]
+
+    return dict(
+        title=window_text["title"].format_map(data),
+        description=window_text["description"].format_map(data),
+        age_button=window_text["age_button"].format_map(data),
+        genre_button=window_text["genre_button"].format_map(data),
+        players_number_button=window_text["players_number_button"].format_map(data),
+        duration_button=window_text["duration_button"].format_map(data),
+        complexity_button=window_text["complexity_button"].format_map(data),
+        status_button=window_text["status_button"].format_map(data),
+        reset_button=window_text["reset_button"].format_map(data),
+        search_button=window_text["search_button"].format_map(data),
+        back_to_main_menu_button=common_text["back_to_main_menu_button"].format_map(
+            data
+        ),
+    )
 
 
 def get_filters_from_user_mongo(user_mongo: Dict) -> Dict[str, Any]:
@@ -38,7 +57,12 @@ async def getter(aiogd_context, db: MDB, user_mongo: Dict, **kwargs):
     if not aiogd_context.widget_data:
         aiogd_context.widget_data = filters
 
-    return {**filters, "genres": ", ".join(filters["genres"])}
+    return dict(
+        text=text(
+            {**filters, "genres": ", ".join(filters["genres"])},
+            user_mongo["options"]["language"],
+        )
+    )
 
 
 async def goto(callback: CallbackQuery, button: Button, manager: DialogManager):
@@ -81,49 +105,56 @@ window = Window(
         type=ContentType.PHOTO,
     ),
     Multi(
-        Const(window_text["title"]),
-        Const(window_text["description"]),
+        Format("{text[title]}"),
+        Format("{text[description]}"),
         sep="\n\n",
     ),
     SwitchTo(
-        Format(window_text["genre_button"]),
+        Format("{text[genre_button]}"),
         id="genre",
         state=FilterSG.genre,
     ),
     SwitchTo(
-        Format(window_text["age_button"]),
+        Format("{text[age_button]}"),
         id="age",
         state=FilterSG.age,
     ),
     SwitchTo(
-        Format(window_text["players_number_button"]),
+        Format("{text[players_number_button]}"),
         id="players_num",
         state=FilterSG.players_num,
     ),
     SwitchTo(
-        Format(window_text["duration_button"]),
+        Format("{text[duration_button]}"),
         id="duration",
         state=FilterSG.duration,
     ),
     SwitchTo(
-        Format(window_text["complexity_button"]),
+        Format("{text[complexity_button]}"),
         id="complexity",
         state=FilterSG.complexity,
     ),
     SwitchTo(
-        Format(window_text["status_button"]),
+        Format("{text[status_button]}"),
         id="status",
         state=FilterSG.status,
     ),
     Row(
-        Button(Const(window_text["reset_button"]), id="reset", on_click=reset_filters),
         Button(
-            Const(window_text["search_button"]),
+            Format("{text[reset_button]}"),
+            id="reset",
+            on_click=reset_filters,
+        ),
+        Button(
+            Format("{text[search_button]}"),
             id="search",
             on_click=goto,
         ),
     ),
-    Cancel(Const(common_text["back_to_main_menu_button"]), id="cancel"),
+    Cancel(
+        Format("{text[back_to_main_menu_button]}"),
+        id="cancel",
+    ),
     state=FilterSG.main,
     parse_mode="HTML",
     getter=getter,

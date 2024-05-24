@@ -1,22 +1,33 @@
-from typing import Dict
+from typing import Any, Dict
 
 from aiogram.types import ContentType, CallbackQuery
 from aiogram_dialog import Window
-from aiogram_dialog.widgets.text import Const, Format, Multi
+from aiogram_dialog.widgets.text import Format, Multi
 from aiogram_dialog.widgets.media import StaticMedia
 from aiogram_dialog.manager.manager import ManagerImpl
 from aiogram_dialog.widgets.kbd import ManagedRadio, SwitchTo, Column, Radio
 from database.database import MDB
 
 from ui.states import FilterSG
+from core.Localization import localization_manager, Language
 
-from core.Localization import localization
-window_text = localization["status_filter_window"]
-common_text = localization["common"]
+
+def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
+    localization = localization_manager[language]
+    window_text = localization["status_filter_window"]
+
+    return dict(
+        title=window_text["title"].format_map(data),
+        description=window_text["description"].format_map(data),
+        back_button=localization["common"]["back_button"].format_map(data),
+    )
 
 
 async def get_values(aiogd_context, user_mongo, **kwargs):
-    return dict(status=["Any", "Available", "Unavailable"])
+    return dict(
+        text=text({}, user_mongo["options"]["language"]),
+        status=["Any", "Available", "Unavailable"],
+    )
 
 
 async def on_state_changed(
@@ -45,8 +56,8 @@ window = Window(
         type=ContentType.PHOTO,
     ),
     Multi(
-        Const(window_text["title"]),
-        Const(window_text["description"]),
+        Format("{text[title]}"),
+        Format("{text[description]}"),
         sep="\n\n",
     ),
     Column(
@@ -59,7 +70,11 @@ window = Window(
             on_state_changed=on_state_changed,
         )
     ),
-    SwitchTo(Const(common_text["back_button"]), id="to_game_menu", state=FilterSG.main),
+    SwitchTo(
+        Format("{text[back_button]}"),
+        id="to_game_menu",
+        state=FilterSG.main,
+    ),
     state=FilterSG.status,
     getter=get_values,
 )

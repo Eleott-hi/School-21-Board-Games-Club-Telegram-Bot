@@ -1,28 +1,34 @@
-from typing import Dict
+from typing import Any, Dict
 
 from aiogram.types import ContentType, CallbackQuery
 from aiogram_dialog import Window
-from aiogram_dialog.widgets.text import Const, Format, Multi
+from aiogram_dialog.widgets.text import Format, Multi
 from aiogram_dialog.widgets.media import StaticMedia
 from aiogram_dialog.manager.manager import ManagerImpl
 from aiogram_dialog.widgets.kbd import ManagedRadio, SwitchTo, Column, Radio
 from database.database import MDB
 from ui.states import FilterSG
 
-from core.Localization import localization
-
-window_text = localization["age_filter_window"]
-common_text = localization["common"]
+from core.Localization import Language, localization_manager
 
 
-async def get_ages(**kwargs):
-    return dict(ages=["Any", "5+", "10+", "18+"])
+def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
+    localization = localization_manager[language]
+    window_text = localization["age_filter_window"]
+    common_text = localization["common"]
+
+    return dict(
+        title=window_text["title"].format_map(data),
+        description=window_text["description"].format_map(data),
+        back_button=common_text["back_button"].format_map(data),
+    )
 
 
-# <class 'aiogram.types.callback_query.CallbackQuery'>
-# <class 'aiogram_dialog.widgets.kbd.select.ManagedRadio'>
-# <class 'aiogram_dialog.manager.manager.ManagerImpl'>
-# <class 'str'>
+async def getter(**kwargs):
+    return dict(
+        text=text({}, kwargs["user_mongo"]["options"]["language"]),
+        ages=["Any", "5+", "10+", "18+"],
+    )
 
 
 async def process_event(
@@ -51,8 +57,8 @@ window = Window(
         type=ContentType.PHOTO,
     ),
     Multi(
-        Const(window_text["title"]),
-        Const(window_text["description"]),
+        Format("{text[title]}"),
+        Format("{text[description]}"),
         sep="\n\n",
     ),
     Column(
@@ -65,7 +71,11 @@ window = Window(
             on_state_changed=process_event,
         )
     ),
-    SwitchTo(Const(common_text["back_button"]), id="to_game_menu", state=FilterSG.main),
+    SwitchTo(
+        Format("{text[back_button]}"),
+        id="to_game_menu",
+        state=FilterSG.main,
+    ),
     state=FilterSG.age,
-    getter=get_ages,
+    getter=getter,
 )

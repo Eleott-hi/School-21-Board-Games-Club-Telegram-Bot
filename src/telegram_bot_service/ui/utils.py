@@ -1,8 +1,10 @@
 from typing import Any
 
-from aiogram_dialog import DialogManager, ShowMode
 from aiogram.types import CallbackQuery
+
+from aiogram_dialog import DialogManager, ShowMode
 from aiogram_dialog.widgets.kbd import Button
+from aiogram_dialog.widgets.text import Format, Multi
 
 
 async def back_to_main_menu(
@@ -23,3 +25,11 @@ def default_on_back_to_main_menu(
     manager: DialogManager,
 ):
     return back_to_main_menu(manager)
+
+
+def default_back_to_main_menu_button():
+    return Button(
+        Format("{text[back_to_main_menu_button]}"),
+        id="back_to_main_menu",
+        on_click=default_on_back_to_main_menu,
+    )
