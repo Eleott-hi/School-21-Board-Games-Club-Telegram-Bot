@@ -7,6 +7,6 @@ import celeryconfig
 # app.config_from_object(celeryconfig)
 
 app = Celery('tasks',
-             broker='amqp://guest:password@rabbit_mq_service/guest_vhost',
-             backend='rpc://',
-             include=['tasks'])
+            broker='amqp://guest:password@localhost/guest_vhost',
+            backend='rpc://',
+            include=['tasks'])
