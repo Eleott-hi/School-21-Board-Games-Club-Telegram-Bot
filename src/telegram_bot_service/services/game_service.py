@@ -3,6 +3,9 @@ from database.database import games
 
 
 class GameService:
+    def __init__(self):
+        self.base_url = "https://boardgamegeek.com"
+
     @classmethod
     async def get_games(cls, filters: Dict):
         print(filters, flush=True)

@@ -97,6 +97,21 @@ services:
     ports:
       - 8002:8000
 
+  booking_service:
+    build: ./booking_service
+    container_name: booking_service
+    working_dir: /app
+    volumes:
+      - ./booking_service:/app
+      - shared_data:/app/shared
+    command: bash -c "make"
+    environment:
+      TZ: "Asia/Novosibirsk"
+    env_file: booking_service/.env
+    restart: on-failure
+    ports:
+      - 8003:8000
+
 volumes:
   shared_data:
     driver: local

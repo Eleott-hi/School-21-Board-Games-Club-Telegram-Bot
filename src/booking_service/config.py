@@ -1,0 +1,7 @@
+import os
+import logger
+
+
+AUTH_SERVICE_HOST = os.getenv("AUTH_SERVICE_HOST")
+AUTH_SERVICE_PORT = os.getenv("AUTH_SERVICE_PORT")
+AUTH_SERVICE_VERSION = os.getenv("AUTH_SERVICE_VERSION")

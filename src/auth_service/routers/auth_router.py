@@ -1,10 +1,9 @@
-from fastapi import APIRouter, Depends, Request, status
+from fastapi import APIRouter, Depends, Header, Request, logger, status
 from schemas.auth_schemas import ConfirmSchema, RegisterSchema, User
 from services.auth_service import AuthService
 from routers.utils import get_telegram_id
 
 router = APIRouter(
-    prefix="/telegram",
     tags=["auth"],
     responses={401: {"description": "Not authorized"}},
 )
@@ -35,11 +34,12 @@ async def confirm_token(
 
 
 @router.get(
-    "/user/{telegram_id}",
+    "/user",
     status_code=status.HTTP_200_OK,
 )
 async def get_user(
-    telegram_id: int = Depends(get_telegram_id),
+    x_telegram_id: int = Header(),
     auth_service: AuthService = Depends(),
 ) -> User:
-    return await auth_service.get_user_by_telegram_id(telegram_id)
+    print(f"Telegram ID: {x_telegram_id}", flush=True)
+    return await auth_service.get_user_by_telegram_id(x_telegram_id)
