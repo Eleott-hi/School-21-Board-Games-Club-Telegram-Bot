@@ -1,3 +1,6 @@
+import config.config
+import config.logger
+
 from fastapi import FastAPI
 from routers.booking_router import router as booking_router
 

@@ -1,10 +1,13 @@
 import httpx
+import logging
 
-from fastapi import HTTPException, logger, status
+from fastapi import HTTPException, status
 
-from config import AUTH_SERVICE_HOST, AUTH_SERVICE_PORT, AUTH_SERVICE_VERSION
+from config.config import AUTH_SERVICE_HOST, AUTH_SERVICE_PORT, AUTH_SERVICE_VERSION
 from schemas.schemas import User
 from services import utils
+
+logger = logging.getLogger(__name__)
 
 
 class AuthService:
@@ -17,15 +20,15 @@ class AuthService:
         try:
             async with httpx.AsyncClient() as client:
                 response = await client.get(url, headers=headers)
+                logger.debug(response)
 
             if response.status_code == 200:
                 return User.model_validate_json(response.text)
 
             err = utils.get_fastapi_error(response)
-            print(err)
+            logger.error(err)
             raise err
 
-
         except httpx.TimeoutException as err:
-            print(err)
+            logger.error(err)
             raise HTTPException(status_code=status.HTTP_504_GATEWAY_TIMEOUT)

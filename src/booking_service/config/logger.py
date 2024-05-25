@@ -1,41 +1,47 @@
-{
+from datetime import date
+import logging
+import logging.config
+from config.config import LOG_LEVEL
+
+LOGGER_CONFIG = {
     "version": 1,
-    "disable_existing_loggers": false,
+    "disable_existing_loggers": False,
     "formatters": {
         "colored": {
             "format": "%(log_color)s%(levelname)s: %(asctime)s - %(name)s - %(message)s",
             "datefmt": "%Y-%m-%d %H:%M:%S",
-            "class": "colorlog.ColoredFormatter"
+            "class": "colorlog.ColoredFormatter",
         },
         "simple": {
             "format": "%(levelname)s: %(asctime)s - %(name)s - %(message)s",
-            "datefmt": "%Y-%m-%d %H:%M:%S"
-        }
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
     },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
             "level": "DEBUG",
             "formatter": "colored",
-            "stream": "ext://sys.stdout"
+            "stream": "ext://sys.stdout",
         },
         "file": {
             "class": "logging.handlers.TimedRotatingFileHandler",
             "level": "INFO",
             "formatter": "simple",
-            "filename": "logs/logs_{asctime}.log",
-            "when": "midnight",
+            "filename": "logs/log",
+            "when": "S",
             "interval": 1,
-            "backupCount": 10
-        }
+            "backupCount": 10,
+        },
     },
     "loggers": {
         "": {
-            "level": "DEBUG",
-            "handlers": [
-                "console",
-                "file"
-            ]
+            "level": LOG_LEVEL,
+            "handlers": ["console", "file"],
         }
-    }
+    },
 }
+
+
+
+logging.config.dictConfig(LOGGER_CONFIG)

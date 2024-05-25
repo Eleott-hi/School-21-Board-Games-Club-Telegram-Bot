@@ -1,3 +1,4 @@
+logs/
 .local/
 .vscode/
 *.aof

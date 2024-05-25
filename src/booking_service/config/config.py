@@ -1,5 +1,6 @@
 import os
-import logger
+
+LOG_LEVEL = os.getenv("LOG_LEVEL")
 
 
 AUTH_SERVICE_HOST = os.getenv("AUTH_SERVICE_HOST")
