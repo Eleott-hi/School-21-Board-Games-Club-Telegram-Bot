@@ -2,7 +2,7 @@ from typing import Any, Dict, List
 
 from aiogram.types import ContentType, CallbackQuery
 from aiogram_dialog import Window
-from aiogram_dialog.widgets.text import Const, Format, Multi
+from aiogram_dialog.widgets.text import Format, Multi
 from aiogram_dialog.widgets.media import StaticMedia
 from aiogram_dialog.manager.manager import ManagerImpl
 from aiogram_dialog.widgets.kbd import (
@@ -15,14 +15,26 @@ from aiogram_dialog.widgets.kbd import (
 from database.database import MDB
 
 from ui.states import FilterSG
-from core.Localization import localization
-
-window_text = localization["genre_filter_window"]
-common_text = localization["common"]
+from core.Localization import Language, localization_manager
 
 
-async def get_values(**kwargs):
-    return dict(genres=["Any", "Strategy", "RPG", "War", "Shooter", "Sports"])
+def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
+    localization = localization_manager[language]
+    window_text = localization["genre_filter_window"]
+    common_text = localization["common"]
+
+    return dict(
+        title=window_text["title"].format_map(data),
+        description=window_text["description"].format_map(data),
+        back_button=common_text["back_button"].format_map(data),
+    )
+
+
+async def getter(user_mongo: Dict, **kwargs):
+    return dict(
+        text=text({}, user_mongo["options"]["language"]),
+        genres=["Any", "Strategy", "RPG", "War", "Shooter", "Sports"],
+    )
 
 
 async def on_click(
@@ -60,8 +72,8 @@ window = Window(
         type=ContentType.PHOTO,
     ),
     Multi(
-        Const(window_text["title"]),
-        Const(window_text["description"]),
+        Format("{text[title]}"),
+        Format("{text[description]}"),
         sep="\n\n",
     ),
     Column(
@@ -75,7 +87,11 @@ window = Window(
             on_state_changed=on_state_changed,
         )
     ),
-    SwitchTo(Const(common_text["back_button"]), id="to_game_menu", state=FilterSG.main),
+    SwitchTo(
+        Format("{text[back_button]}"),
+        id="to_game_menu",
+        state=FilterSG.main,
+    ),
     state=FilterSG.genre,
-    getter=get_values,
+    getter=getter,
 )

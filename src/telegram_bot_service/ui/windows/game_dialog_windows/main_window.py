@@ -13,7 +13,7 @@ from aiogram_dialog.api.entities.context import Context
 from services.game_service import GameService
 from core.Localization import Language, localization_manager
 from ui.states import GameDialogSG
-
+import ui.utils
 
 def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
     localization = localization_manager[language]
@@ -25,6 +25,9 @@ def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
         booking_button=window_text["booking_button"].format_map(data),
         collection_button=window_text["collection_button"].format_map(data),
         back_button=common_text["back_button"].format_map(data),
+        back_to_main_menu_button=common_text["back_to_main_menu_button"].format_map(
+            data
+        )
     )
 
 
@@ -75,6 +78,7 @@ window = Window(
         Format("{text[back_button]}"),
         id="cancel",
     ),
+    ui.utils.default_back_to_main_menu_button(),
     state=GameDialogSG.main,
     getter=getter,
 )

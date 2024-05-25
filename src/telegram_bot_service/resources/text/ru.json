@@ -95,6 +95,10 @@
         "booking_button": "📅 Бронирование",
         "collection_button": "👤 Коллекция"
     },
+    "game_info_window": {
+        "description": "Год выпуска: <b>{year}</b>\nКоличество игроков: <b>{minPlayers}-{maxPlayers}</b>\nИдеальное кол-во игроков: <b>{minIdealPlayers}-{maxIdealPlayers}</b>\nДлительность: <b>{minPlayTime}-{maxPlayTime} мин</b>\nСложность: <b>{gameComplexity}</b>\nВозрастная категория: <b>{minAge}</b>\nЖанр: <b>{genre}</b>\nСтатус: <b>{status}</b>\nСсылка на видео правила: <b>{videoRulesLink}</b>\n\nОписание: <b>{description}</b>",
+        "title": "🎮 Название: <b>{title}</b>"
+    },
     "profile_menu_window": {
         "title": "<b>👋 Привет, {username}!</b>",
         "description": "👤 Информация о вас",
@@ -127,5 +131,6 @@
         "back_button": "⬅️ Назад",
         "back_to_main_menu_button": "⬅️ В главное меню",
         "any_button": "🔲 Любой"
-    }
+    },
+    "special": {}
 }

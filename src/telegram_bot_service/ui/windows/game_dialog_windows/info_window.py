@@ -14,11 +14,18 @@ from core.Localization import Language, localization_manager
 from ui.states import GameDialogSG
 
 
+
 def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
     localization = localization_manager[language]
     common_text: Dict[str, str] = localization["common"]
 
+    game: Dict = data["game"]
+
+    print(game)
+
     return dict(
+        title=localization["game_info_window"]["title"].format_map(game),
+        description=localization["game_info_window"]["description"].format_map(game),
         back_button=common_text["back_button"].format_map(data),
     )
 
@@ -38,17 +45,16 @@ async def getter(
     game: Dict = await GameService.get_game_by_id(data["game_id"])
 
     return dict(
-        text=text({}, user_mongo["options"]["language"]),
+        text=text({"game": game}, user_mongo["options"]["language"]),
         photo=MediaAttachment(ContentType.PHOTO, path=game["photo_link"]),
-        game=game,
     )
 
 
 window = Window(
     DynamicMedia("photo"),
     Multi(
-        Format("{game[title]}"),
-        Format("{game[description]}"),
+        Format("{text[title]}"),
+        Format("{text[description]}"),
         sep="\n\n",
     ),
     SwitchTo(
