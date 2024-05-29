@@ -1,6 +1,6 @@
 from typing import Optional
 from uuid import UUID
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 from datetime import date
 from enum import Enum as PyEnum
 
@@ -34,6 +34,8 @@ class BookingRequest(BaseModel):
 
 class BookingResponse(BookingRequest):
     id: UUID
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class FastapiError(BaseModel):

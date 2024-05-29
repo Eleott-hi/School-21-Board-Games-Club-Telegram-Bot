@@ -15,6 +15,15 @@ class AuthService:
         self.auth_url = f"http://{AUTH_SERVICE_HOST}:{AUTH_SERVICE_PORT}/api/v{AUTH_SERVICE_VERSION}"
 
     async def get_user_by_telegram_id(self, telegram_id: int) -> User | None:
+        '''
+        Requires:
+            X-Telegram-ID header with Telegram ID
+        Returns:
+            User
+        Exceptions local:
+            HTTP_504_GATEWAY_TIMEOUT
+            HTTP_401_UNAUTHORIZED
+        '''
         url = f"{self.auth_url}/user"
         headers = {"X-Telegram-ID": str(telegram_id)}
         try:

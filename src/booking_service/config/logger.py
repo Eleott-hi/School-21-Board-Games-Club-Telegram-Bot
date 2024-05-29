@@ -29,7 +29,13 @@ LOGGER_CONFIG = {
             "level": "INFO",
             "formatter": "simple",
             "filename": "logs/log",
-            "when": "S",
+            "when": "D",
+            # S - Seconds
+            # M - Minutes
+            # H - Hours
+            # D - Days
+            # midnight - roll over at midnight
+            # W{0-6} - roll over on a certain day; 0 - Monday
             "interval": 1,
             "backupCount": 10,
         },
@@ -41,7 +47,6 @@ LOGGER_CONFIG = {
         }
     },
 }
-
 
 
 logging.config.dictConfig(LOGGER_CONFIG)

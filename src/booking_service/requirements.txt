@@ -1,4 +1,7 @@
 fastapi[standart]
 pydantic[email]
 colorlog
-ecs-logging
+sqlalchemy
+sqlalchemy-utils
+psycopg2-binary
+asyncpg

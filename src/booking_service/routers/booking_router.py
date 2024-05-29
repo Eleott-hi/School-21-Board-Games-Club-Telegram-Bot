@@ -18,7 +18,8 @@ import logging
 from typing import Annotated, List, Optional
 from uuid import UUID
 from fastapi import APIRouter, Header, status, Depends, Query
-from schemas.schemas import BookingRequest, BookingFilters, BookingResponse
+from dependencies.auth_dependency import get_user_by_telegram_id_dependency
+from schemas.schemas import BookingRequest, BookingFilters, BookingResponse, User
 from services.booking_service import BookingService
 
 router = APIRouter()
@@ -40,10 +41,6 @@ async def get_all_bookings_with_filters(
     booking_service: BookingService = Depends(),
 ) -> List[BookingResponse]:
     logger.debug(filters)
-    logger.info(filters)
-    logger.warning(filters)
-    logger.error(filters)
-    logger.critical(filters)
     res = await booking_service.get_all(filters)
     return res
 
@@ -62,7 +59,6 @@ async def get_booking_by_id(
     booking_id: UUID,
     booking_service: BookingService = Depends(),
 ) -> BookingResponse:
-
     res = await booking_service.get(booking_id)
     return res
 
@@ -79,10 +75,10 @@ async def get_booking_by_id(
 )
 async def create_booking(
     booking: BookingRequest,
-    x_telegram_id: int = Header(),
+    user: User = Depends(get_user_by_telegram_id_dependency),
     booking_service: BookingService = Depends(),
 ) -> None:
-    await booking_service.create(x_telegram_id, booking)
+    await booking_service.create(user, booking)
 
 
 @router.put(
@@ -98,10 +94,10 @@ async def create_booking(
 async def update_booking(
     booking_id: UUID,
     booking: BookingRequest,
-    x_telegram_id: int = Header(),
+    user: User = Depends(get_user_by_telegram_id_dependency),
     booking_service: BookingService = Depends(),
 ) -> None:
-    await booking_service.update(x_telegram_id, booking_id, booking)
+    await booking_service.update(user, booking_id, booking)
 
 
 @router.delete(
@@ -116,7 +112,7 @@ async def update_booking(
 )
 async def delete_booking(
     booking_id: UUID,
-    x_telegram_id: int = Header(),
+    user: User = Depends(get_user_by_telegram_id_dependency),
     booking_service: BookingService = Depends(),
 ) -> None:
-    await booking_service.delete(x_telegram_id, booking_id)
+    await booking_service.delete(user, booking_id)
