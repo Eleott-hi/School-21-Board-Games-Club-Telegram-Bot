@@ -29,7 +29,7 @@ class BaseModel(Base):
 
 
 class Booking(BaseModel):
-    __tablename__ = "users"
+    __tablename__ = "bookings"
 
     user_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),

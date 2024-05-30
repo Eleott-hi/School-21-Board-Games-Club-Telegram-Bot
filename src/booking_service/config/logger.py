@@ -26,7 +26,7 @@ LOGGER_CONFIG = {
         },
         "file": {
             "class": "logging.handlers.TimedRotatingFileHandler",
-            "level": "INFO",
+            "level": "ERROR",
             "formatter": "simple",
             "filename": "logs/log",
             "when": "D",

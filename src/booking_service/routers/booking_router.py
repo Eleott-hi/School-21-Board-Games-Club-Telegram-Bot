@@ -77,8 +77,9 @@ async def create_booking(
     booking: BookingRequest,
     user: User = Depends(get_user_by_telegram_id_dependency),
     booking_service: BookingService = Depends(),
-) -> None:
-    await booking_service.create(user, booking)
+) -> BookingResponse:
+    new_booking = await booking_service.create(user, booking)
+    return new_booking
 
 
 @router.put(

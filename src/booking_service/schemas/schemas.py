@@ -1,7 +1,7 @@
 from typing import Optional
 from uuid import UUID
 from pydantic import BaseModel, ConfigDict, EmailStr
-from datetime import date
+from datetime import date, datetime
 from enum import Enum as PyEnum
 
 
@@ -28,12 +28,14 @@ class BookingFilters(BaseModel):
 
 class BookingRequest(BaseModel):
     game_id: UUID
-    user_id: UUID
     booking_date: date
 
 
 class BookingResponse(BookingRequest):
     id: UUID
+    user_id: UUID
+    created_at: datetime
+    updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
 

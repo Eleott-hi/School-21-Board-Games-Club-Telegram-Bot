@@ -1,15 +1,14 @@
 import config.config
 import config.logger
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from routers.booking_router import router as booking_router
-
 from database.database import init_db
+
 
 async def lifespan(app):
     await init_db()
     yield
-
 
 
 app: FastAPI = FastAPI(
@@ -19,6 +18,7 @@ app: FastAPI = FastAPI(
     version="0.0.1",
     root_path="/api/v1",
 )
+
 
 app.include_router(booking_router)
 
