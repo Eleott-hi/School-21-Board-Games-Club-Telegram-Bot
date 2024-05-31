@@ -15,7 +15,7 @@ router = APIRouter(prefix="/db", tags=["test"])
 
 @router.get("/id", status_code=200)
 async def get_testing_query(*,
-                            name: Annotated[str, Query()], 
+                            name: Annotated[str, Query()],
                             session: AsyncSession = Depends(get_session)
 ):
     stmt = select(BoardGame).where(BoardGame.gameName == name)
@@ -39,14 +39,17 @@ async def get_filtered(*,
                         })),
                         session: AsyncSession = Depends(get_session)  # Assuming you have session setup
 ):
-    
+
     try:
         filters = Filters.model_validate(json.loads(json_filters) if json_filters else {})
     except json.JSONDecodeError:
         raise HTTPException(status_code=400, detail="Invalid JSON format")
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
-    
+
     result_data = await get_filtered_games(filters, session)
 
     return result_data
+
+
+# @router.get("/notify", status_code=200, response_model=)

@@ -2,13 +2,15 @@ from celery import shared_task
 from aiohttp import ClientSession
 import asyncio
 
+
+
 async def fetch_data():
     data_source_url = (
-        "http://NAME_OF_SERVICE:PORT/PATH"
+
     )
 
     tg_notifier_url = (
-        "http://NAME_OF_SERVICE:PORT/PATH"
+
     )
 
     try:
