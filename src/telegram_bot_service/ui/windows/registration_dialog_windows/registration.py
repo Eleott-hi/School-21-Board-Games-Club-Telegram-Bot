@@ -11,7 +11,7 @@ from aiogram_dialog.widgets.input import MessageInput
 from aiogram_dialog.manager.manager import ManagerImpl
 
 from services.auth_service import AuthService
-from ui.states import NotFoundSG, RegistrationSG
+from ui.states import TelegramErrorSG, RegistrationSG
 from database.database import MDB
 
 from core.Localization import Language, localization_manager
@@ -54,7 +54,7 @@ async def register(callback: CallbackQuery, button: Button, manager: DialogManag
     success = await auth.register(nickname, telegram_id)
 
     if not success:
-        await manager.start(NotFoundSG.main)
+        await manager.start(TelegramErrorSG.main)
         return
 
     manager.current_context().widget_data["input"] = ""

@@ -47,7 +47,7 @@ class OptionsSG(StatesGroup):
     language = State()
 
 
-class NotFoundSG(StatesGroup):
+class TelegramErrorSG(StatesGroup):
     main = State()
 
 

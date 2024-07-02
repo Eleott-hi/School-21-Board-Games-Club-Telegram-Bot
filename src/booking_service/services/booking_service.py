@@ -33,6 +33,7 @@ class BookingService:
         filters: BookingFilters,
     ) -> List[BookingResponse]:
         res = await self.booking_repository.get_all(filters)
+        print(res, flush=True)
         return [BookingResponse.model_validate(r) for r in res]
 
     async def create(

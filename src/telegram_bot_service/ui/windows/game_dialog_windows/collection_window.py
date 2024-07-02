@@ -37,7 +37,7 @@ async def getter(
         aiogd_context.dialog_data = deepcopy(aiogd_context.start_data)
 
     data = aiogd_context.dialog_data
-    game: Dict = await GameService.get_game_by_id(data["game_id"])
+    game: Dict = await GameService().get_game_by_id(data["game_id"])
 
     return dict(
         text=text({}, user_mongo["options"]["language"]),

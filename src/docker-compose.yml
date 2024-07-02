@@ -131,6 +131,21 @@ services:
     ports:
       - 8003:8000
 
+  games_service:
+    build: ./games_service
+    container_name: games_service
+    working_dir: /app
+    volumes:
+      - ./games_service:/app
+      - shared_data:/app/shared
+    command: bash -c "make"
+    environment:
+      TZ: "Asia/Novosibirsk"
+    env_file: games_service/.env
+    restart: on-failure
+    ports:
+      - 8004:8000
+
 volumes:
   shared_data:
     driver: local

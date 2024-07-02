@@ -11,7 +11,7 @@ from aiogram.types.message import Message
 from aiogram_dialog.manager.manager import ManagerImpl
 
 from services.game_service import GameService
-from ui.states import GameDialogSG, NotFoundSG, PaginationSG, TitleSearchSG
+from ui.states import GameDialogSG, TelegramErrorSG, PaginationSG, TitleSearchSG
 from database.database import MDB
 
 from core.Localization import localization_manager
@@ -67,10 +67,10 @@ async def goto(
 
     filters = dict(offset=0, limit=options["pagination_limit"], title=data["input"])
 
-    games = await GameService.get_games(filters)
+    games = await GameService().get_games(filters)
 
     if games["total"] == 0:
-        await manager.start(NotFoundSG.main)
+        await manager.start(TelegramErrorSG.main)
 
     elif games["total"] == 1:
         game_id = games["games"][0]["id"]

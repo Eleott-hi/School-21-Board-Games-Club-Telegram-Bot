@@ -15,6 +15,7 @@ from core.Localization import Language, localization_manager
 from ui.states import GameDialogSG
 import ui.utils
 
+
 def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
     localization = localization_manager[language]
     window_text: Dict[str, str] = localization["game_menu_window"]
@@ -27,7 +28,7 @@ def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
         back_button=common_text["back_button"].format_map(data),
         back_to_main_menu_button=common_text["back_to_main_menu_button"].format_map(
             data
-        )
+        ),
     )
 
 
@@ -43,7 +44,7 @@ async def getter(
         aiogd_context.dialog_data = deepcopy(aiogd_context.start_data)
 
     data = aiogd_context.dialog_data
-    game: Dict = await GameService.get_game_by_id(data["game_id"])
+    game: Dict = await GameService().get_game_by_id(data["game_id"])
 
     return dict(
         text=text({}, user_mongo["options"]["language"]),

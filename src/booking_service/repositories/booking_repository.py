@@ -50,7 +50,7 @@ class BookingRepository:
             logger.error(e)
             raise HTTPException(status_code=500, detail="Internal Server Error")
 
-        return res
+        return res.scalars().all()
 
     async def create(self, user_id: UUID, booking: BookingRequest) -> Booking:
         new_booking = Booking(

@@ -8,11 +8,12 @@ from aiogram_dialog.widgets.kbd import Button, Cancel, Row, Cancel, SwitchTo
 from aiogram_dialog.widgets.text import Format, Multi
 from aiogram_dialog.widgets.media import StaticMedia
 
-from ui.states import GameDialogSG, NotFoundSG, PaginationSG, FilterSG
-
+import ui.utils
+from ui.states import GameDialogSG, TelegramErrorSG, PaginationSG, FilterSG
 from database.database import MDB
 from services.game_service import GameService
 from core.Localization import localization_manager, Language
+from core.Exceptions import TelegramException
 
 
 def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
@@ -71,10 +72,14 @@ async def goto(callback: CallbackQuery, button: Button, manager: DialogManager):
     filters = user["optional_filters"]
     filters = dict(offset=0, limit=options["pagination_limit"], **filters)
 
-    games = await GameService.get_games(filters)
+    try:
+        games = await GameService().get_games(filters)
+    except TelegramException as e:
+        await manager.start(TelegramErrorSG.main, data=dict(error=e))
+        return
 
     if games["total"] == 0:
-        await manager.start(NotFoundSG.main)
+        await manager.start(TelegramErrorSG.main)
 
     elif games["total"] == 1:
         game_id = games["games"][0]["id"]

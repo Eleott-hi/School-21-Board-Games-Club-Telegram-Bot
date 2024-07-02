@@ -15,7 +15,8 @@ from ui.dialogs.main_menu_dialog import dialog as main_menu_dialog
 from ui.dialogs.pagination_dialog import dialog as pagination_dialog
 from ui.dialogs.title_search_dialog import dialog as title_search_dialog
 from ui.dialogs.registration_dialog import dialog as registration_dialog
-from ui.states import MainMenuSG
+from ui.states import MainMenuSG, TelegramErrorSG
+from core.Exceptions import TelegramException
 
 from config import TELEGRAM_TOKEN
 from database.database import database
@@ -60,10 +61,10 @@ async def start(message: Message, dialog_manager: DialogManager):
 
 
 @dp.error()
-async def message_not_modified_handler(error_event):
+async def message_not_modified_handler(error_event, dialog_manager: DialogManager):
     print("Something went wrong:", error_event, flush=True)
 
-    error_event.update.callback_query.answer("Something went wrong")
+    await error_event.update.callback_query.answer("Something went wrong")
 
     return True
 

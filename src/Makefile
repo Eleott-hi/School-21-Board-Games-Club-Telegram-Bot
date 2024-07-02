@@ -1,7 +1,7 @@
 MONGO_DB_CONTAINER_NAME := mongodb_service 
 POSTGRES_CONTAINER_NAME := postgres_service
 
-all: stop up
+all: stop clean_db up
 
 up:
 	docker-compose up

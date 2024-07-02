@@ -1,0 +1,7 @@
+fastapi[standart]
+pydantic[email]
+colorlog
+sqlalchemy
+sqlalchemy-utils
+psycopg2-binary
+asyncpg

@@ -13,7 +13,8 @@ from aiogram_dialog.api.entities.context import Context
 from aiogram_dialog import DialogManager, Window
 from aiogram_dialog.widgets.kbd import Button, Cancel, Row, Select, Column
 
-from ui.states import GameDialogSG, PaginationSG, NotFoundSG, ignore
+import ui.utils
+from ui.states import GameDialogSG, PaginationSG, TelegramErrorSG, ignore
 from services.game_service import GameService
 from core.Localization import localization_manager
 
@@ -55,13 +56,13 @@ async def getter(
     filters = aiogd_context.dialog_data["filters"]
     utils = aiogd_context.dialog_data["utils"]
 
-    games_info: Dict = await GameService.get_games(filters)
+    games_info: Dict = await GameService().get_games(filters)
     data["games"] = games_info["games"]
     data["total"] = games_info["total"]
 
     if data["total"] == 0:
         dialog_manager.current_stack().pop()
-        await dialog_manager.start(state=NotFoundSG.main)
+        await dialog_manager.start(state=TelegramErrorSG.main)
         return
 
     text_data = dict(
