@@ -23,7 +23,7 @@ from core.Exceptions import TelegramException
 from services.auth_service import AuthService
 from ui.states import GameDialogSG
 from ui.widgets.CustomCalendar import CustomCalendar
-
+import ui.utils
 
 def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
     localization = localization_manager[language]
@@ -31,6 +31,7 @@ def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
 
     return dict(
         back_button=common_text["back_button"].format_map(data),
+        back_to_main_menu_button=common_text["back_to_main_menu_button"].format_map(data),
     )
 
 
@@ -79,10 +80,9 @@ async def on_date_selected(
             booking_date=selected_date,
         )
     except TelegramException as e:
-        print(e.exception_type, flush=True)
-        pass
+        await callback.answer(str(e))
     else:
-        await callback.answer(str(selected_date))
+        await callback.answer("You've booked this game on " + str(selected_date))
     # await manager.switch_to(GameDialogSG.main)
 
 
@@ -98,6 +98,7 @@ window = Window(
         id="back",
         state=GameDialogSG.main,
     ),
+    ui.utils.default_back_to_main_menu_button(),
     state=GameDialogSG.booking,
     getter=getter,
 )

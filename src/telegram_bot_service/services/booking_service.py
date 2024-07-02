@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from core.Exceptions import TelegramException, TelegramExceptions
 
 from config import BOOKING_SERVICE_HOST, BOOKING_SERVICE_PORT, BOOKING_SERVICE_VERSION
+import core.utils as utils
 
 
 class BookingFilters(BaseModel):
@@ -43,12 +44,18 @@ class BookingService:
             "booking_date": booking_date.isoformat(),
         }
 
-        print(payload)
-
         async with httpx.AsyncClient() as client:
             response = await client.post(url, headers=headers, json=payload)
             if response.status_code == status.HTTP_201_CREATED:
                 return response.json()
 
-            print(response.text)
+            err = utils.get_fastapi_error(response)
+
+            if response.status_code == status.HTTP_409_CONFLICT:
+                raise TelegramException(
+                    exception_type=TelegramExceptions.BOOKING_ALREADY_EXISTS_EXCEPTION
+                )
+
+            print(err, flush=True)
+
         raise TelegramException(TelegramExceptions.UNKNOWN_ERROR)

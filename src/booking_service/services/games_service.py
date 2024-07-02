@@ -7,7 +7,7 @@ from fastapi import HTTPException
 logger = logging.getLogger(__name__)
 
 
-class GameService:
+class GamesService:
     def __init__(self):
         pass
 

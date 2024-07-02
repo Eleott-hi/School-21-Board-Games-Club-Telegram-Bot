@@ -53,16 +53,24 @@ class BookingRepository:
         return res.scalars().all()
 
     async def create(self, user_id: UUID, booking: BookingRequest) -> Booking:
-        new_booking = Booking(
-            **booking.model_dump(),
-            user_id=user_id,
-        )
+        try:
+            res = await self.get_all(filters=BookingFilters(**booking.model_dump()))
+        except Exception as e:
+            logger.error(e)
+            raise HTTPException(status_code=500, detail="Internal Server Error")
+
+        if res:
+            print(res, flush=True)
+            raise HTTPException(status_code=409, detail="Booking already exists")
+
+        new_booking = Booking(**booking.model_dump(), user_id=user_id)
 
         self.session.add(new_booking)
 
         try:
             await self.session.commit()
             await self.session.refresh(new_booking)
+
         except Exception as e:
             logger.error(e)
             raise HTTPException(status_code=500, detail="Internal Server Error")

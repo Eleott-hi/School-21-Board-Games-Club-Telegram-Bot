@@ -6,6 +6,7 @@ from uuid import UUID
 from fastapi import Depends, HTTPException
 from schemas.schemas import BookingFilters, BookingResponse, BookingRequest, User
 from services.auth_service import AuthService
+from services.games_service import GamesService
 from repositories.booking_repository import BookingRepository
 
 logger = logging.getLogger(__name__)
@@ -16,9 +17,11 @@ class BookingService:
         self,
         auth_service: AuthService = Depends(),
         booking_repository: BookingRepository = Depends(),
+        games_service: GamesService = Depends(),
     ):
         self.auth_service = auth_service
         self.booking_repository = booking_repository
+        self.games_service = games_service
 
     async def get(
         self,
@@ -41,7 +44,8 @@ class BookingService:
         user: User,
         booking: BookingRequest,
     ) -> BookingResponse:
-
+        # check game exists
+        _ = await self.games_service.get_game_by_id(booking.game_id)
         new_booking = await self.booking_repository.create(user.id, booking)
         return BookingResponse.model_validate(new_booking)
 
