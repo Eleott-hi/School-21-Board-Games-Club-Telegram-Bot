@@ -27,8 +27,8 @@ async def getter(aiogd_context, db: MDB, user_mongo: Dict, **kwargs):
             input="",
         )
 
-    data = aiogd_context.widget_data
-    return data
+    w_data = aiogd_context.widget_data
+    return w_data
 
 
 async def confirm(callback: CallbackQuery, button: Button, manager: DialogManager):
@@ -55,8 +55,9 @@ async def confirm(callback: CallbackQuery, button: Button, manager: DialogManage
 
 
 async def user_input_text(message: Message, b: MessageInput, manager: ManagerImpl):
-    print(message.text, flush=True)
-    manager.current_context().widget_data["input"] = message.text
+    user_input = message.text.strip()
+    print(user_input, flush=True)
+    manager.current_context().widget_data["input"] = user_input
 
 
 window = Window(

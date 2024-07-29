@@ -68,25 +68,22 @@ async def getter(aiogd_context, db: MDB, user_mongo: Dict, **kwargs):
 
 async def goto(callback: CallbackQuery, button: Button, manager: DialogManager):
     user = manager.middleware_data["user_mongo"]
-    options = user["options"]
     filters = user["optional_filters"]
-    filters = dict(offset=0, limit=options["pagination_limit"], **filters)
 
     try:
         games = await GameService().get_games(filters)
+
     except TelegramException as e:
         await manager.start(TelegramErrorSG.main, data=dict(error=e))
         return
 
-    if games["total"] == 0:
-        await manager.start(TelegramErrorSG.main)
-
-    elif games["total"] == 1:
-        game_id = games["games"][0]["id"]
-        await manager.start(GameDialogSG.main, data=dict(game_id=game_id))
-
-    else:
-        await manager.start(PaginationSG.main, data=filters)
+    match len(games):
+        case 0:
+            await manager.start(TelegramErrorSG.main)
+        case 1:
+            await manager.start(GameDialogSG.main, data=dict(chosen_game=games[0]))
+        case _:
+            await manager.start(PaginationSG.main, data=dict(games=games))
 
 
 async def reset_filters(

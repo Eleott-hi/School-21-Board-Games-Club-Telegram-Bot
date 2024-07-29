@@ -41,6 +41,11 @@ class ProfileSG(StatesGroup):
     registration = State()
 
 
+class BookingSG(StatesGroup):
+    main = State()
+    calendar = State()
+
+
 class OptionsSG(StatesGroup):
     main = State()
     pagination = State()

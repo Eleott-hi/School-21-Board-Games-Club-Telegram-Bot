@@ -8,6 +8,7 @@ from aiogram_dialog.widgets.text import Format, Multi
 from aiogram_dialog.widgets.media import StaticMedia
 
 from core.Localization import Language, localization_manager
+from services.game_service import GameService
 from ui.states import (
     FilterSG,
     MainMenuSG,
@@ -44,10 +45,8 @@ async def goto_pagination(
     button: Button,
     manager: DialogManager,
 ):
-    options = manager.middleware_data["user_mongo"]["options"]
-    filters = dict(offset=0, limit=options["pagination_limit"])
-
-    await manager.start(state=PaginationSG.main, data=filters)
+    games = await GameService().get_games({})
+    await manager.start(state=PaginationSG.main, data=dict(games=games))
 
 
 window = Window(

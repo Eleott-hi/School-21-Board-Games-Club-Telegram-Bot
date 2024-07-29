@@ -14,6 +14,7 @@ from aiogram_dialog import DialogManager, Window
 from aiogram_dialog.widgets.kbd import Button, Cancel, Row, Select, Column
 
 import ui.utils
+from ui.widgets.CustomScrollingGroup import CustomScrollingGroup
 from ui.states import GameDialogSG, PaginationSG, TelegramErrorSG, ignore
 from services.game_service import GameService
 from core.Localization import localization_manager
@@ -26,14 +27,10 @@ def text(data: Dict, language: str) -> Dict[str, str]:
 
     return dict(
         title=window_text["title"].format_map(data),
-        first_page_button=window_text["first_page_button"].format_map(data),
-        prev_button=window_text["prev_button"].format_map(data),
-        pagination_info=window_text["pagination_info"].format_map(data),
-        next_button=window_text["next_button"].format_map(data),
-        last_page_button=window_text["last_page_button"].format_map(data),
         back_button=common_text["back_button"].format_map(data),
-        #
-        no_pages_message=window_text["no_pages_message"].format_map(data),
+        back_to_main_menu_button=common_text["back_to_main_menu_button"].format_map(
+            data,
+        ),
     )
 
 
@@ -45,37 +42,18 @@ async def getter(
 ):
     print("getter", aiogd_context, flush=True)
 
-    if not aiogd_context.dialog_data:
-        aiogd_context.dialog_data = dict(
-            filters=deepcopy(aiogd_context.start_data),
-            data={},
-            utils={},
-        )
+    s_data = aiogd_context.start_data
+    d_data = aiogd_context.dialog_data
 
-    data = aiogd_context.dialog_data["data"]
-    filters = aiogd_context.dialog_data["filters"]
-    utils = aiogd_context.dialog_data["utils"]
+    if not d_data:
+        d_data.update(**deepcopy(s_data))
 
-    games_info: Dict = await GameService().get_games(filters)
-    data["games"] = games_info["games"]
-    data["total"] = games_info["total"]
-
-    if data["total"] == 0:
-        dialog_manager.current_stack().pop()
-        await dialog_manager.start(state=TelegramErrorSG.main)
-        return
-
-    text_data = dict(
-        pages=ceil(data["total"] / filters["limit"]),
-        page=int(filters["offset"] / filters["limit"] + 1),
-    )
-
-    _text = text(text_data, user_mongo["options"]["language"])
-    utils["no_pages_message"] = _text["no_pages_message"]
+    if "games" not in d_data:
+        raise ValueError("Games not in d_data")
 
     return dict(
-        text=_text,
-        games=data["games"],
+        text=text({}, user_mongo["options"]["language"]),
+        games=d_data["games"],
     )
 
 
@@ -85,69 +63,14 @@ async def on_game_selected(
     manager: DialogManager,
     item_id: str,
 ):
-    await manager.start(state=GameDialogSG.main, data=dict(game_id=item_id))
+    d_data = manager.dialog_data
 
+    game = [g for g in d_data["games"] if g["id"] == item_id][0]
 
-async def prev_page(
-    callback: CallbackQuery,
-    button: Button,
-    manager: DialogManager,
-):
-    filters = manager.dialog_data["filters"]
-    utils = manager.dialog_data["utils"]
-
-    prev_offset = filters["offset"] - filters["limit"]
-
-    if prev_offset < 0:
-        await callback.answer(utils["no_pages_message"])
-        return
-
-    filters["offset"] = prev_offset
-    await manager.show()
-
-
-async def next_page(
-    callback: CallbackQuery,
-    button: Button,
-    manager: DialogManager,
-):
-    filters = manager.dialog_data["filters"]
-    data = manager.dialog_data["data"]
-    utils = manager.dialog_data["utils"]
-
-    next_offset = filters["offset"] + filters["limit"]
-
-    if next_offset >= data["total"]:
-        await callback.answer(utils["no_pages_message"])
-        return
-
-    filters["offset"] = next_offset
-    await manager.show()
-
-
-async def goto_first_page(
-    callback: CallbackQuery,
-    button: Button,
-    manager: DialogManager,
-):
-    filters = manager.dialog_data["filters"]
-    filters["offset"] = 0
-
-    await manager.show()
-
-
-async def goto_last_page(
-    callback: CallbackQuery,
-    button: Button,
-    manager: DialogManager,
-):
-    filters = manager.dialog_data["filters"]
-    data = manager.dialog_data["data"]
-
-    pages = ceil(data["total"] / filters["limit"])
-    filters["offset"] = (pages - 1) * filters["limit"]
-
-    await manager.show()
+    await manager.start(
+        state=GameDialogSG.main,
+        data=dict(chosen_game=game),
+    )
 
 
 window = Window(
@@ -156,43 +79,20 @@ window = Window(
         type=ContentType.PHOTO,
     ),
     Format("{text[title]}"),
-    Column(
+    CustomScrollingGroup(
         Select(
             Format("{item[title]}"),
-            id="s_fruits",
+            id="games",
             item_id_getter=lambda x: x["id"],
             items="games",
             on_click=on_game_selected,
         ),
-    ),
-    Row(
-        Button(
-            Format("{text[first_page_button]}"),
-            id="first_page",
-            on_click=goto_first_page,
-        ),
-        Button(
-            Format("{text[prev_button]}"),
-            id="prev",
-            on_click=prev_page,
-        ),
-        Button(
-            Format("{text[pagination_info]}"),
-            id="page",
-            on_click=ignore,
-        ),
-        Button(
-            Format("{text[next_button]}"),
-            id="next",
-            on_click=next_page,
-        ),
-        Button(
-            Format("{text[last_page_button]}"),
-            id="last_page",
-            on_click=goto_last_page,
-        ),
+        id="games_scrolling",
+        height=5,
+        width=1,
     ),
     Cancel(Format("{text[back_button]}"), id="cancel"),
+    ui.utils.default_back_to_main_menu_button(),
     state=PaginationSG.main,
     getter=getter,
 )

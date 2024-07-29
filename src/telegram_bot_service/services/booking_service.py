@@ -14,7 +14,8 @@ import core.utils as utils
 class BookingFilters(BaseModel):
     game_id: Optional[UUID] = None
     user_id: Optional[UUID] = None
-    booking_date: Optional[date] = None
+    from_date: Optional[date] = None
+    to_date: Optional[date] = None
 
 
 class BookingService:
@@ -54,6 +55,27 @@ class BookingService:
             if response.status_code == status.HTTP_409_CONFLICT:
                 raise TelegramException(
                     exception_type=TelegramExceptions.BOOKING_ALREADY_EXISTS_EXCEPTION
+                )
+
+            print(err, flush=True)
+
+        raise TelegramException(TelegramExceptions.UNKNOWN_ERROR)
+
+    async def remove_booking(self, telegram_id: int, booking_id: UUID):
+        url = f"{self.base_url}/bookings/{str(booking_id)}"
+        print("URL:", url, flush=True)
+        headers = {"Telegram-ID": str(telegram_id)}
+
+        async with httpx.AsyncClient() as client:
+            response = await client.delete(url, headers=headers)
+            if response.status_code == status.HTTP_204_NO_CONTENT:
+                return
+
+            err = utils.get_fastapi_error(response)
+
+            if response.status_code == status.HTTP_404_NOT_FOUND:
+                raise TelegramException(
+                    exception_type=TelegramExceptions.BOOKING_NOT_FOUND_EXCEPTION
                 )
 
             print(err, flush=True)

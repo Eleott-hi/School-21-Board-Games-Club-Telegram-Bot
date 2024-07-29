@@ -2,6 +2,7 @@ import datetime
 from datetime import date
 from copy import deepcopy
 from typing import Any, Dict
+from uuid import UUID
 
 from aiogram.types import CallbackQuery, ContentType
 
@@ -21,9 +22,10 @@ from services.booking_service import BookingService
 from core.Localization import Language, localization_manager
 from core.Exceptions import TelegramException
 from services.auth_service import AuthService
-from ui.states import GameDialogSG
+from ui.states import GameDialogSG, TelegramErrorSG
 from ui.widgets.CustomCalendar import CustomCalendar
 import ui.utils
+
 
 def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
     localization = localization_manager[language]
@@ -31,7 +33,9 @@ def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
 
     return dict(
         back_button=common_text["back_button"].format_map(data),
-        back_to_main_menu_button=common_text["back_to_main_menu_button"].format_map(data),
+        back_to_main_menu_button=common_text["back_to_main_menu_button"].format_map(
+            data
+        ),
     )
 
 
@@ -40,26 +44,30 @@ async def getter(
     user_mongo: Dict,
     **kwargs,
 ):
-    print(aiogd_context.start_data, flush=True)
-    print(aiogd_context.dialog_data, flush=True)
-    print(aiogd_context, type(aiogd_context), flush=True)
+    s_data = aiogd_context.start_data
+    d_data = aiogd_context.dialog_data
 
-    if not aiogd_context.dialog_data:
-        aiogd_context.dialog_data = deepcopy(aiogd_context.start_data)
+    if not d_data:
+        d_data.update(**deepcopy(s_data))
 
-    data = aiogd_context.dialog_data
-    game: Dict = await GameService().get_game_by_id(data["game_id"])
-    bookings: Dict = await BookingService().get_bookings()
-    user: User = await AuthService().get_user_by_telegram_id(user_mongo["_id"])
-    data["bookings"] = bookings
-    data["user_id"] = user.id
+    if "user" not in d_data:
+        user: User = await AuthService().get_user_by_telegram_id(user_mongo["_id"])
+        d_data["user"] = user
 
-    print(data, flush=True)
+    if "chosen_game" not in d_data:
+        raise ValueError("chosen_game not in d_data")
+
+    filters = dict(game_id=d_data["chosen_game"]["id"])
+    bookings: Dict = await BookingService().get_bookings(filters=filters)
+    d_data["bookings"] = bookings
+
+    print(d_data, flush=True)
 
     return dict(
         text=text({}, user_mongo["options"]["language"]),
-        photo=MediaAttachment(ContentType.PHOTO, path=game["photo_link"]),
-        # game=game,
+        photo=MediaAttachment(
+            ContentType.PHOTO, path=d_data["chosen_game"]["photo_link"]
+        ),
     )
 
 
@@ -69,21 +77,51 @@ async def on_date_selected(
     manager: DialogManager,
     selected_date: date,
 ):
-    data = manager.current_context().dialog_data
-    # print(manager.current_context(), flush=True)
-    # print(widget, flush=True)
+    d_data = manager.current_context().dialog_data
+
+    bookings = d_data["bookings"]
+    print(bookings, flush=True)
+
+    already_booked_for_this_user_and_this_date = [
+        b
+        for b in bookings
+        if UUID(b["user_id"]) == d_data["user"].id
+        and date.fromisoformat(b["booking_date"]) == selected_date
+    ]
+
+    print(
+        "already_booked_for_this_user_and_this_date",
+        already_booked_for_this_user_and_this_date,
+        flush=True,
+    )
 
     try:
-        res = await BookingService().create_booking(
-            telegram_id=callback.from_user.id,
-            game_id=data["game_id"],
-            booking_date=selected_date,
-        )
+        if already_booked_for_this_user_and_this_date:
+            booking = already_booked_for_this_user_and_this_date[0]
+            await BookingService().remove_booking(
+                telegram_id=callback.from_user.id,
+                booking_id=booking["id"],
+            )
+
+        else:
+            res = await BookingService().create_booking(
+                telegram_id=callback.from_user.id,
+                game_id=d_data["chosen_game"]["id"],
+                booking_date=selected_date,
+            )
+
     except TelegramException as e:
-        await callback.answer(str(e))
+        await manager.start(TelegramErrorSG.main, data=dict(error=e))
+        return
+
     else:
-        await callback.answer("You've booked this game on " + str(selected_date))
-    # await manager.switch_to(GameDialogSG.main)
+        if already_booked_for_this_user_and_this_date:
+            await callback.answer(
+                "You've canceled your booking on " + str(selected_date)
+            )
+
+        else:
+            await callback.answer("You've booked this game on " + str(selected_date))
 
 
 window = Window(

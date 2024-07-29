@@ -14,14 +14,11 @@ from core.Localization import Language, localization_manager
 from ui.states import GameDialogSG
 
 
-
 def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
     localization = localization_manager[language]
     common_text: Dict[str, str] = localization["common"]
 
     game: Dict = data["game"]
-
-    print(game)
 
     return dict(
         title=localization["game_info_window"]["title"].format_map(game),
@@ -41,12 +38,16 @@ async def getter(
     if not aiogd_context.dialog_data:
         aiogd_context.dialog_data = deepcopy(aiogd_context.start_data)
 
-    data = aiogd_context.dialog_data
-    game: Dict = await GameService().get_game_by_id(data["game_id"])
+    d_data = aiogd_context.dialog_data
+    if "chosen_game" not in d_data:
+        game: Dict = await GameService().get_game_by_id(d_data["game_id"])
+        d_data["chosen_game"] = game
 
     return dict(
-        text=text({"game": game}, user_mongo["options"]["language"]),
-        photo=MediaAttachment(ContentType.PHOTO, path=game["photo_link"]),
+        text=text({"game": d_data["chosen_game"]}, user_mongo["options"]["language"]),
+        photo=MediaAttachment(
+            ContentType.PHOTO, path=d_data["chosen_game"]["photo_link"]
+        ),
     )
 
 

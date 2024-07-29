@@ -7,6 +7,7 @@ class TelegramExceptions(str, enum.Enum):
     UNKNOWN_ERROR = "Unknown error"
     GAME_NOT_FOUND_EXCEPTION = "Game not found"
     BOOKING_ALREADY_EXISTS_EXCEPTION = "Booking already exists"
+    BOOKING_NOT_FOUND_EXCEPTION = "Booking not found"
 
 
 class TelegramException(Exception):
@@ -25,6 +26,10 @@ class TelegramException(Exception):
             case TelegramExceptions.BOOKING_ALREADY_EXISTS_EXCEPTION:
                 self.title = "Booking already exists"
                 self.description = "You can't book a game that already booked"
+            
+            case TelegramExceptions.BOOKING_NOT_FOUND_EXCEPTION:
+                self.title = "Booking not found"
+                self.description = "There is no such booking"
 
             case _:
                 self.title = "Something went wrong"

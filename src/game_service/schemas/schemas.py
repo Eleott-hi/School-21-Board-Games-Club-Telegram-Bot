@@ -31,7 +31,7 @@ class GameResponse(GameRequest):
 
 class GamesFiltersWithoutGenres(BaseModel):
     offset: int = 0
-    limit: int = 10
+    limit: int = 1000000000
     title: Optional[str] = None
     age: Optional[int] = None
     players_num: Optional[int] = None

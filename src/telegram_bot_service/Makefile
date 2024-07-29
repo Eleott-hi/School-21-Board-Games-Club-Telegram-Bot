@@ -13,7 +13,7 @@ wait_for_it:
 	chmod +x ./wait-for-it.sh 
 	./wait-for-it.sh -t 120 $$MONGODB_SERVICE_HOST:$$MONGODB_SERVICE_PORT -- \
 	./wait-for-it.sh -t 120 $$AUTH_SERVICE_HOST:$$AUTH_SERVICE_PORT -- 	     \
-	./wait-for-it.sh -t 120 $$GAMES_SERVICE_HOST:$$GAMES_SERVICE_PORT
+	./wait-for-it.sh -t 120 $$GAME_SERVICE_HOST:$$GAME_SERVICE_PORT
 
 
 run:

@@ -131,20 +131,35 @@ services:
     ports:
       - 8003:8000
 
-  games_service:
-    build: ./games_service
-    container_name: games_service
+  game_service:
+    build: ./game_service
+    container_name: game_service
     working_dir: /app
     volumes:
-      - ./games_service:/app
+      - ./game_service:/app
       - shared_data:/app/shared
     command: bash -c "make"
     environment:
       TZ: "Asia/Novosibirsk"
-    env_file: games_service/.env
+    env_file: game_service/.env
     restart: on-failure
     ports:
       - 8004:8000
+  
+  collection_service:
+    build: ./collection_service
+    container_name: collection_service
+    working_dir: /app
+    volumes:
+      - ./collection_service:/app
+      - shared_data:/app/shared
+    command: bash -c "make"
+    environment:
+      TZ: "Asia/Novosibirsk"
+    env_file: collection_service/.env
+    restart: on-failure
+    ports:
+      - 8005:8000
 
 volumes:
   shared_data:

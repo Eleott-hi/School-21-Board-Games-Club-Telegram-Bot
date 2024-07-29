@@ -19,7 +19,7 @@ class CustomCalendarDaysView(CalendarDaysView):
         data: Dict,
         manager: DialogManager,
     ):
-        dialog_data = manager.current_context().dialog_data
+        d_data = manager.current_context().dialog_data
 
         current_data = {
             "date": selected_date,
@@ -27,13 +27,13 @@ class CustomCalendarDaysView(CalendarDaysView):
         }
         text = self.date_text
 
-        for booking in dialog_data["bookings"]:
+        for booking in d_data["bookings"]:
             booking_date = date.fromisoformat(booking["booking_date"])
             user_id = UUID(booking["user_id"])
 
             if booking_date == selected_date:
                 text = Format("🔴 {date:%d}")
-                if user_id == dialog_data["user_id"]:
+                if user_id == d_data["user"].id:
                     text = Format("🔵 {date:%d}")
 
         if selected_date == today:

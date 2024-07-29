@@ -9,7 +9,7 @@ from aiogram_dialog.widgets.media import StaticMedia
 from aiogram_dialog.manager.manager import ManagerImpl
 
 
-from ui.states import OptionsSG, ProfileSG, RegistrationSG
+from ui.states import BookingSG, OptionsSG, ProfileSG, RegistrationSG
 from core.Localization import Language, localization_manager
 
 
@@ -39,7 +39,8 @@ async def getter(dialog_manager: ManagerImpl, user_mongo: Dict, **kwargs):
 
     return dict(
         text=text(text_data, user_mongo["options"]["language"]),
-        is_not_registered=not user_mongo["options"]["is_logged_in"],
+        is_logged_in=user_mongo["options"]["is_logged_in"],
+        is_not_logged_in=not user_mongo["options"]["is_logged_in"],
     )
 
 
@@ -53,21 +54,23 @@ window = Window(
         Format("{text[description]}"),
         sep="\n\n",
     ),
-    SwitchTo(
+    Start(
         Format("{text[booking_button]}"),
         id="bookings",
-        state=ProfileSG.bookings,
+        state=BookingSG.main,
+        when="is_logged_in",
     ),
     SwitchTo(
         Format("{text[collections_button]}"),
         id="collections",
         state=ProfileSG.collections,
+        when="is_logged_in",
     ),
     Start(
         Format("{text[registration_button]}"),
-        when="is_not_registered",
         id="registration",
         state=RegistrationSG.start,
+        when="is_not_logged_in",
     ),
     Start(
         Format("{text[settings_button]}"),

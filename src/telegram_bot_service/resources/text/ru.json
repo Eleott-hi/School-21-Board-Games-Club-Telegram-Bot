@@ -93,7 +93,8 @@
         "description": "📜 Информация о игре",
         "info_button": "📖 Информация",
         "booking_button": "📅 Бронирование",
-        "collection_button": "👤 Коллекция"
+        "collection_button": "👤 Коллекция",
+        "register_button": "📝 Зарегистрироваться"
     },
     "game_info_window": {
         "description": "Год выпуска: <b>{year}</b>\nКоличество игроков: <b>{min_players}-{max_players}</b>\nИдеальное кол-во игроков: <b>{min_ideal_players}-{max_ideal_players}</b>\nДлительность: <b>{min_play_time}-{max_play_time} мин</b>\nСложность: <b>{complexity}</b>\nВозрастная категория: <b>{min_age}</b>\nЖанр: <b>{genres}</b>\nСтатус: <b>Not implemeted</b>\nСсылка на видео правила: <b>{video_rules_link}</b>\n\nОписание: <b>{description}</b>",
@@ -107,6 +108,10 @@
         "collections_button": "👤 Коллекция",
         "registration_button": "📝 Регистрация",
         "settings_button": "⚙️ Настройки"
+    },
+    "profile_booking_window": {
+        "title": "<b>📅 Бронирования</b>",
+        "description": "👇 Выберите бронирование"
     },
     "settings_window": {
         "title": "<b>⚙️ Настройки</b>",

@@ -9,7 +9,7 @@ from schemas.schemas import (
     GamesFiltersWithoutGenres,
     Genre,
 )
-from services.games_service import GamesService
+from services.game_service import GamesService
 
 router = APIRouter()
 
@@ -26,10 +26,10 @@ logger = logging.getLogger(__name__)
 async def get_all_games(
     genres: List[Genre] = Query(None),
     filters: GamesFiltersWithoutGenres = Depends(),
-    games_service: GamesService = Depends(),
+    game_service: GamesService = Depends(),
 ):
     filters = GamesFiltersWithGenres(**filters.model_dump(), genres=genres)
-    res = await games_service.get_all(filters)
+    res = await game_service.get_all(filters)
     return res
 
 
@@ -42,7 +42,7 @@ async def get_all_games(
 )
 async def get_game(
     id: UUID,
-    games_service: GamesService = Depends(),
+    game_service: GamesService = Depends(),
 ) -> GameResponse:
-    res = await games_service.get(id)
+    res = await game_service.get(id)
     return res

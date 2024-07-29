@@ -62,8 +62,9 @@ async def register(callback: CallbackQuery, button: Button, manager: DialogManag
 
 
 async def user_input_text(message: Message, b: MessageInput, manager: ManagerImpl):
-    print(message.text, flush=True)
-    manager.current_context().widget_data["input"] = message.text
+    user_input = message.text.strip().lower()
+    print(user_input, flush=True)
+    manager.current_context().widget_data["input"] = user_input
 
 
 window = Window(
