@@ -6,60 +6,59 @@ from uuid import UUID
 from fastapi import Depends, HTTPException
 from sqlalchemy import delete, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from models.Booking import Booking
+from models.Collection import Collection
 from database.database import get_session
-from schemas.schemas import BookingFilters, BookingRequest
+from schemas.schemas import CollectionFilters, CollectionRequest
 
 logger = logging.getLogger(__name__)
 
 
-class BookingRepository:
+class CollectionRepository:
     def __init__(
         self,
         session: AsyncSession = Depends(get_session),
     ):
         self.session = session
 
-    async def get(self, booking_id: UUID) -> Booking | None:
-        q = select(Booking).where(Booking.id == booking_id)
+    async def get(self, id: UUID) -> Collection | None:
+        q = select(Collection).where(Collection.id == id)
 
         try:
             res = await self.session.execute(q)
+
         except Exception as e:
             logger.error(e)
             raise HTTPException(status_code=500, detail="Internal Server Error")
 
         res = res.scalars().first()
         if res is None:
-            raise HTTPException(status_code=404, detail="Booking not found")
+            raise HTTPException(status_code=404, detail="Collection not found")
 
         return res
 
-    async def get_all(self, filters: BookingFilters) -> List[Booking]:
-        q = select(Booking)
+    async def get_all(self, filters: CollectionFilters) -> List[Collection]:
+        q = select(Collection)
+
         if filters.user_id:
-            q = q.where(Booking.user_id == filters.user_id)
+            q = q.where(Collection.user_id == filters.user_id)
         if filters.game_id:
-            q = q.where(Booking.game_id == filters.game_id)
-        if filters.from_date:
-            q = q.where(Booking.booking_date >= filters.from_date)
-        if filters.to_date:
-            q = q.where(Booking.booking_date <= filters.to_date)
+            q = q.where(Collection.game_id == filters.game_id)
+
         try:
             res = await self.session.execute(q)
+
         except Exception as e:
             logger.error(e)
             raise HTTPException(status_code=500, detail="Internal Server Error")
 
         return res.scalars().all()
 
-    async def create(self, user_id: UUID, booking: BookingRequest) -> Booking:
+    async def create(self, user_id: UUID, collection: CollectionRequest) -> Collection:
         try:
             res = await self.get_all(
-                filters=BookingFilters(
-                    game_id=booking.game_id,
-                    from_date=booking.booking_date,
-                    to_date=booking.booking_date,
+                filters=CollectionFilters(
+                    game_id=collection.game_id,
+                    user_id=user_id,
                 )
             )
 
@@ -69,27 +68,24 @@ class BookingRepository:
 
         if res:
             print(res, flush=True)
-            raise HTTPException(status_code=409, detail="Booking already exists")
+            raise HTTPException(status_code=409, detail="Collection already exists")
 
-        new_booking = Booking(**booking.model_dump(), user_id=user_id)
+        new_collection = Collection(**collection.model_dump(), user_id=user_id)
 
-        self.session.add(new_booking)
+        self.session.add(new_collection)
 
         try:
             await self.session.commit()
-            await self.session.refresh(new_booking)
+            await self.session.refresh(new_collection)
 
         except Exception as e:
             logger.error(e)
             raise HTTPException(status_code=500, detail="Internal Server Error")
 
-        return new_booking
+        return new_collection
 
-    async def delete(
-        self,
-        booking_id: UUID,
-    ) -> None:
-        q = delete(Booking).where(Booking.id == booking_id)
+    async def delete(self, id: UUID) -> None:
+        q = delete(Collection).where(Collection.id == id)
 
         try:
             await self.session.execute(q)
@@ -99,15 +95,11 @@ class BookingRepository:
             logger.error(e)
             raise HTTPException(status_code=500, detail="Internal Server Error")
 
-    async def update(
-        self,
-        booking_id: UUID,
-        booking: BookingRequest,
-    ) -> None:
+    async def update(self, id: UUID, collection: CollectionRequest) -> None:
         q = (
-            update(Booking)
-            .where(Booking.id == booking_id)
-            .values(**booking.model_dump(exclude_none=True))
+            update(Collection)
+            .where(Collection.id == id)
+            .values(**collection.model_dump(exclude_none=True))
         )
 
         try:

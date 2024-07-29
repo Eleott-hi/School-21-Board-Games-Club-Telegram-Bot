@@ -20,21 +20,19 @@ class User(BaseModel):
     auth_method: AuthMethod
 
 
-class BookingFilters(BaseModel):
+class CollectionFilters(BaseModel):
     game_id: Optional[UUID] = None
     user_id: Optional[UUID] = None
-    from_date: Optional[date] = None
-    to_date: Optional[date] = None
 
 
-class BookingRequest(BaseModel):
+class CollectionRequest(BaseModel):
     game_id: UUID
-    booking_date: date
 
 
-class BookingResponse(BookingRequest):
+class CollectionResponse(BaseModel):
     id: UUID
     user_id: UUID
+    game_id: UUID
     created_at: datetime
     updated_at: datetime
 

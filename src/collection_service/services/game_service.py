@@ -14,8 +14,8 @@ class GamesService:
     async def get_game_by_id(cls, id: UUID) -> Dict:
         try:
             res = {"id": id}
+            return res
+
         except Exception as e:
             logger.error(e)
             raise HTTPException(status_code=500, detail="Internal Server Error")
-
-        return res

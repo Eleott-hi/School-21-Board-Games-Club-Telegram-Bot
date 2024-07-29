@@ -2,7 +2,7 @@ import config.config
 import config.logger
 
 from fastapi import Depends, FastAPI
-from routers.booking_router import router as booking_router
+from routers.collection_router import router as collection_router
 from database.database import init_db
 
 
@@ -20,7 +20,7 @@ app: FastAPI = FastAPI(
 )
 
 
-app.include_router(booking_router)
+app.include_router(collection_router)
 
 if __name__ == "__main__":
     import uvicorn

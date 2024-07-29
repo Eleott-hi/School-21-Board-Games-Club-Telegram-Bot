@@ -2,7 +2,7 @@ import logging
 import os
 
 from contextlib import asynccontextmanager
-from models.Booking import Base as booking_base
+from models.Collection import Base as booking_base
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import select

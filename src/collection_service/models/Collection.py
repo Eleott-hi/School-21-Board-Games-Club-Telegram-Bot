@@ -28,8 +28,8 @@ class BaseModel(Base):
     )
 
 
-class Booking(BaseModel):
-    __tablename__ = "bookings"
+class Collection(BaseModel):
+    __tablename__ = "collections"
 
     user_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
@@ -37,9 +37,5 @@ class Booking(BaseModel):
     )
     game_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
-        nullable=False,
-    )
-    booking_date: Mapped[date] = mapped_column(
-        Date,
         nullable=False,
     )
