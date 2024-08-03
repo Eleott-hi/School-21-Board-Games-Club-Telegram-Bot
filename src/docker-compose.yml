@@ -15,8 +15,8 @@ services:
   minio_service:
     image: docker.io/bitnami/minio:2022
     container_name: minio_service
-    volumes:
-      - ./minio_service/data:/data
+    # volumes:
+      # - ./minio_service/data:/data
     env_file: minio_service/.env
     restart: on-failure
     ports:
