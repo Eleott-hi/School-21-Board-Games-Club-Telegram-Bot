@@ -26,3 +26,11 @@ prune:
 
 sed:
 	find . -type f -name "*.sh" -exec sed -i 's/\r//g' {} +
+
+freeze:
+	docker exec auth_service make freeze
+	docker exec mail_service make freeze
+	docker exec telegram_bot_service make freeze
+	docker exec booking_service make freeze
+	docker exec game_service make freeze
+	docker exec collection_service make freeze

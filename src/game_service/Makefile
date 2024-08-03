@@ -19,3 +19,6 @@ run:
 
 pytest:
 	pytest
+
+freeze:
+	pip freeze > requirements.txt
