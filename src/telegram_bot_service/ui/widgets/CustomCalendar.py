@@ -25,19 +25,19 @@ class CustomCalendarDaysView(CalendarDaysView):
             "date": selected_date,
             "data": data,
         }
-        text = self.date_text
+        text = "{date:%d}"
 
         for booking in d_data["bookings"]:
             booking_date = date.fromisoformat(booking["booking_date"])
             user_id = UUID(booking["user_id"])
 
             if booking_date == selected_date:
-                text = Format("🔴 {date:%d}")
-                if user_id == d_data["user"].id:
-                    text = Format("🔵 {date:%d}")
+                text = f"🔵{text}" if user_id == d_data["user"].id else f"🔴{text}"
 
         if selected_date == today:
-            text = self.today_text
+            text = f"[{text}]"
+
+        text = Format(text)
 
         raw_date = int(mktime(selected_date.timetuple()))
         return InlineKeyboardButton(

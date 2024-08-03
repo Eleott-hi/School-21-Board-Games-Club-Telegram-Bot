@@ -66,16 +66,12 @@ async def getter(aiogd_context, db: MDB, user_mongo: Dict, **kwargs):
     )
 
 
+@ui.utils.telegram_error_handling_decorator
 async def goto(callback: CallbackQuery, button: Button, manager: DialogManager):
     user = manager.middleware_data["user_mongo"]
     filters = user["optional_filters"]
 
-    try:
-        games = await GameService().get_games(filters)
-
-    except TelegramException as e:
-        await manager.start(TelegramErrorSG.main, data=dict(error=e))
-        return
+    games = await GameService().get_games(filters)
 
     match len(games):
         case 0:

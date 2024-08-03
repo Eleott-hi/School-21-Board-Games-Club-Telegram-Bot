@@ -68,14 +68,13 @@ async def goto(
 
     games = await GameService().get_games(filters)
 
-    if len(games) == 0:
-        await manager.start(TelegramErrorSG.main)
-
-    elif len(games) == 1:
-        await manager.start(GameDialogSG.main, data=dict(chosen_game=games[0]))
-
-    else:
-        await manager.start(PaginationSG.main, data=dict(games=games))
+    match len(games):
+        case 0:
+            await manager.start(TelegramErrorSG.main)
+        case 1:
+            await manager.start(GameDialogSG.main, data=dict(chosen_game=games[0]))
+        case _:
+            await manager.start(PaginationSG.main, data=dict(games=games))
 
 
 async def reset_filters(

@@ -4,35 +4,47 @@ import enum
 
 
 class TelegramExceptions(str, enum.Enum):
-    UNKNOWN_ERROR = "Unknown error"
+    UNKNOWN_EXCEPTION = "Unknown exception"
+    CUSTOM_EXCEPTION = "Custom exception"
     GAME_NOT_FOUND_EXCEPTION = "Game not found"
     BOOKING_ALREADY_EXISTS_EXCEPTION = "Booking already exists"
     BOOKING_NOT_FOUND_EXCEPTION = "Booking not found"
+    REGISTRATION_FAILD_EXCEPTION = "Registration faild exception"
 
 
 class TelegramException(Exception):
     def __init__(
         self,
-        exception_type: TelegramExceptions = TelegramExceptions.UNKNOWN_ERROR,
-        title: str = "Something went wrong",
+        exception_type: TelegramExceptions = TelegramExceptions.UNKNOWN_EXCEPTION,
+        title: str = "Unknown exception",
         description: str = "Something went wrong, please try again",
     ) -> None:
         self.exception_type = exception_type
+
         match exception_type:
-            case TelegramExceptions.GAME_NOT_FOUND_EXCEPTION:
+            case TelegramExceptions.CUSTOM_EXCEPTION:
                 self.title = title
                 self.description = description
+
+            case TelegramExceptions.GAME_NOT_FOUND_EXCEPTION:
+                self.title = "Game not found"
+                self.description = "Can not find game"
 
             case TelegramExceptions.BOOKING_ALREADY_EXISTS_EXCEPTION:
                 self.title = "Booking already exists"
                 self.description = "You can't book a game that already booked"
-            
+
             case TelegramExceptions.BOOKING_NOT_FOUND_EXCEPTION:
                 self.title = "Booking not found"
                 self.description = "There is no such booking"
 
+            case TelegramExceptions.REGISTRATION_FAILD_EXCEPTION:
+                self.title = "Registration faild"
+                self.description = "Something went wrong while registration process.Please, check your input"
+
             case _:
-                self.title = "Something went wrong"
+                self.exception_type = TelegramExceptions.UNKNOWN_EXCEPTION
+                self.title = "Unknown error"
                 self.description = "Something went wrong, please try again"
 
     def __str__(self):

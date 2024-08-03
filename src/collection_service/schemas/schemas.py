@@ -4,6 +4,8 @@ from pydantic import BaseModel, ConfigDict, EmailStr
 from datetime import date, datetime
 from enum import Enum as PyEnum
 
+from models.Collection import CollectionType
+
 
 class AuthMethod(str, PyEnum):
     NATIVE = "native"
@@ -23,16 +25,19 @@ class User(BaseModel):
 class CollectionFilters(BaseModel):
     game_id: Optional[UUID] = None
     user_id: Optional[UUID] = None
+    type: Optional[CollectionType] = None
 
 
 class CollectionRequest(BaseModel):
     game_id: UUID
+    type: CollectionType
 
 
 class CollectionResponse(BaseModel):
     id: UUID
     user_id: UUID
     game_id: UUID
+    type: CollectionType
     created_at: datetime
     updated_at: datetime
 

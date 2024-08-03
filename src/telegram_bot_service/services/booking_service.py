@@ -35,7 +35,7 @@ class BookingService:
             if response.status_code == status.HTTP_200_OK:
                 return response.json()
 
-        raise TelegramException(TelegramExceptions.UNKNOWN_ERROR)
+        raise TelegramException(TelegramExceptions.UNKNOWN_EXCEPTION)
 
     async def create_booking(self, telegram_id: int, game_id: UUID, booking_date: date):
         url = f"{self.base_url}/bookings"
@@ -59,7 +59,7 @@ class BookingService:
 
             print(err, flush=True)
 
-        raise TelegramException(TelegramExceptions.UNKNOWN_ERROR)
+        raise TelegramException(TelegramExceptions.UNKNOWN_EXCEPTION)
 
     async def remove_booking(self, telegram_id: int, booking_id: UUID):
         url = f"{self.base_url}/bookings/{str(booking_id)}"
@@ -80,4 +80,4 @@ class BookingService:
 
             print(err, flush=True)
 
-        raise TelegramException(TelegramExceptions.UNKNOWN_ERROR)
+        raise TelegramException(TelegramExceptions.UNKNOWN_EXCEPTION)

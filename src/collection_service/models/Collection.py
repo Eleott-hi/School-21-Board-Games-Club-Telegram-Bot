@@ -10,6 +10,11 @@ from sqlalchemy.ext.declarative import as_declarative, declared_attr
 Base = declarative_base()
 
 
+class CollectionType(str, PyEnum):
+    BLACK_LIST = "black_list"
+    FAVORITE = "favorite"
+
+
 class BaseModel(Base):
     __abstract__ = True
     id: Mapped[UUID] = mapped_column(
@@ -39,3 +44,4 @@ class Collection(BaseModel):
         SQLUUID(as_uuid=True),
         nullable=False,
     )
+    type: Mapped[CollectionType] = mapped_column(Enum(CollectionType))

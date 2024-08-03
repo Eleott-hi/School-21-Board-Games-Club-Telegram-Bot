@@ -6,6 +6,9 @@ from aiogram_dialog import DialogManager, ShowMode
 from aiogram_dialog.widgets.kbd import Button, Cancel
 from aiogram_dialog.widgets.text import Format, Multi
 
+from core.Exceptions import TelegramException
+from ui.states import TelegramErrorSG
+
 
 async def back_to_main_menu(
     manager: DialogManager,
@@ -39,3 +42,17 @@ def default_back_button():
         Format("{text[back_button]}"),
         id="cancel",
     )
+
+
+def telegram_error_handling_decorator(func):
+    async def wrapper(*args, **kwargs):
+        manager: DialogManager = args[2]
+
+        try:
+            print("HERE", type(manager), flush=True)
+            await func(*args, **kwargs)
+
+        except TelegramException as e:
+            await manager.start(TelegramErrorSG.main, data=dict(error=e))
+
+    return wrapper

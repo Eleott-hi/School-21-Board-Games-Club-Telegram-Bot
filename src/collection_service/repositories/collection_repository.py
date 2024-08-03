@@ -43,6 +43,8 @@ class CollectionRepository:
             q = q.where(Collection.user_id == filters.user_id)
         if filters.game_id:
             q = q.where(Collection.game_id == filters.game_id)
+        if filters.type:
+            q = q.where(Collection.type == filters.type)
 
         try:
             res = await self.session.execute(q)

@@ -71,6 +71,7 @@ async def getter(
     )
 
 
+@ui.utils.telegram_error_handling_decorator
 async def on_date_selected(
     callback: CallbackQuery,
     widget,
@@ -95,33 +96,21 @@ async def on_date_selected(
         flush=True,
     )
 
-    try:
-        if already_booked_for_this_user_and_this_date:
-            booking = already_booked_for_this_user_and_this_date[0]
-            await BookingService().remove_booking(
-                telegram_id=callback.from_user.id,
-                booking_id=booking["id"],
-            )
-
-        else:
-            res = await BookingService().create_booking(
-                telegram_id=callback.from_user.id,
-                game_id=d_data["chosen_game"]["id"],
-                booking_date=selected_date,
-            )
-
-    except TelegramException as e:
-        await manager.start(TelegramErrorSG.main, data=dict(error=e))
-        return
+    if already_booked_for_this_user_and_this_date:
+        booking = already_booked_for_this_user_and_this_date[0]
+        await BookingService().remove_booking(
+            telegram_id=callback.from_user.id,
+            booking_id=booking["id"],
+        )
+        await callback.answer("You've canceled your booking on " + str(selected_date))
 
     else:
-        if already_booked_for_this_user_and_this_date:
-            await callback.answer(
-                "You've canceled your booking on " + str(selected_date)
-            )
-
-        else:
-            await callback.answer("You've booked this game on " + str(selected_date))
+        res = await BookingService().create_booking(
+            telegram_id=callback.from_user.id,
+            game_id=d_data["chosen_game"]["id"],
+            booking_date=selected_date,
+        )
+        await callback.answer("You've booked this game on " + str(selected_date))
 
 
 window = Window(
