@@ -53,7 +53,7 @@ async def getter(
     return dict(
         text=text({}, user_mongo["options"]["language"]),
         photo=MediaAttachment(
-            ContentType.PHOTO, path=d_data["chosen_game"]["photo_link"]
+            ContentType.PHOTO, url=d_data["chosen_game"]["photo_link"]
         ),
         game=d_data["chosen_game"],
         is_logged_in=user_mongo["options"]["is_logged_in"],

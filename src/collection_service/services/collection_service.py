@@ -44,7 +44,6 @@ class CollectionService:
         _ = await self.game_service.get_game_by_id(collection.game_id)
 
         new_collection = await self.collection_repository.create(user.id, collection)
-        # print(new_collection, new_collection.id, new_collection.game_id, new_collection.user_id, flush=True)
         return CollectionResponse.model_validate(new_collection)
 
     async def update(self, user: User, id: UUID, collection: CollectionRequest) -> None:

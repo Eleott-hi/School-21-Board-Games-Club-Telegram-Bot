@@ -1,21 +1,28 @@
 import logging
 from typing import Dict
 from uuid import UUID
+from fastapi import HTTPException, status
+import httpx
 
-from fastapi import HTTPException
+from config.config import GAME_SERVICE_HOST, GAME_SERVICE_PORT, GAME_SERVICE_VERSION
+import services.utils as utils
 
 logger = logging.getLogger(__name__)
 
 
 class GamesService:
     def __init__(self):
-        pass
+        self.base_url = f"http://{GAME_SERVICE_HOST}:{GAME_SERVICE_PORT}/api/v{GAME_SERVICE_VERSION}"
 
-    async def get_game_by_id(cls, id: UUID) -> Dict:
-        try:
-            res = {"id": id}
-        except Exception as e:
-            logger.error(e)
-            raise HTTPException(status_code=500, detail="Internal Server Error")
+    async def get_game_by_id(self, id: UUID) -> Dict:
+        url = f"{self.base_url}/games/{str(id)}"
 
-        return res
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url)
+            if response.status_code == status.HTTP_200_OK:
+                return response.json()
+
+            err = utils.get_fastapi_error(response)
+            logger.error(msg=str(err))
+
+            raise err

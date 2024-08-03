@@ -47,7 +47,7 @@ async def getter(
     return dict(
         text=text(d_data, user_mongo["options"]["language"]),
         photo=MediaAttachment(
-            ContentType.PHOTO, path=d_data["chosen_game"]["photo_link"]
+            ContentType.PHOTO, url=d_data["chosen_game"]["photo_link"]
         ),
     )
 

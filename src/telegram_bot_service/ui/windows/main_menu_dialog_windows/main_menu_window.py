@@ -11,6 +11,7 @@ from core.Localization import Language, localization_manager
 from services.game_service import GameService
 from ui.states import (
     FilterSG,
+    HelpSG,
     MainMenuSG,
     PaginationSG,
     ProfileSG,
@@ -79,10 +80,10 @@ window = Window(
         id="profile",
         state=ProfileSG.main,
     ),
-    Button(
+    Start(
         Format("{text[help_button]}"),
         id="help",
-        on_click=not_implemented_yet,
+        state=HelpSG.main,
     ),
     state=MainMenuSG.main,
     getter=getter,

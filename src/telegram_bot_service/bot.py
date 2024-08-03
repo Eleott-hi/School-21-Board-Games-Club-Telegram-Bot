@@ -18,7 +18,8 @@ from ui.dialogs.title_search_dialog import dialog as title_search_dialog
 from ui.dialogs.registration_dialog import dialog as registration_dialog
 from ui.dialogs.profile_booking_dialog import dialog as profile_booking_dialog
 from ui.dialogs.profile_collection_dialog import dialog as profile_collection_dialog
-from ui.states import CollectionSG, MainMenuSG, TelegramErrorSG
+from ui.dialogs.help_dialog import dialog as help_dialog
+from ui.states import MainMenuSG, TelegramErrorSG
 from core.Exceptions import TelegramException
 
 from config import TELEGRAM_TOKEN
@@ -56,6 +57,7 @@ dp.include_routers(
     settings_dialog,
     title_search_dialog,
     registration_dialog,
+    help_dialog,
     error_dialog,
 )
 setup_dialogs(dp)
@@ -63,7 +65,7 @@ setup_dialogs(dp)
 
 @dp.message(Command("start"))
 async def start(message: Message, dialog_manager: DialogManager):
-    await dialog_manager.start(CollectionSG.main, mode=StartMode.NORMAL)
+    await dialog_manager.start(MainMenuSG.main, mode=StartMode.NORMAL)
 
 
 @dp.error()

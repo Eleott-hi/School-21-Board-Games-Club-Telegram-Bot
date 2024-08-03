@@ -84,7 +84,7 @@ async def getter(aiogd_context, user_mongo: Dict, **kwargs):
     return dict(
         text=text(d_data, user_mongo["options"]["language"]),
         photo=MediaAttachment(
-            ContentType.PHOTO, path=d_data["chosen_game"]["photo_link"]
+            ContentType.PHOTO, url=d_data["chosen_game"]["photo_link"]
         ),
         not_in_favorites=not_in_favorites,
         in_favorites=in_favorites,

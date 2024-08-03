@@ -66,7 +66,7 @@ class GamesRepository:
             pass
 
         q = (
-            q.group_by(Game.id).order_by(Game.id)
+            q.group_by(Game.id).order_by(Game.created_at)
             # .offset(filters.offset)
             # .limit(filters.limit)
         )

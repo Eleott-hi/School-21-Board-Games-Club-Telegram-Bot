@@ -16,7 +16,7 @@ games = [
         video_rules_link="https://www.youtube.com/watch?v=tpxV-uNZef4",
         genres=["adventure"],
         status="available",
-        photo_link="resources/static/game_1.jpg",
+        photo_link="https://nastol.io/storage/games/images/pandemic_legacy_season_1/650787/conversions/pic2452831-thumb.jpg",
     ),
     dict(
         id="2",
@@ -35,7 +35,7 @@ games = [
         video_rules_link="https://www.youtube.com/watch?v=tpxV-uNZef4",
         genres=["strategy"],
         status="available",
-        photo_link="resources/static/game_2.jpg",
+        photo_link="https://nastol.io/storage/games/images/the_mandalorian_adventures/921597/conversions/pic8172090-thumb.jpg",
     ),
     dict(
         id="3",
@@ -54,7 +54,7 @@ games = [
         video_rules_link="https://www.youtube.com/watch?v=tpxV-uNZef4",
         genres=["fantasy"],
         status="available",
-        photo_link="resources/static/game_1.jpg",
+        photo_link="https://nastol.io/storage/games/images/the_mandalorian_adventures/921597/conversions/pic8172090-thumb.jpg",
     ),
     dict(
         id="4",
@@ -73,7 +73,7 @@ games = [
         video_rules_link="https://www.youtube.com/watch?v=tpxV-uNZef4",
         genres=["horror"],
         status="available",
-        photo_link="resources/static/game_2.jpg",
+        photo_link="https://nastol.io/storage/games/images/pandemic_legacy_season_1/650787/conversions/pic2452831-thumb.jpg",
     ),
     dict(
         id="5",
@@ -92,7 +92,7 @@ games = [
         video_rules_link="https://www.youtube.com/watch?v=tpxV-uNZef4",
         genres=["other"],
         status="available",
-        photo_link="resources/static/game_1.jpg",
+        photo_link="https://nastol.io/storage/games/images/the_mandalorian_adventures/921597/conversions/pic8172090-thumb.jpg",
     ),
     dict(
         id="6",
@@ -111,7 +111,7 @@ games = [
         video_rules_link="https://www.youtube.com/watch?v=tpxV-uNZef4",
         genres=["other"],
         status="available",
-        photo_link="resources/static/game_1.jpg",
+        photo_link="https://nastol.io/storage/games/images/pandemic_legacy_season_1/650787/conversions/pic2452831-thumb.jpg",
     ),
     dict(
         id="7",
@@ -130,7 +130,7 @@ games = [
         video_rules_link="https://www.youtube.com/watch?v=tpxV-uNZef4",
         genres=["other"],
         status="available",
-        photo_link="resources/static/game_1.jpg",
+        photo_link="https://nastol.io/storage/games/images/the_mandalorian_adventures/921597/conversions/pic8172090-thumb.jpg",
     ),
     dict(
         id="8",
@@ -149,7 +149,7 @@ games = [
         video_rules_link="https://www.youtube.com/watch?v=tpxV-uNZef4",
         genres=["other"],
         status="available",
-        photo_link="resources/static/game_1.jpg",
+        photo_link="https://nastol.io/storage/games/images/pandemic_legacy_season_1/650787/conversions/pic2452831-thumb.jpg",
     ),
     dict(
         id="9",
@@ -168,7 +168,7 @@ games = [
         video_rules_link="https://www.youtube.com/watch?v=tpxV-uNZef4",
         genres=["other"],
         status="available",
-        photo_link="resources/static/game_1.jpg",
+        photo_link="https://nastol.io/storage/games/images/the_mandalorian_adventures/921597/conversions/pic8172090-thumb.jpg",
     ),
     dict(
         id="10",
@@ -187,7 +187,7 @@ games = [
         video_rules_link="https://www.youtube.com/watch?v=tpxV-uNZef4",
         genres=["other"],
         status="available",
-        photo_link="resources/static/game_1.jpg",
+        photo_link="https://nastol.io/storage/games/images/pandemic_legacy_season_1/650787/conversions/pic2452831-thumb.jpg",
     ),
     dict(
         id="11",
@@ -206,7 +206,7 @@ games = [
         video_rules_link="https://www.youtube.com/watch?v=tpxV-uNZef4",
         genres=["other"],
         status="available",
-        photo_link="resources/static/game_1.jpg",
+        photo_link="https://nastol.io/storage/games/images/the_mandalorian_adventures/921597/conversions/pic8172090-thumb.jpg",
     ),
     dict(
         id="12",
@@ -225,7 +225,7 @@ games = [
         video_rules_link="https://www.youtube.com/watch?v=tpxV-uNZef4",
         genres=["other"],
         status="available",
-        photo_link="resources/static/game_1.jpg",
+        photo_link="https://nastol.io/storage/games/images/pandemic_legacy_season_1/650787/conversions/pic2452831-thumb.jpg",
     ),
     dict(
         id="13",
@@ -244,7 +244,7 @@ games = [
         video_rules_link="https://www.youtube.com/watch?v=tpxV-uNZef4",
         genres=["other"],
         status="available",
-        photo_link="resources/static/game_1.jpg",
+        photo_link="https://nastol.io/storage/games/images/the_mandalorian_adventures/921597/conversions/pic8172090-thumb.jpg",
     ),
     dict(
         id="14",
@@ -263,7 +263,7 @@ games = [
         video_rules_link="https://www.youtube.com/watch?v=tpxV-uNZef4",
         genres=["other"],
         status="available",
-        photo_link="resources/static/game_1.jpg",
+        photo_link="https://nastol.io/storage/games/images/pandemic_legacy_season_1/650787/conversions/pic2452831-thumb.jpg",
     ),
     dict(
         id="15",
@@ -282,6 +282,6 @@ games = [
         video_rules_link="https://www.youtube.com/watch?v=tpxV-uNZef4",
         genres=["other"],
         status="available",
-        photo_link="resources/static/game_1.jpg",
+        photo_link="https://nastol.io/storage/games/images/the_mandalorian_adventures/921597/conversions/pic8172090-thumb.jpg",
     ),
 ]
