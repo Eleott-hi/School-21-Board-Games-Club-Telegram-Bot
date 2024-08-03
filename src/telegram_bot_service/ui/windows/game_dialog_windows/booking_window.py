@@ -29,9 +29,14 @@ import ui.utils
 
 def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
     localization = localization_manager[language]
+    window_text: Dict[str, str] = localization["game_booking_window"]
     common_text: Dict[str, str] = localization["common"]
 
+    game = data["chosen_game"]
+
     return dict(
+        title=window_text["title"].format_map(game),
+        description=window_text["description"].format_map(data),
         back_button=common_text["back_button"].format_map(data),
         back_to_main_menu_button=common_text["back_to_main_menu_button"].format_map(
             data
@@ -64,7 +69,7 @@ async def getter(
     print(d_data, flush=True)
 
     return dict(
-        text=text({}, user_mongo["options"]["language"]),
+        text=text(d_data, user_mongo["options"]["language"]),
         photo=MediaAttachment(
             ContentType.PHOTO, path=d_data["chosen_game"]["photo_link"]
         ),
@@ -115,6 +120,11 @@ async def on_date_selected(
 
 window = Window(
     DynamicMedia("photo"),
+    Multi(
+        Format("{text[title]}"),
+        Format("{text[description]}"),
+        sep="\n\n",
+    ),
     CustomCalendar(
         id="calendar",
         on_click=on_date_selected,

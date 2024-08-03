@@ -8,7 +8,9 @@ class TelegramExceptions(str, enum.Enum):
     CUSTOM_EXCEPTION = "Custom exception"
     GAME_NOT_FOUND_EXCEPTION = "Game not found"
     BOOKING_ALREADY_EXISTS_EXCEPTION = "Booking already exists"
+    COLLECTION_ALREADY_EXISTS_EXCEPTION = "Collection already exists"
     BOOKING_NOT_FOUND_EXCEPTION = "Booking not found"
+    COLLECTION_NOT_FOUND_EXCEPTION = "Collection not found"
     REGISTRATION_FAILD_EXCEPTION = "Registration faild exception"
 
 
@@ -34,9 +36,19 @@ class TelegramException(Exception):
                 self.title = "Booking already exists"
                 self.description = "You can't book a game that already booked"
 
+            case TelegramExceptions.COLLECTION_ALREADY_EXISTS_EXCEPTION:
+                self.title = "Collection already exists"
+                self.description = (
+                    "You can't add game in collection if it's already in it"
+                )
+
             case TelegramExceptions.BOOKING_NOT_FOUND_EXCEPTION:
                 self.title = "Booking not found"
                 self.description = "There is no such booking"
+
+            case TelegramExceptions.COLLECTION_NOT_FOUND_EXCEPTION:
+                self.title = "Collection not found"
+                self.description = "There is no such collection"
 
             case TelegramExceptions.REGISTRATION_FAILD_EXCEPTION:
                 self.title = "Registration faild"

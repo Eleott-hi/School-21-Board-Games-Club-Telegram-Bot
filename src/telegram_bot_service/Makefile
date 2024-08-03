@@ -11,8 +11,10 @@ install:
 
 wait_for_it: 
 	chmod +x ./wait-for-it.sh 
-	./wait-for-it.sh -t 120 $$MONGODB_SERVICE_HOST:$$MONGODB_SERVICE_PORT -- \
-	./wait-for-it.sh -t 120 $$AUTH_SERVICE_HOST:$$AUTH_SERVICE_PORT -- 	     \
+	./wait-for-it.sh -t 120 $$MONGODB_SERVICE_HOST:$$MONGODB_SERVICE_PORT -- 			 \
+	./wait-for-it.sh -t 120 $$AUTH_SERVICE_HOST:$$AUTH_SERVICE_PORT -- 	     			 \
+	./wait-for-it.sh -t 120 $$COLLECTION_SERVICE_HOST:$$COLLECTION_SERVICE_PORT -- 	     \
+	./wait-for-it.sh -t 120 $$BOOKING_SERVICE_HOST:$$BOOKING_SERVICE_PORT -- 	     \
 	./wait-for-it.sh -t 120 $$GAME_SERVICE_HOST:$$GAME_SERVICE_PORT
 
 
