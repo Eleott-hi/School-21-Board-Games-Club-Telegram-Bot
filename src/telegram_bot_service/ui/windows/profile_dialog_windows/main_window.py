@@ -9,7 +9,7 @@ from aiogram_dialog.widgets.media import StaticMedia
 from aiogram_dialog.manager.manager import ManagerImpl
 
 
-from ui.states import BookingSG, OptionsSG, ProfileSG, RegistrationSG
+from ui.states import BookingSG, CollectionSG, OptionsSG, ProfileSG, RegistrationSG
 from core.Localization import Language, localization_manager
 
 
@@ -60,10 +60,10 @@ window = Window(
         state=BookingSG.main,
         when="is_logged_in",
     ),
-    SwitchTo(
+    Start(
         Format("{text[collections_button]}"),
         id="collections",
-        state=ProfileSG.collections,
+        state=CollectionSG.main,
         when="is_logged_in",
     ),
     Start(

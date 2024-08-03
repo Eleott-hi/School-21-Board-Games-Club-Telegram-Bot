@@ -125,6 +125,16 @@
         "title": "<b>📅 Бронирования</b>",
         "description": "👇 Выберите бронирование"
     },
+    "profile_collection_window": {
+        "title": "<b>📅 Коллекция</b>",
+        "description": "👇 Выберите тип коллекции",
+        "favorite_button": "Избранные",
+        "black_list_button": "Черный список"
+    },
+    "profile_collection_pagination_window": {
+        "title": "<b>⏱️ Коллекция: {type}</b>",
+        "description": "👇 Выберите игру"
+    },
     "settings_window": {
         "title": "<b>⚙️ Настройки</b>",
         "description": "👇 Выберите параметр",

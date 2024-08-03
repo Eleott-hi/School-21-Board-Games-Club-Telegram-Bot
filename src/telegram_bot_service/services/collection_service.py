@@ -40,12 +40,20 @@ class CollectionService:
         url = f"{self.base_url}/collections"
 
         if filters:
-            url += f"?{urlencode(CollectionFilters(**filters).model_dump(exclude_unset=True))}"
+            filters = CollectionFilters(**filters).model_dump(exclude_unset=True)
+            
+            if "type" in filters:
+                filters["type"] = filters["type"].value
+
+            url += f"?{urlencode(filters)}"
 
         async with httpx.AsyncClient() as client:
             response = await client.get(url)
             if response.status_code == status.HTTP_200_OK:
                 return response.json()
+
+            err = utils.get_fastapi_error(response)
+            print("Error:", err, flush=True)
 
         raise TelegramException(TelegramExceptions.UNKNOWN_EXCEPTION)
 
@@ -61,14 +69,13 @@ class CollectionService:
             if response.status_code == status.HTTP_201_CREATED:
                 return response.json()
 
-            err = utils.get_fastapi_error(response)
-
             if response.status_code == status.HTTP_409_CONFLICT:
                 raise TelegramException(
                     exception_type=TelegramExceptions.COLLECTION_ALREADY_EXISTS_EXCEPTION
                 )
 
-            print(err, flush=True)
+            err = utils.get_fastapi_error(response)
+            print("Error:", err, flush=True)
 
         raise TelegramException(TelegramExceptions.UNKNOWN_EXCEPTION)
 
@@ -81,13 +88,12 @@ class CollectionService:
             if response.status_code == status.HTTP_204_NO_CONTENT:
                 return
 
-            err = utils.get_fastapi_error(response)
-
             if response.status_code == status.HTTP_404_NOT_FOUND:
                 raise TelegramException(
                     exception_type=TelegramExceptions.COLLECTION_NOT_FOUND_EXCEPTION
                 )
 
-            print(err, flush=True)
+            err = utils.get_fastapi_error(response)
+            print("Error:", err, flush=True)
 
         raise TelegramException(TelegramExceptions.UNKNOWN_EXCEPTION)

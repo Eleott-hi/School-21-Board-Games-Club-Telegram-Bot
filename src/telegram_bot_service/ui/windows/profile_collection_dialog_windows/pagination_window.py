@@ -16,9 +16,9 @@ from aiogram_dialog.api.entities.context import Context
 
 import ui.utils
 from services.game_service import GameService
-from services.booking_service import BookingService
-from services.auth_service import AuthService
-from ui.states import BookingSG, GameDialogSG, ProfileSG
+from services.collection_service import CollectionService
+from services.auth_service import AuthService, User
+from ui.states import CollectionSG, GameDialogSG, ProfileSG
 from core.Localization import Language, localization_manager
 from ui.widgets.CustomScrollingGroup import CustomScrollingGroup
 
@@ -26,7 +26,7 @@ from ui.widgets.CustomScrollingGroup import CustomScrollingGroup
 def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
     localization = localization_manager[language]
 
-    window_text: Dict[str, str] = localization["profile_booking_window"]
+    window_text: Dict[str, str] = localization["profile_collection_pagination_window"]
     common_text: Dict[str, str] = localization["common"]
 
     return dict(
@@ -38,16 +38,16 @@ def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
 
 async def prepare(s_data: Dict, d_data: Dict, user_mongo: Dict):
     if "user" not in d_data:
-        user = await AuthService().get_user_by_telegram_id(user_mongo["_id"])
+        user: User = await AuthService().get_user_by_telegram_id(user_mongo["_id"])
         d_data["user"] = user
 
-    filters = {"user_id": d_data["user"].id, "from_date": date.today()}
-    bookings = await BookingService().get_bookings(filters=filters)
-
-    games_ids = set(map(lambda x: x["game_id"], bookings))
+    filters = dict(user_id=d_data["user"].id, type=d_data["collection_type"])
+    favorites = await CollectionService().get_collections(filters=filters)
+    games_ids = [f["game_id"] for f in favorites]
     tasks = [GameService().get_game_by_id(game_id) for game_id in games_ids]
     games = await asyncio.gather(*tasks)
 
+    d_data["collections"] = favorites
     d_data["games"] = games
 
 
@@ -63,7 +63,10 @@ async def getter(
     await prepare(s_data, d_data, user_mongo)
 
     return dict(
-        text=text({}, user_mongo["options"]["language"]),
+        text=text(
+            dict(type=d_data["collection_type"].value),
+            user_mongo["options"]["language"],
+        ),
         games=d_data["games"],
     )
 
@@ -79,7 +82,7 @@ async def on_game_selected(
     d_data["chosen_game"] = [g for g in d_data["games"] if g["id"] == item_id][0]
 
     await manager.start(
-        state=GameDialogSG.booking,
+        state=GameDialogSG.collections,
         data=dict(
             user=d_data["user"],
             game_id=d_data["game_id"],
@@ -110,7 +113,11 @@ window = Window(
         height=5,
         width=1,
     ),
-    ui.utils.default_back_button(),
-    state=BookingSG.main,
+    SwitchTo(
+        Format("{text[back_button]}"),
+        id="back_button",
+        state=CollectionSG.main,
+    ),
+    state=CollectionSG.pagination,
     getter=getter,
 )

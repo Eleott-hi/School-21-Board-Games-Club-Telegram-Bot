@@ -7,5 +7,4 @@ from ui.windows.profile_dialog_windows.collection_window import (
 
 dialog = Dialog(
     main_window,
-    collection_window,
 )
