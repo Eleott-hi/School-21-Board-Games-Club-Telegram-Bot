@@ -83,6 +83,11 @@ class Game(BaseModel):
         nullable=True,
     )
 
+    # shop_link
+    # tesera_link
+    # note
+    # owner [str]
+
 class GameGenreRelation(BaseModel):
     __tablename__ = "games_genres_relations"
 
