@@ -33,9 +33,6 @@ async def getter(
     user_mongo: Dict,
     **kwargs,
 ):
-    print(aiogd_context.start_data, flush=True)
-    print(aiogd_context.dialog_data, flush=True)
-
     if not aiogd_context.dialog_data:
         aiogd_context.dialog_data = deepcopy(aiogd_context.start_data)
 
@@ -44,11 +41,10 @@ async def getter(
         game: Dict = await GameService().get_game_by_id(d_data["game_id"])
         d_data["chosen_game"] = game
 
+    media = MediaAttachment(ContentType.PHOTO, url=d_data["chosen_game"]["photo_link"])
     return dict(
         text=text(d_data, user_mongo["options"]["language"]),
-        photo=MediaAttachment(
-            ContentType.PHOTO, url=d_data["chosen_game"]["photo_link"]
-        ),
+        photo=media,
     )
 
 

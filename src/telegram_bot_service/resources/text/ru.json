@@ -97,7 +97,7 @@
         "register_button": "📝 Зарегистрироваться"
     },
     "game_info_window": {
-        "description": "Год выпуска: <b>{year}</b>\nКоличество игроков: <b>{min_players}-{max_players}</b>\nИдеальное кол-во игроков: <b>{min_ideal_players}-{max_ideal_players}</b>\nДлительность: <b>{min_play_time}-{max_play_time} мин</b>\nСложность: <b>{complexity}</b>\nВозрастная категория: <b>{min_age}</b>\nЖанр: <b>{genres}</b>\nСтатус: <b>Not implemeted</b>\nСсылка на видео правила: <b>{video_rules_link}</b>\n\nОписание: <b>{description}</b>",
+        "description": "Год выпуска: <b>{year}</b>\nКоличество игроков: <b>{min_players}-{max_players}</b>\nИдеальное кол-во игроков: <b>{min_ideal_players}-{max_ideal_players}</b>\nДлительность: <b>{min_play_time}-{max_play_time} мин</b>\nСложность: <b>{complexity}</b>\nВозрастная категория: <b>{min_age}</b>\nЖанр: <b>{genres}</b>\nСтатус: <b>Not implemeted</b>\nВладелец: <b>{owner}</b>\nПримечание: <b>{note}</b>\nСсылка на видео правила: <b>{video_rules_link}</b>\nСсылка на магазин: <b>{shop_link}</b>\nСсылка на тесеру: <b>{tesera_link}</b>\n\nОписание: <b>{description}</b>",
         "title": "🎮 Название: <b>{title}</b>"
     },
     "game_booking_window": {

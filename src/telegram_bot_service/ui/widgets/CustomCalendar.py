@@ -8,7 +8,7 @@ from aiogram.types import InlineKeyboardButton
 from aiogram_dialog import DialogManager
 from aiogram_dialog.widgets.kbd import Calendar, CalendarScope
 from aiogram_dialog.widgets.text import Format
-from aiogram_dialog.widgets.kbd.calendar_kbd import CalendarDaysView, CalendarScopeView
+from aiogram_dialog.widgets.kbd.calendar_kbd import CalendarDaysView, CalendarScopeView, CalendarMonthView, CalendarYearsView
 
 
 class CustomCalendarDaysView(CalendarDaysView):
@@ -18,7 +18,7 @@ class CustomCalendarDaysView(CalendarDaysView):
         today: date,
         data: Dict,
         manager: DialogManager,
-    ):
+    ) -> InlineKeyboardButton:
         d_data = manager.current_context().dialog_data
 
         current_data = {
@@ -57,4 +57,8 @@ class CustomCalendar(Calendar):
                 self._item_callback_data,
                 self.config,
             ),
+            CalendarScope.MONTHS:
+                CalendarMonthView(self._item_callback_data, self.config),
+            CalendarScope.YEARS:
+                CalendarYearsView(self._item_callback_data, self.config),
         }

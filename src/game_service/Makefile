@@ -14,6 +14,9 @@ wait_for_it:
 	chmod +x ./wait-for-it.sh 
 	./wait-for-it.sh -t 120 "$$POSTGRES_SERVICE_HOST:$$POSTGRES_SERVICE_PORT"
 
+init_db:
+	python3 init_db.py
+
 run:
 	python3 main.py
 

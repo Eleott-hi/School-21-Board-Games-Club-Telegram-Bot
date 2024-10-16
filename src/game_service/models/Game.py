@@ -8,13 +8,14 @@ from sqlalchemy.dialects.postgresql import UUID as SQLUUID
 
 
 class Genre(PyEnum):
-    ACTION = "action"
+    ECONOMY = "economy"
+    LOGICAL = "logical"
+    CARDS = "cards"
+    WAR = "war"
+    COMPANY = "company"
+    GAMBLING = "gambling"
     ADVENTURE = "adventure"
-    FANTASY = "fantasy"
-    HORROR = "horror"
-    ROLE_PLAYING = "role-playing"
-    STRATEGY = "strategy"
-    SUSPENSE = "suspense"
+
     OTHER = "other"
 
 
@@ -22,6 +23,7 @@ class GameComplexity(PyEnum):
     EASY = "easy"
     MEDIUM = "medium"
     HARD = "hard"
+    HARDCORE = "hardcore"
 
 
 class Game(BaseModel):
@@ -82,11 +84,23 @@ class Game(BaseModel):
         String,
         nullable=True,
     )
+    note: Mapped[str] = mapped_column(
+        String,
+        nullable=True,
+    )
+    tesera_link: Mapped[str] = mapped_column(
+        String,
+        nullable=True,
+    )
+    shop_link: Mapped[str] = mapped_column(
+        String,
+        nullable=True,
+    )
+    owner: Mapped[str] = mapped_column(
+        String,
+        nullable=True,
+    )
 
-    # shop_link
-    # tesera_link
-    # note
-    # owner [str]
 
 class GameGenreRelation(BaseModel):
     __tablename__ = "games_genres_relations"

@@ -12,16 +12,16 @@ services:
     ports:
       - 5432:5432
 
-  minio_service:
-    image: docker.io/bitnami/minio:2022
-    container_name: minio_service
-    # volumes:
-      # - ./minio_service/data:/data
-    env_file: minio_service/.env
-    restart: on-failure
-    ports:
-      - 9000:9000
-      - 9001:9001
+  # minio_service:
+  #   image: docker.io/bitnami/minio:2022
+  #   container_name: minio_service
+  #   # volumes:
+  #     # - ./minio_service/data:/data
+  #   env_file: minio_service/.env
+  #   restart: on-failure
+  #   ports:
+  #     - 9000:9000
+  #     - 9001:9001
 
   # zookeeper:
   #   image: wurstmeister/zookeeper

@@ -3,11 +3,11 @@ import config.logger
 
 from fastapi import Depends, FastAPI
 from routers.games_router import router as booking_router
-from database.database import init_db
+# from database.database import init_db
 
 
 async def lifespan(app):
-    await init_db()
+    # await init_db()
     yield
 
 

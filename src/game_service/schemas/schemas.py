@@ -18,11 +18,17 @@ class GameRequest(BaseModel):
     min_play_time: int
     max_play_time: int
     rule_time: int
+    photo_link: str
+    genres: List[Genre]
     complexity: GameComplexity
-    description: Optional[str]
-    genres: Optional[List[Genre]]
-    photo_link: Optional[str]
-    video_rules_link: Optional[str]
+    description: Optional[str] = None
+    video_rules_link: Optional[str] = None
+    note: Optional[str] = None
+    tesera_link: Optional[str] = None
+    shop_link: Optional[str] = None
+    owner: Optional[str] = None
+
+
 
 
 class GameResponse(GameRequest):

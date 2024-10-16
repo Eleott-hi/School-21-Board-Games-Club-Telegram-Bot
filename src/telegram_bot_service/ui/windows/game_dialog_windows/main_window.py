@@ -9,12 +9,12 @@ from aiogram_dialog.widgets.common import Whenable
 from aiogram_dialog.widgets.kbd import Cancel, Row, Cancel, SwitchTo, Start
 from aiogram_dialog.api.entities import MediaAttachment
 from aiogram_dialog.widgets.text import Format, Multi
-from aiogram_dialog.widgets.media import DynamicMedia
 from aiogram_dialog.api.entities.context import Context
 
 from services.game_service import GameService
 from core.Localization import Language, localization_manager
 from ui.states import GameDialogSG, RegistrationSG
+from ui.widgets.CustomDynamicMedia import CustomDynamicMedia
 import ui.utils
 
 
@@ -50,11 +50,13 @@ async def getter(
         game: Dict = await GameService().get_game_by_id(d_data["game_id"])
         d_data["chosen_game"] = game
 
+    media = MediaAttachment(ContentType.PHOTO, url=d_data["chosen_game"]["photo_link"])
+
+    print(media.url, flush=True)
+    
     return dict(
         text=text({}, user_mongo["options"]["language"]),
-        photo=MediaAttachment(
-            ContentType.PHOTO, url=d_data["chosen_game"]["photo_link"]
-        ),
+        photo=media,
         game=d_data["chosen_game"],
         is_logged_in=user_mongo["options"]["is_logged_in"],
         is_not_logged_in=not user_mongo["options"]["is_logged_in"],
@@ -62,7 +64,7 @@ async def getter(
 
 
 window = Window(
-    DynamicMedia("photo"),
+    CustomDynamicMedia("photo"),
     Format("{game[title]}"),
     Row(
         SwitchTo(

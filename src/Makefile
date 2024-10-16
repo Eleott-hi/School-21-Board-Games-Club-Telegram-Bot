@@ -34,3 +34,6 @@ freeze:
 	docker exec booking_service make freeze
 	docker exec game_service make freeze
 	docker exec collection_service make freeze
+
+init_db:
+	docker exec game_service make init_db
