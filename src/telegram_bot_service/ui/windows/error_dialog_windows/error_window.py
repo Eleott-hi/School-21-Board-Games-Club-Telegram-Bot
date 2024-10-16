@@ -6,21 +6,30 @@ from aiogram_dialog import Window
 from aiogram_dialog.widgets.kbd import Button, Cancel, Cancel
 from aiogram_dialog.widgets.text import Format, Multi
 from aiogram_dialog.widgets.media import StaticMedia
+from aiogram_dialog.api.entities.context import Context
 
 import ui.utils
-from ui.states import NotFoundSG
+from ui.states import TelegramErrorSG
+from core.Exceptions import TelegramException
 from core.Localization import Language, localization_manager
 
 
-def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
+def text(
+    data: Dict[str, Any], language: str | Language, error: TelegramException | None
+) -> Dict[str, str]:
     localization = localization_manager[language]
 
     window_text: Dict[str, str] = localization["not_found_window"]
     common_text: Dict[str, str] = localization["common"]
 
+    title = error.title if error else window_text["title"].format_map(data)
+    description = (
+        error.description if error else window_text["description"].format_map(data)
+    )
+
     return {
-        "title": window_text["title"].format_map(data),
-        "description": window_text["description"].format_map(data),
+        "title": title,
+        "description": description,
         "back_button": common_text["back_button"].format_map(data),
         "back_to_main_menu_button": common_text["back_to_main_menu_button"].format_map(
             data
@@ -28,11 +37,14 @@ def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
     }
 
 
-async def getter(user_mongo: Dict, **kwargs):
+async def getter(aiogd_context: Context, user_mongo: Dict, **kwargs):
+    print(aiogd_context, flush=True)
+
     language = user_mongo["options"]["language"]
+    error = aiogd_context.start_data["error"] if aiogd_context.start_data else None
 
     return dict(
-        text=text({}, language),
+        text=text({}, language, error),
     )
 
 
@@ -53,6 +65,6 @@ window = Window(
         on_click=ui.utils.default_on_back_to_main_menu,
     ),
     parse_mode="HTML",
-    state=NotFoundSG.main,
+    state=TelegramErrorSG.main,
     getter=getter,
 )

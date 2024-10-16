@@ -27,7 +27,7 @@ def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
 async def getter(user_mongo, **kwargs):
     return dict(
         text=text({}, user_mongo["options"]["language"]),
-        complexity=["Any", "Easy", "Medium", "Hard"],
+        complexity=["Any", "easy", "medium", "hard"],
     )
 
 

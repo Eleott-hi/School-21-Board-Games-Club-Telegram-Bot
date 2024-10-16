@@ -1,7 +1,7 @@
 MONGO_DB_CONTAINER_NAME := mongodb_service 
 POSTGRES_CONTAINER_NAME := postgres_service
 
-all: stop up
+all: stop clean_db up
 
 up:
 	docker-compose up
@@ -26,3 +26,14 @@ prune:
 
 sed:
 	find . -type f -name "*.sh" -exec sed -i 's/\r//g' {} +
+
+freeze:
+	docker exec auth_service make freeze
+	docker exec mail_service make freeze
+	docker exec telegram_bot_service make freeze
+	docker exec booking_service make freeze
+	docker exec game_service make freeze
+	docker exec collection_service make freeze
+
+init_db:
+	docker exec game_service make init_db

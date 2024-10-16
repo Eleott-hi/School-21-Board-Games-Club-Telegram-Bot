@@ -17,3 +17,6 @@ wait_for_it:
 
 run:
 	python3 main.py
+
+freeze:
+	pip freeze > requirements.txt

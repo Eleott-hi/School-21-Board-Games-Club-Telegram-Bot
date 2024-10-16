@@ -2,8 +2,8 @@
 .vscode/
 *.aof
 *.rdb
-minio_service/
 logs/
+minio_service/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

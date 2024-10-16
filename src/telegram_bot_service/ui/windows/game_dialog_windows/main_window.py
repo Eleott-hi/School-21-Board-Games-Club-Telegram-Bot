@@ -3,17 +3,20 @@ from typing import Any, Dict
 
 from aiogram.types import ContentType
 
-from aiogram_dialog import Window
-from aiogram_dialog.widgets.kbd import Cancel, Row, Cancel, SwitchTo
+from magic_filter import F
+from aiogram_dialog import Window, DialogManager
+from aiogram_dialog.widgets.common import Whenable
+from aiogram_dialog.widgets.kbd import Cancel, Row, Cancel, SwitchTo, Start
 from aiogram_dialog.api.entities import MediaAttachment
 from aiogram_dialog.widgets.text import Format, Multi
-from aiogram_dialog.widgets.media import DynamicMedia
 from aiogram_dialog.api.entities.context import Context
 
 from services.game_service import GameService
 from core.Localization import Language, localization_manager
-from ui.states import GameDialogSG
+from ui.states import GameDialogSG, RegistrationSG
+from ui.widgets.CustomDynamicMedia import CustomDynamicMedia
 import ui.utils
+
 
 def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
     localization = localization_manager[language]
@@ -24,10 +27,11 @@ def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
         info_button=window_text["info_button"].format_map(data),
         booking_button=window_text["booking_button"].format_map(data),
         collection_button=window_text["collection_button"].format_map(data),
+        register_button=window_text["register_button"].format_map(data),
         back_button=common_text["back_button"].format_map(data),
         back_to_main_menu_button=common_text["back_to_main_menu_button"].format_map(
             data
-        )
+        ),
     )
 
 
@@ -36,24 +40,31 @@ async def getter(
     user_mongo: Dict,
     **kwargs,
 ):
-    print(aiogd_context.start_data, flush=True)
-    print(aiogd_context.dialog_data, flush=True)
+    s_data = aiogd_context.start_data
+    d_data = aiogd_context.dialog_data
 
-    if not aiogd_context.dialog_data:
-        aiogd_context.dialog_data = deepcopy(aiogd_context.start_data)
+    if not d_data:
+        d_data.update(**deepcopy(s_data))
 
-    data = aiogd_context.dialog_data
-    game: Dict = await GameService.get_game_by_id(data["game_id"])
+    if "chosen_game" not in d_data:
+        game: Dict = await GameService().get_game_by_id(d_data["game_id"])
+        d_data["chosen_game"] = game
 
+    media = MediaAttachment(ContentType.PHOTO, url=d_data["chosen_game"]["photo_link"])
+
+    print(media.url, flush=True)
+    
     return dict(
         text=text({}, user_mongo["options"]["language"]),
-        photo=MediaAttachment(ContentType.PHOTO, path=game["photo_link"]),
-        game=game,
+        photo=media,
+        game=d_data["chosen_game"],
+        is_logged_in=user_mongo["options"]["is_logged_in"],
+        is_not_logged_in=not user_mongo["options"]["is_logged_in"],
     )
 
 
 window = Window(
-    DynamicMedia("photo"),
+    CustomDynamicMedia("photo"),
     Format("{game[title]}"),
     Row(
         SwitchTo(
@@ -65,14 +76,20 @@ window = Window(
             Format("{text[booking_button]}"),
             id="booking",
             state=GameDialogSG.booking,
+            when="is_logged_in",
         ),
     ),
-    Row(
-        SwitchTo(
-            Format("{text[collection_button]}"),
-            id="collections",
-            state=GameDialogSG.collections,
-        ),
+    SwitchTo(
+        Format("{text[collection_button]}"),
+        id="collections",
+        state=GameDialogSG.collections,
+        when="is_logged_in",
+    ),
+    Start(
+        Format("{text[register_button]}"),
+        id="register",
+        state=RegistrationSG.start,
+        when="is_not_logged_in",
     ),
     Cancel(
         Format("{text[back_button]}"),

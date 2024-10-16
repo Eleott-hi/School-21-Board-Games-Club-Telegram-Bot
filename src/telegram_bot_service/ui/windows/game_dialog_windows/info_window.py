@@ -14,18 +14,16 @@ from core.Localization import Language, localization_manager
 from ui.states import GameDialogSG
 
 
-
 def text(data: Dict[str, Any], language: str | Language) -> Dict[str, str]:
     localization = localization_manager[language]
+    window_text: Dict[str, str] = localization["game_info_window"]
     common_text: Dict[str, str] = localization["common"]
 
-    game: Dict = data["game"]
-
-    print(game)
+    game: Dict = data["chosen_game"]
 
     return dict(
-        title=localization["game_info_window"]["title"].format_map(game),
-        description=localization["game_info_window"]["description"].format_map(game),
+        title=window_text["title"].format_map(game),
+        description=window_text["description"].format_map(game),
         back_button=common_text["back_button"].format_map(data),
     )
 
@@ -35,18 +33,18 @@ async def getter(
     user_mongo: Dict,
     **kwargs,
 ):
-    print(aiogd_context.start_data, flush=True)
-    print(aiogd_context.dialog_data, flush=True)
-
     if not aiogd_context.dialog_data:
         aiogd_context.dialog_data = deepcopy(aiogd_context.start_data)
 
-    data = aiogd_context.dialog_data
-    game: Dict = await GameService.get_game_by_id(data["game_id"])
+    d_data = aiogd_context.dialog_data
+    if "chosen_game" not in d_data:
+        game: Dict = await GameService().get_game_by_id(d_data["game_id"])
+        d_data["chosen_game"] = game
 
+    media = MediaAttachment(ContentType.PHOTO, url=d_data["chosen_game"]["photo_link"])
     return dict(
-        text=text({"game": game}, user_mongo["options"]["language"]),
-        photo=MediaAttachment(ContentType.PHOTO, path=game["photo_link"]),
+        text=text(d_data, user_mongo["options"]["language"]),
+        photo=media,
     )
 
 

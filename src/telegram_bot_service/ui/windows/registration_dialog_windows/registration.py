@@ -11,7 +11,9 @@ from aiogram_dialog.widgets.input import MessageInput
 from aiogram_dialog.manager.manager import ManagerImpl
 
 from services.auth_service import AuthService
-from ui.states import NotFoundSG, RegistrationSG
+from core.Exceptions import TelegramException, TelegramExceptions
+from ui.utils import telegram_error_handling_decorator
+from ui.states import TelegramErrorSG, RegistrationSG
 from database.database import MDB
 
 from core.Localization import Language, localization_manager
@@ -44,6 +46,7 @@ async def getter(aiogd_context, user_mongo: Dict, **kwargs):
     )
 
 
+@telegram_error_handling_decorator
 async def register(callback: CallbackQuery, button: Button, manager: DialogManager):
     nickname = manager.current_context().widget_data["input"]
     if nickname is None:
@@ -54,16 +57,18 @@ async def register(callback: CallbackQuery, button: Button, manager: DialogManag
     success = await auth.register(nickname, telegram_id)
 
     if not success:
-        await manager.start(NotFoundSG.main)
-        return
+        raise TelegramException(
+            exception_type=TelegramExceptions.REGISTRATION_FAILD_EXCEPTION
+        )
 
     manager.current_context().widget_data["input"] = ""
     await manager.switch_to(RegistrationSG.confirm)
 
 
 async def user_input_text(message: Message, b: MessageInput, manager: ManagerImpl):
-    print(message.text, flush=True)
-    manager.current_context().widget_data["input"] = message.text
+    user_input = message.text.strip().lower()
+    print(user_input, flush=True)
+    manager.current_context().widget_data["input"] = user_input
 
 
 window = Window(

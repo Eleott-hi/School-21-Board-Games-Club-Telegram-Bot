@@ -41,19 +41,33 @@ class ProfileSG(StatesGroup):
     registration = State()
 
 
+class BookingSG(StatesGroup):
+    main = State()
+    calendar = State()
+
+
+class CollectionSG(StatesGroup):
+    main = State()
+    pagination = State()
+
+
 class OptionsSG(StatesGroup):
     main = State()
     pagination = State()
     language = State()
 
 
-class NotFoundSG(StatesGroup):
+class TelegramErrorSG(StatesGroup):
     main = State()
 
 
 class RegistrationSG(StatesGroup):
     start = State()
     confirm = State()
+
+
+class HelpSG(StatesGroup):
+    main = State()
 
 
 async def not_implemented_yet(

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from bot import bot, dp, types
 from config import TELEGRAM_TOKEN
-
+from schemas.schemas import TelegramMessageToUser
 
 router = APIRouter(
     prefix="/bot",
@@ -18,5 +18,5 @@ async def bot_webhook(update: types.Update):
 
 
 @router.post(f"/notify")
-async def notify_bot():
-    await bot.send_message(chat_id=572276281, text="Hello from /send")
+async def notify_bot(message: TelegramMessageToUser):
+    await bot.send_message(chat_id=message.chat_id, text=message.text)

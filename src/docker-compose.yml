@@ -12,6 +12,17 @@ services:
     ports:
       - 5432:5432
 
+  # minio_service:
+  #   image: docker.io/bitnami/minio:2022
+  #   container_name: minio_service
+  #   # volumes:
+  #     # - ./minio_service/data:/data
+  #   env_file: minio_service/.env
+  #   restart: on-failure
+  #   ports:
+  #     - 9000:9000
+  #     - 9001:9001
+
   # zookeeper:
   #   image: wurstmeister/zookeeper
   #   restart: on-failure
@@ -31,6 +42,25 @@ services:
   #     - zookeeper
   #   ports:
   #     - 9092:9092
+
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+  #   container_name: elasticsearch
+  #   environment:
+  #     - discovery.type=single-node
+  #     - xpack.security.enabled=false
+  #   ports:
+  #     - 9200:9200
+  #   volumes:
+  #     - ./elasticsearch:/usr/share/elasticsearch/data
+
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana:8.13.4
+  #   container_name: kibana
+  #   ports:
+  #     - 5601:5601
+  #   depends_on:
+  #     - elasticsearch
 
   mongodb_service:
     image: mongo
@@ -96,6 +126,51 @@ services:
     restart: on-failure
     ports:
       - 8002:8000
+
+  booking_service:
+    build: ./booking_service
+    container_name: booking_service
+    working_dir: /app
+    volumes:
+      - ./booking_service:/app
+      - shared_data:/app/shared
+    command: bash -c "make"
+    environment:
+      TZ: "Asia/Novosibirsk"
+    env_file: booking_service/.env
+    restart: on-failure
+    ports:
+      - 8003:8000
+
+  game_service:
+    build: ./game_service
+    container_name: game_service
+    working_dir: /app
+    volumes:
+      - ./game_service:/app
+      - shared_data:/app/shared
+    command: bash -c "make"
+    environment:
+      TZ: "Asia/Novosibirsk"
+    env_file: game_service/.env
+    restart: on-failure
+    ports:
+      - 8004:8000
+  
+  collection_service:
+    build: ./collection_service
+    container_name: collection_service
+    working_dir: /app
+    volumes:
+      - ./collection_service:/app
+      - shared_data:/app/shared
+    command: bash -c "make"
+    environment:
+      TZ: "Asia/Novosibirsk"
+    env_file: collection_service/.env
+    restart: on-failure
+    ports:
+      - 8005:8000
 
 volumes:
   shared_data:

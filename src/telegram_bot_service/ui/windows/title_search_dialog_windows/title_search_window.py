@@ -11,7 +11,7 @@ from aiogram.types.message import Message
 from aiogram_dialog.manager.manager import ManagerImpl
 
 from services.game_service import GameService
-from ui.states import GameDialogSG, NotFoundSG, PaginationSG, TitleSearchSG
+from ui.states import GameDialogSG, TelegramErrorSG, PaginationSG, TitleSearchSG
 from database.database import MDB
 
 from core.Localization import localization_manager
@@ -41,8 +41,7 @@ async def getter(
     user_mongo: Dict,
     **kwargs,
 ):
-    print("aiogd_context", aiogd_context, flush=True)
-    print("user_mongo", user_mongo, flush=True)
+    print("getter", aiogd_context, flush=True)
 
     if not aiogd_context.widget_data:
         aiogd_context.widget_data = dict(
@@ -50,10 +49,10 @@ async def getter(
             input="",
         )
 
-    data = aiogd_context.widget_data
+    w_data = aiogd_context.widget_data
 
     return dict(
-        text=text(data, user_mongo["options"]["language"]),
+        text=text(w_data, user_mongo["options"]["language"]),
     )
 
 
@@ -62,22 +61,20 @@ async def goto(
     button: Button,
     manager: DialogManager,
 ):
-    data = manager.current_context().widget_data
-    options = manager.middleware_data["user_mongo"]["options"]
+    w_data = manager.current_context().widget_data
 
-    filters = dict(offset=0, limit=options["pagination_limit"], title=data["input"])
+    filters = dict(title=w_data["input"])
+    print("FilterS:", filters, flush=True)
 
-    games = await GameService.get_games(filters)
+    games = await GameService().get_games(filters)
 
-    if games["total"] == 0:
-        await manager.start(NotFoundSG.main)
-
-    elif games["total"] == 1:
-        game_id = games["games"][0]["id"]
-        await manager.start(GameDialogSG.main, data=dict(game_id=game_id))
-
-    else:
-        await manager.start(PaginationSG.main, data=filters)
+    match len(games):
+        case 0:
+            await manager.start(TelegramErrorSG.main)
+        case 1:
+            await manager.start(GameDialogSG.main, data=dict(chosen_game=games[0]))
+        case _:
+            await manager.start(PaginationSG.main, data=dict(games=games))
 
 
 async def reset_filters(
